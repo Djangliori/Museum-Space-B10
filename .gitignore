@@ -1,0 +1,8 @@
+# Ignore everything
+*
+
+# But don't ignore Manizha file
+!Manizha
+
+# Don't ignore .gitignore itself
+!.gitignore
