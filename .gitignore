@@ -1,8 +1,7 @@
 # Ignore everything
 *
 
-# But don't ignore Manizha file
+# But don't ignore these files
 !Manizha
-
-# Don't ignore .gitignore itself
+!index.html
 !.gitignore
