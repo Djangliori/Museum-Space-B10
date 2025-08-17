@@ -109,7 +109,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            background: var(--dark-bg);
+            background: linear-gradient(135deg, rgba(255, 20, 147, 0.1), rgba(255, 69, 0, 0.1));
             position: relative;
             overflow: hidden;
         }
@@ -271,59 +271,6 @@
             box-shadow: 0 15px 30px rgba(57, 255, 20, 0.5);
         }
 
-        /* Terms Button */
-        .terms-section {
-            text-align: center;
-            margin-top: 4rem;
-            padding: 2rem;
-        }
-
-        .terms-button {
-            display: inline-block;
-            padding: 1.2rem 3rem;
-            background: linear-gradient(45deg, var(--electric-pink), var(--electric-purple));
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.3rem;
-            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4);
-            border: 2px solid transparent;
-        }
-
-        .terms-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, var(--electric-orange), var(--electric-yellow));
-            opacity: 0;
-            transition: opacity 0.5s;
-            z-index: -1;
-        }
-
-        .terms-button:hover::before {
-            opacity: 1;
-        }
-
-        .terms-button:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 25px 50px rgba(255, 20, 147, 0.6);
-            border-color: var(--electric-yellow);
-        }
-
-        .terms-button span {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
 
         /* Contact Section */
         .contact {
@@ -411,6 +358,53 @@
             padding: 2rem;
             text-align: center;
             border-top: 2px solid var(--electric-purple);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-terms {
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-terms-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, var(--electric-purple), var(--electric-blue));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-terms-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.4);
+            background: linear-gradient(45deg, var(--electric-blue), var(--electric-purple));
+        }
+
+        .copyright {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
         }
 
         /* Animations */
@@ -513,11 +507,6 @@
                 <a href="#" class="card-button">შედი მომავალში</a>
             </div>
             
-            <div class="terms-section">
-                <a href="#" class="terms-button">
-                    <span>📋 წესები და პირობები</span>
-                </a>
-            </div>
         </div>
     </section>
 
@@ -544,7 +533,17 @@
     </section>
 
     <footer>
-        <p>&copy; 2024 Museum Space. ყველა უფლება დაცულია.</p>
+        <div class="footer-content">
+            <div class="footer-terms">
+                <a href="#" class="footer-terms-button">
+                    <span>📋</span>
+                    <span>წესები და პირობები</span>
+                </a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2024 Museum Space. ყველა უფლება დაცულია.</p>
+            </div>
+        </div>
     </footer>
 
     <script>
