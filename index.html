@@ -360,52 +360,6 @@
             border-top: 2px solid var(--electric-purple);
         }
 
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            flex-wrap: wrap;
-            gap: 2rem;
-        }
-
-        .footer-terms {
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-terms-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
-            background: linear-gradient(45deg, var(--electric-purple), var(--electric-blue));
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .footer-terms-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.4);
-            background: linear-gradient(45deg, var(--electric-blue), var(--electric-purple));
-        }
-
-        .copyright {
-            opacity: 0.8;
-        }
-
-        @media (max-width: 768px) {
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
 
         /* Animations */
         @keyframes glow {
@@ -528,22 +482,16 @@
                     <div class="contact-icon">✉️</div>
                     <span class="contact-text">info@museumspace.ge</span>
                 </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📋</div>
+                    <span class="contact-text">წესები და პირობები</span>
+                </div>
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="footer-content">
-            <div class="footer-terms">
-                <a href="#" class="footer-terms-button">
-                    <span>📋</span>
-                    <span>წესები და პირობები</span>
-                </a>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2024 Museum Space. ყველა უფლება დაცულია.</p>
-            </div>
-        </div>
+        <p>&copy; 2024 Museum Space. ყველა უფლება დაცულია.</p>
     </footer>
 
     <script>
