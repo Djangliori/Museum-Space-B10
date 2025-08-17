@@ -288,12 +288,12 @@
         /* Contact Section */
         .contact {
             background: linear-gradient(135deg, rgba(255, 20, 147, 0.1), rgba(255, 69, 0, 0.1));
-            padding: var(--section-gap) 2rem;
+            padding: 3rem 2rem;
             text-align: center;
         }
 
         .contact-content {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -301,26 +301,72 @@
             color: var(--electric-pink);
             margin-bottom: 2rem;
             text-shadow: 0 0 20px var(--electric-pink);
+            font-size: 2.5rem;
         }
 
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        .contact p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
             margin-top: 2rem;
         }
 
-        .contact-item {
-            padding: 1rem;
+        .contact-card {
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            border-left: 4px solid var(--electric-orange);
-            transition: all 0.4s ease;
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .contact-item:hover {
-            background: rgba(255, 69, 0, 0.1);
-            transform: translateX(10px);
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--electric-pink), var(--electric-orange));
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: -1;
+        }
+
+        .contact-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--electric-pink);
+            box-shadow: 0 15px 30px rgba(255, 20, 147, 0.3);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--electric-orange);
+        }
+
+        .contact-card h3 {
+            color: var(--electric-pink);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .contact-card p {
+            font-size: 1rem;
+            margin: 0;
+            opacity: 0.8;
         }
 
         /* Footer */
@@ -408,10 +454,10 @@
 
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Museum Space</h1>
-            <p>აღმოაცენოს ახალი განზომილებები ელექტრიკი გამოცდილების საშუალებით</p>
+            <h1>სამუზეუმო სივრცე ყველა ასაკისათვის</h1>
+            <p>მრავალგანზომილებიანი პროექციების სამყარო, ვიზუალური, სენსორული და შემეცნებითი გამოცდილება</p>
             <a href="#museums" class="cta-button">
-                <span>დაიწყე მოგზაურობა</span>
+                <span>შემოუერთდი მუზეუმს</span>
             </a>
         </div>
     </section>
@@ -435,18 +481,24 @@
 
     <section id="contact" class="contact scroll-reveal">
         <div class="contact-content">
-            <h2 class="section-title">დაგვიკავშირდით</h2>
+            <h2>დაგვიკავშირდით</h2>
             <p>მოდით ერთად შევქმნათ ახალი გამოცდილებები</p>
             
-            <div class="contact-info">
-                <div class="contact-item">
-                    <strong>მისამართი:</strong> თბილისი, საქართველო
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <h3>მისამართი</h3>
+                    <p>თბილისი, საქართველო</p>
                 </div>
-                <div class="contact-item">
-                    <strong>ტელეფონი:</strong> +995 XXX XXX XXX
+                <div class="contact-card">
+                    <div class="contact-icon">📞</div>
+                    <h3>ტელეფონი</h3>
+                    <p>+995 XXX XXX XXX</p>
                 </div>
-                <div class="contact-item">
-                    <strong>ელ-ფოსტა:</strong> info@museumspace.ge
+                <div class="contact-card">
+                    <div class="contact-icon">✉️</div>
+                    <h3>ელ-ფოსტა</h3>
+                    <p>info@museumspace.ge</p>
                 </div>
             </div>
         </div>
