@@ -271,6 +271,60 @@
             box-shadow: 0 15px 30px rgba(57, 255, 20, 0.5);
         }
 
+        /* Terms Button */
+        .terms-section {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+        }
+
+        .terms-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(45deg, var(--electric-pink), var(--electric-purple));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.3rem;
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4);
+            border: 2px solid transparent;
+        }
+
+        .terms-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--electric-orange), var(--electric-yellow));
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: -1;
+        }
+
+        .terms-button:hover::before {
+            opacity: 1;
+        }
+
+        .terms-button:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(255, 20, 147, 0.6);
+            border-color: var(--electric-yellow);
+        }
+
+        .terms-button span {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         /* Contact Section */
         .contact {
             background: linear-gradient(135deg, rgba(255, 20, 147, 0.1), rgba(255, 69, 0, 0.1));
@@ -457,6 +511,12 @@
                 <h3>Holozeum</h3>
                 <p>მომავლის ტექნოლოგია დღეს! ჰოლოგრაფიული პროექციები, ვირტუალური რეალობა და AI ინტერაქცია გყოფინათ დროის და სივრცის ბარიერებს.</p>
                 <a href="#" class="card-button">შედი მომავალში</a>
+            </div>
+            
+            <div class="terms-section">
+                <a href="#" class="terms-button">
+                    <span>📋 წესები და პირობები</span>
+                </a>
             </div>
         </div>
     </section>
