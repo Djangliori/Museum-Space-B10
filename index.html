@@ -6,12 +6,12 @@
     <title>Museum Space - ელექტრიკი გამოცდილება</title>
     <style>
         :root {
-            --electric-blue: #00ffff;
-            --electric-purple: #8a2be2;
-            --electric-green: #39ff14;
-            --electric-pink: #ff1493;
-            --electric-orange: #ff4500;
-            --electric-yellow: #ffff00;
+            --primary-blue: #4fc3f7;
+            --primary-purple: #9c27b0;
+            --primary-teal: #26a69a;
+            --accent-pink: #e91e63;
+            --accent-orange: #ff9800;
+            --accent-lime: #cddc39;
             --dark-bg: #0a0a0a;
             --section-gap: clamp(2rem, 5vw, 4rem);
         }
@@ -43,7 +43,7 @@
             z-index: 1000;
             background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(20px);
-            border-bottom: 2px solid var(--electric-blue);
+            border-bottom: 2px solid var(--primary-blue);
             padding: 1rem 0;
             transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
@@ -60,11 +60,11 @@
         .logo {
             font-size: 1.8rem;
             font-weight: bold;
-            background: linear-gradient(45deg, var(--electric-blue), var(--electric-purple));
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 20px var(--electric-blue);
+            text-shadow: 0 0 20px var(--primary-blue);
             animation: glow 3s ease-in-out infinite alternate;
         }
 
@@ -89,7 +89,7 @@
             left: 50%;
             width: 0;
             height: 2px;
-            background: var(--electric-blue);
+            background: var(--primary-blue);
             transition: all 0.3s ease;
             transform: translateX(-50%);
         }
@@ -99,7 +99,7 @@
         }
 
         .nav-links a:hover {
-            color: var(--electric-blue);
+            color: var(--primary-blue);
         }
 
         /* Hero Section */
@@ -123,12 +123,12 @@
         .hero h1 {
             font-size: clamp(3rem, 8vw, 6rem);
             margin-bottom: 2rem;
-            background: linear-gradient(45deg, var(--electric-blue), var(--electric-purple), var(--electric-green));
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple), var(--primary-teal));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             animation: colorShift 3s ease-in-out infinite;
-            text-shadow: 0 0 40px var(--electric-blue);
+            text-shadow: 0 0 40px var(--primary-blue);
         }
 
         .hero p {
@@ -141,7 +141,7 @@
         .cta-button {
             display: inline-block;
             padding: 1rem 3rem;
-            background: linear-gradient(45deg, var(--electric-blue), var(--electric-purple));
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
             color: white;
             text-decoration: none;
             border-radius: 50px;
@@ -160,7 +160,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, var(--electric-green), var(--electric-pink));
+            background: linear-gradient(45deg, var(--primary-teal), var(--accent-pink));
             opacity: 0;
             transition: opacity 0.4s;
         }
@@ -190,7 +190,7 @@
             font-size: clamp(2.5rem, 5vw, 4rem);
             margin-bottom: 3rem;
             text-align: center;
-            background: linear-gradient(45deg, var(--electric-pink), var(--electric-orange));
+            background: linear-gradient(45deg, var(--accent-pink), var(--accent-orange));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -205,7 +205,7 @@
         }
 
         .museum-card {
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(0, 255, 255, 0.1));
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.1), rgba(79, 195, 247, 0.1));
             border-radius: 20px;
             padding: 3rem;
             text-align: center;
@@ -223,7 +223,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, var(--electric-blue), var(--electric-purple), var(--electric-green), var(--electric-pink));
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple), var(--primary-teal), var(--accent-pink));
             opacity: 0;
             transition: opacity 0.6s;
             z-index: -1;
@@ -236,15 +236,15 @@
 
         .museum-card:hover {
             transform: translateY(-10px) scale(1.02);
-            border-color: var(--electric-blue);
-            box-shadow: 0 30px 60px rgba(0, 255, 255, 0.3);
+            border-color: var(--primary-blue);
+            box-shadow: 0 30px 60px rgba(79, 195, 247, 0.3);
         }
 
         .museum-card h3 {
             font-size: 2rem;
             margin-bottom: 1.5rem;
-            color: var(--electric-blue);
-            text-shadow: 0 0 20px var(--electric-blue);
+            color: var(--primary-blue);
+            text-shadow: 0 0 20px var(--primary-blue);
         }
 
         .museum-card p {
@@ -257,18 +257,18 @@
         .card-button {
             display: inline-block;
             padding: 0.8rem 2rem;
-            background: linear-gradient(45deg, var(--electric-green), var(--electric-yellow));
+            background: linear-gradient(45deg, var(--primary-teal), var(--accent-lime));
             color: var(--dark-bg);
             text-decoration: none;
             border-radius: 30px;
             font-weight: bold;
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 5px 15px rgba(57, 255, 20, 0.3);
+            box-shadow: 0 5px 15px rgba(38, 166, 154, 0.3);
         }
 
         .card-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(57, 255, 20, 0.5);
+            box-shadow: 0 15px 30px rgba(38, 166, 154, 0.5);
         }
 
 
@@ -285,9 +285,9 @@
         }
 
         .contact h2 {
-            color: var(--electric-pink);
+            color: var(--accent-pink);
             margin-bottom: 1.5rem;
-            text-shadow: 0 0 20px var(--electric-pink);
+            text-shadow: 0 0 20px var(--accent-pink);
             font-size: 2.2rem;
         }
 
@@ -326,7 +326,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, var(--electric-pink), var(--electric-orange));
+            background: linear-gradient(45deg, var(--accent-pink), var(--accent-orange));
             opacity: 0;
             transition: opacity 0.4s;
             z-index: -1;
@@ -338,13 +338,13 @@
 
         .contact-item:hover {
             transform: translateY(-3px);
-            border-color: var(--electric-pink);
+            border-color: var(--accent-pink);
             box-shadow: 0 10px 20px rgba(255, 20, 147, 0.3);
         }
 
         .contact-icon {
             font-size: 1.5rem;
-            color: var(--electric-orange);
+            color: var(--accent-orange);
         }
 
         .contact-text {
@@ -357,7 +357,7 @@
             background: var(--dark-bg);
             padding: 2rem;
             text-align: center;
-            border-top: 2px solid var(--electric-purple);
+            border-top: 2px solid var(--primary-purple);
         }
 
 
@@ -547,12 +547,12 @@
                 position: fixed;
                 width: 4px;
                 height: 4px;
-                background: var(--electric-blue);
+                background: var(--primary-blue);
                 border-radius: 50%;
                 pointer-events: none;
                 opacity: 0.6;
                 z-index: -1;
-                box-shadow: 0 0 10px var(--electric-blue);
+                box-shadow: 0 0 10px var(--primary-blue);
                 animation: float 6s linear infinite;
             `;
             
@@ -594,17 +594,17 @@
         `;
         document.head.appendChild(style);
 
-        // Create more particles for better effect
-        setInterval(createParticle, 100);
+        // Create fewer particles (reduced by 70%)
+        setInterval(createParticle, 500);
         
         // Add different colored particles
         function createColoredParticle() {
             const colors = [
-                'var(--electric-blue)',
-                'var(--electric-purple)',
-                'var(--electric-green)',
-                'var(--electric-pink)',
-                'var(--electric-orange)'
+                'var(--primary-blue)',
+                'var(--primary-purple)',
+                'var(--primary-teal)',
+                'var(--accent-pink)',
+                'var(--accent-orange)'
             ];
             
             const particle = document.createElement('div');
@@ -634,17 +634,17 @@
             }, 9000);
         }
         
-        // Create colored particles more frequently
-        setInterval(createColoredParticle, 120);
+        // Create colored particles less frequently (reduced by 70%)
+        setInterval(createColoredParticle, 600);
         
         // Add hero-specific particles that spawn from different directions
         function createHeroParticle() {
             const colors = [
-                'var(--electric-blue)',
-                'var(--electric-purple)',
-                'var(--electric-green)',
-                'var(--electric-pink)',
-                'var(--electric-yellow)'
+                'var(--primary-blue)',
+                'var(--primary-purple)',
+                'var(--primary-teal)',
+                'var(--accent-pink)',
+                'var(--accent-lime)'
             ];
             
             const particle = document.createElement('div');
@@ -730,12 +730,12 @@
         `;
         document.head.appendChild(heroParticleStyle);
         
-        // Create hero particles more frequently
-        setInterval(createHeroParticle, 150);
+        // Create hero particles less frequently (reduced by 70%)
+        setInterval(createHeroParticle, 800);
         
         // Add side particles
         function createSideParticle() {
-            const colors = ['var(--electric-blue)', 'var(--electric-purple)', 'var(--electric-green)'];
+            const colors = ['var(--primary-blue)', 'var(--primary-purple)', 'var(--primary-teal)'];
             const particle = document.createElement('div');
             const color = colors[Math.floor(Math.random() * colors.length)];
             const size = Math.random() * 4 + 2;
@@ -776,11 +776,11 @@
         `;
         document.head.appendChild(sideStyle);
         
-        setInterval(createSideParticle, 300);
+        setInterval(createSideParticle, 1200);
         
         // Add ambient particles that float around the hero section
         function createAmbientParticle() {
-            const colors = ['var(--electric-blue)', 'var(--electric-purple)', 'var(--electric-green)'];
+            const colors = ['var(--primary-blue)', 'var(--primary-purple)', 'var(--primary-teal)'];
             const particle = document.createElement('div');
             const color = colors[Math.floor(Math.random() * colors.length)];
             const size = Math.random() * 3 + 1;
@@ -836,7 +836,7 @@
         `;
         document.head.appendChild(ambientStyle);
         
-        setInterval(createAmbientParticle, 800);
+        setInterval(createAmbientParticle, 2500);
     </script>
 </body>
 </html>
