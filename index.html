@@ -301,9 +301,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 3rem;
-            flex-wrap: wrap;
+            gap: 2rem;
+            flex-wrap: nowrap;
             margin-top: 1.5rem;
+            overflow-x: auto;
         }
 
         .contact-item {
@@ -415,6 +416,21 @@
             .hero h1 {
                 font-size: 3rem;
             }
+            
+            .contact-inline {
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+            
+            .contact-item {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+                min-width: fit-content;
+            }
+            
+            .contact-text {
+                white-space: nowrap;
+            }
         }
 
         /* Scroll animations */
@@ -481,7 +497,7 @@
                     <span class="contact-text">თბილისი, ბეთლემის ქუჩა N10</span>
                 </div>
                 <a href="https://www.facebook.com/profile.php?id=61567248502180" target="_blank" class="contact-item clickable">
-                    <div class="contact-icon">📘</div>
+                    <div class="contact-icon">👥</div>
                     <span class="contact-text">Museum space</span>
                 </a>
                 <div class="contact-item">
