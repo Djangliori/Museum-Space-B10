@@ -78,31 +78,28 @@
             color: white;
             text-decoration: none;
             padding: 0.5rem 1rem;
-            border-radius: 20px;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
         }
 
-        .nav-links a::before {
+        .nav-links a::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, var(--electric-blue), transparent);
-            transition: left 0.5s;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--electric-blue);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
 
-        .nav-links a:hover::before {
-            left: 100%;
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .nav-links a:hover {
             color: var(--electric-blue);
-            box-shadow: 0 0 20px var(--electric-blue);
-            transform: translateY(-2px);
         }
 
         /* Hero Section */
@@ -403,8 +400,8 @@
             <div class="logo">Museum Space</div>
             <ul class="nav-links">
                 <li><a href="#home">მთავარი</a></li>
-                <li><a href="#museums">მუზეუმები</a></li>
-                <li><a href="#contact">კონტაქტი</a></li>
+                <li><a href="#about">ჩვენს შესახებ</a></li>
+                <li><a href="#tickets">ბილეთები</a></li>
             </ul>
         </nav>
     </header>
