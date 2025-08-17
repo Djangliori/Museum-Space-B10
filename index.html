@@ -317,6 +317,12 @@
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .contact-item.clickable:hover {
+            cursor: pointer;
         }
 
         .contact-item::before {
@@ -474,18 +480,18 @@
                     <div class="contact-icon">📍</div>
                     <span class="contact-text">თბილისი, ბეთლემის ქუჩა N10</span>
                 </div>
-                <div class="contact-item">
-                    <div class="contact-icon">📞</div>
-                    <span class="contact-text">+995 XXX XXX XXX</span>
-                </div>
+                <a href="https://www.facebook.com/profile.php?id=61567248502180" target="_blank" class="contact-item clickable">
+                    <div class="contact-icon">📘</div>
+                    <span class="contact-text">Museum space</span>
+                </a>
                 <div class="contact-item">
                     <div class="contact-icon">✉️</div>
                     <span class="contact-text">info@museumspace.ge</span>
                 </div>
-                <div class="contact-item">
+                <a href="#" class="contact-item clickable">
                     <div class="contact-icon">📋</div>
                     <span class="contact-text">წესები და პირობები</span>
-                </div>
+                </a>
             </div>
         </div>
     </section>
