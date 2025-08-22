@@ -36,6 +36,15 @@ export default async function handler(req, res) {
             inApp
         } = req.body;
 
+        // Validate required fields
+        if (!merchantUser || !merchantOrderID || !orderPrice || !orderName) {
+            return res.status(400).json({
+                success: false,
+                error: 'Missing required fields',
+                required: ['merchantUser', 'merchantOrderID', 'orderPrice', 'orderName']
+            });
+        }
+
         // UniPay credentials
         const MERCHANT_ID = '5015191030581';
         const API_KEY = 'bc6f5073-6d1c-4abe-8456-1bb814077f6e';
@@ -80,9 +89,9 @@ export default async function handler(req, res) {
         console.log('Step 2: Creating order...');
         
         // Encode URLs to base64 as required
-        const encodedSuccessUrl = encodeBase64(successRedirectUrl);
-        const encodedCancelUrl = encodeBase64(cancelRedirectUrl);
-        const encodedCallbackUrl = encodeBase64(callBackUrl);
+        const encodedSuccessUrl = successRedirectUrl ? encodeBase64(successRedirectUrl) : '';
+        const encodedCancelUrl = cancelRedirectUrl ? encodeBase64(cancelRedirectUrl) : '';
+        const encodedCallbackUrl = callBackUrl ? encodeBase64(callBackUrl) : '';
 
         const orderData = {
             MerchantUser: merchantUser,
