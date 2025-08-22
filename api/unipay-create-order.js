@@ -1,4 +1,9 @@
-// Vercel Serverless Function to create UniPay order (bypassing CORS)
+// Helper function to encode URLs to base64
+function encodeBase64(str) {
+    return Buffer.from(str).toString('base64');
+}
+
+// Vercel Serverless Function to create UniPay order (following proper 2-step flow)
 export default async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -31,82 +36,114 @@ export default async function handler(req, res) {
             inApp
         } = req.body;
 
-        // UniPay API endpoint
-        const uniPayEndpoint = 'https://apiv2.unipay.com/v3/api/order/create';
-        
-        // Your UniPay credentials
-        const apiKey = 'bc6f5073-6d1c-4abe-8456-1bb814077f6e';
+        // UniPay credentials
+        const MERCHANT_ID = '5015191030581';
+        const API_KEY = 'bc6f5073-6d1c-4abe-8456-1bb814077f6e';
 
-        // Prepare UniPay request
-        const uniPayRequest = {
-            "MerchantUser": merchantUser,
-            "MerchantOrderID": merchantOrderID,
-            "OrderPrice": orderPrice,
-            "OrderCurrency": orderCurrency,
-            "OrderName": orderName,
-            "OrderDescription": orderDescription,
-            "SuccessRedirectUrl": successRedirectUrl,
-            "CancelRedirectUrl": cancelRedirectUrl,
-            "CallBackUrl": callBackUrl,
-            "Language": language || "GE",
-            "InApp": inApp || 0
-        };
-
-        console.log('Making UniPay API request:', uniPayRequest);
-
-        // Make request to UniPay
-        const response = await fetch(uniPayEndpoint, {
+        // Step 1: Authentication
+        console.log('Step 1: Authenticating with UniPay...');
+        const authResponse = await fetch('https://apiv2.unipay.com/v3/auth', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'X-API-Key': apiKey,
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(uniPayRequest)
+            body: JSON.stringify({
+                merchant_id: MERCHANT_ID,
+                api_key: API_KEY
+            })
         });
 
-        console.log('UniPay response status:', response.status);
-        console.log('UniPay response headers:', Object.fromEntries(response.headers));
-        
-        const responseText = await response.text();
-        console.log('UniPay raw response:', responseText);
+        const authText = await authResponse.text();
+        console.log('Auth response:', authText);
 
-        // Check if the response is not ok
-        if (!response.ok) {
-            console.error('UniPay API error:', {
-                status: response.status,
-                statusText: response.statusText,
-                body: responseText
-            });
-            res.status(response.status).json({ 
-                error: 'UniPay API Error', 
-                status: response.status,
-                statusText: response.statusText,
-                details: responseText 
-            });
-            return;
+        if (!authResponse.ok) {
+            throw new Error(`Authentication failed: ${authResponse.status} ${authText}`);
         }
 
-        let result;
+        let authData;
         try {
-            result = JSON.parse(responseText);
+            authData = JSON.parse(authText);
         } catch (parseError) {
-            console.error('Failed to parse UniPay response:', parseError);
-            res.status(500).json({ 
-                error: 'Invalid response from UniPay', 
-                details: responseText.substring(0, 200) 
-            });
-            return;
+            throw new Error(`Auth response parsing failed: ${authText}`);
         }
 
-        console.log('UniPay parsed response:', result);
+        // Get auth token (it's in 'auth_token' field, not 'access_token')
+        const authToken = authData.auth_token;
+        if (!authToken) {
+            throw new Error('No auth_token received from UniPay');
+        }
 
-        // Return response to client
-        res.status(200).json(result);
+        console.log('✅ Authentication successful, token received');
+
+        // Step 2: Create Order
+        console.log('Step 2: Creating order...');
+        
+        // Encode URLs to base64 as required
+        const encodedSuccessUrl = encodeBase64(successRedirectUrl);
+        const encodedCancelUrl = encodeBase64(cancelRedirectUrl);
+        const encodedCallbackUrl = encodeBase64(callBackUrl);
+
+        const orderData = {
+            MerchantUser: merchantUser,
+            MerchantOrderID: merchantOrderID,
+            OrderPrice: parseFloat(orderPrice),
+            OrderCurrency: orderCurrency || "GEL",
+            OrderName: orderName,
+            OrderDescription: orderDescription,
+            SuccessRedirectUrl: encodedSuccessUrl,
+            CancelRedirectUrl: encodedCancelUrl,
+            CallBackUrl: encodedCallbackUrl,
+            Language: language || "GE",
+            InApp: inApp || 0
+        };
+
+        console.log('Order data:', orderData);
+
+        const orderResponse = await fetch('https://apiv2.unipay.com/v3/api/order/create', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderData)
+        });
+
+        const orderText = await orderResponse.text();
+        console.log('Order response:', orderText);
+
+        if (!orderResponse.ok) {
+            throw new Error(`Order creation failed: ${orderResponse.status} ${orderText}`);
+        }
+
+        let orderResult;
+        try {
+            orderResult = JSON.parse(orderText);
+        } catch (parseError) {
+            throw new Error(`Order response parsing failed: ${orderText}`);
+        }
+
+        console.log('✅ Order created successfully:', orderResult);
+
+        // Check for UniPay errors
+        if (orderResult.errorcode && orderResult.errorcode !== 0) {
+            throw new Error(`UniPay error: ${orderResult.message || 'Unknown error'}`);
+        }
+
+        // Return the checkout URL and order details
+        res.status(200).json({
+            success: true,
+            checkoutUrl: orderResult.data?.Checkout,
+            unipayOrderId: orderResult.data?.UnipayOrderID,
+            unipayOrderHashId: orderResult.data?.UnipayOrderHashID,
+            orderId: merchantOrderID
+        });
 
     } catch (error) {
-        console.error('UniPay proxy error:', error);
+        console.error('UniPay integration error:', error);
         res.status(500).json({ 
+            success: false,
             error: 'Failed to create order', 
             details: error.message 
         });
