@@ -745,73 +745,59 @@
                 
                 // Get UniPay configuration
                 const uniPayConfig = APP_CONFIG.getUniPayConfig();
-                
                 const btn = document.getElementById('purchaseBtn');
-                // UniPay integration parameters
+                
+                // Generate unique order ID
+                const orderId = 'MS-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
+                
+                // UniPay API parameters (JSON format as per documentation)
                 const uniPayParams = {
-                    // Required UniPay parameters
-                    merchant_id: uniPayConfig.merchant_id,
-                    amount: data.total,
-                    currency: 'GEL',
-                    description: `Museum Space B10 - ბილეთები (${Object.values(data.tickets).reduce((sum, t) => sum + t.quantity, 0)} ცალი)`,
-                    order_id: 'MS-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
-                    
-                    // Customer information
-                    customer_name: `${data.customer.firstName} ${data.customer.lastName}`,
-                    customer_email: data.customer.email,
-                    customer_phone: data.customer.phone,
-                    
-                    // Callback URLs using config
-                    success_url: uniPayConfig.success_url,
-                    fail_url: uniPayConfig.fail_url,
-                    callback_url: uniPayConfig.callback_url,
-                    
-                    // Optional parameters
-                    language: 'ka', // Georgian
-                    preauth: 0, // 0 = immediate charge, 1 = preauthorization
-                    
-                    // API Key for authentication
-                    api_key: uniPayConfig.api_key
+                    "MerchantUser": uniPayConfig.merchant_user,
+                    "MerchantOrderID": orderId,
+                    "OrderPrice": data.total,
+                    "OrderCurrency": "GEL", 
+                    "OrderName": `Museum Space B10 - ბილეთი`,
+                    "OrderDescription": `ბილეთები: ${Object.values(data.tickets).reduce((sum, t) => sum + t.quantity, 0)} ცალი - ${data.customer.firstName} ${data.customer.lastName}`,
+                    "SuccessRedirectUrl": btoa(uniPayConfig.success_url), // Base64 encoded
+                    "CancelRedirectUrl": btoa(uniPayConfig.fail_url), // Base64 encoded  
+                    "CallBackUrl": btoa(uniPayConfig.callback_url), // Base64 encoded
+                    "Language": "GE",
+                    "InApp": 0 // 0 = web browser, 1 = mobile app
                 };
 
-                // Create form and submit to UniPay
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = uniPayConfig.endpoint;
-                
-                // Add parameters as hidden inputs
-                Object.entries(uniPayParams).forEach(([key, value]) => {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = key;
-                    input.value = value;
-                    form.appendChild(input);
-                });
-
-                // Add form to page and submit
-                document.body.appendChild(form);
-                
                 // Show redirect message
                 btn.textContent = '🔄 UniPay-ზე გადამისამართება...';
                 
-                // Show what would happen (SAFE MODE)
-                setTimeout(() => {
-                    console.log('UniPay params that would be sent:', uniPayParams);
-                    alert(`🔧 UniPay DEBUGGING MODE
-                    
-📍 Target URL: ${uniPayConfig.endpoint}
-💳 Amount: ${data.total} ლარი
-🆔 Merchant ID: ${uniPayConfig.merchant_id}
-📧 Customer: ${data.customer.email}
-
-⚠️ URL ტესტირება საჭიროა!
-დააჭირეთ OK რომ ვნახოთ console-ში ყველა პარამეტრი`);
-                    
-                    btn.textContent = '🛒 ბილეთის შეძენა';
-                    btn.disabled = false;
-                    
-                    // COMMENTED: Real redirect (enable after URL confirmation)
-                    // form.submit();
+                // Make API call to create order
+                setTimeout(async () => {
+                    try {
+                        console.log('Creating UniPay order with params:', uniPayParams);
+                        
+                        const response = await fetch(uniPayConfig.endpoint, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${uniPayConfig.api_key}`
+                            },
+                            body: JSON.stringify(uniPayParams)
+                        });
+                        
+                        const result = await response.json();
+                        console.log('UniPay response:', result);
+                        
+                        if (result.success && result.checkoutUrl) {
+                            // Redirect to UniPay checkout
+                            window.location.href = result.checkoutUrl;
+                        } else {
+                            throw new Error(result.message || 'UniPay order creation failed');
+                        }
+                        
+                    } catch (error) {
+                        console.error('UniPay error:', error);
+                        alert(`❌ გადახდის შეცდომა: ${error.message}`);
+                        btn.textContent = '🛒 ბილეთის შეძენა';
+                        btn.disabled = false;
+                    }
                 }, 1000);
             }
 

@@ -16,10 +16,11 @@ class Config {
         this.config = {
             UNIPAY_MERCHANT_ID: '5015191030581',
             UNIPAY_API_KEY: 'bc6f5073-6d1c-4abe-8456-1bb814077f6e',
+            UNIPAY_MERCHANT_USER: 'betlemi.museum@gmail.com', // Your merchant email
             SITE_URL: isDevelopment ? 
                 `${window.location.protocol}//${window.location.host}` : 
                 'https://museum-space-b10.vercel.app',
-            UNIPAY_ENDPOINT: 'https://business.unipay.com/payment', // Georgian UniPay endpoint
+            UNIPAY_ENDPOINT: 'https://apiv2.unipay.com/v3/api/order/create', // Georgian UniPay endpoint
             ENVIRONMENT: isDevelopment ? 'development' : 'production'
         };
     }
@@ -35,6 +36,7 @@ class Config {
     getUniPayConfig() {
         return {
             merchant_id: this.config.UNIPAY_MERCHANT_ID,
+            merchant_user: this.config.UNIPAY_MERCHANT_USER,
             api_key: this.config.UNIPAY_API_KEY,
             endpoint: this.config.UNIPAY_ENDPOINT,
             success_url: `${this.getSiteUrl()}/callback.html?status=success`,
