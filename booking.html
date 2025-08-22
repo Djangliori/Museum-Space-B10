@@ -500,10 +500,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="visitDate">ვიზიტის თარიღი *</label>
-                    <input type="date" id="visitDate" name="visitDate" required>
-                </div>
             </div>
 
             <!-- Payment Method -->
@@ -580,7 +576,6 @@
             init() {
                 this.bindEvents();
                 this.updateTotal();
-                this.setMinDate();
                 this.updatePurchaseButton();
             }
 
@@ -671,14 +666,6 @@
                 document.getElementById('finalTotal').textContent = `${total} ლ`;
             }
 
-            setMinDate() {
-                const today = new Date();
-                const tomorrow = new Date(today);
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                
-                const dateInput = document.getElementById('visitDate');
-                dateInput.min = tomorrow.toISOString().split('T')[0];
-            }
 
             updatePurchaseButton() {
                 const btn = document.getElementById('purchaseBtn');
@@ -709,8 +696,7 @@
                         firstName: formData.get('firstName'),
                         lastName: formData.get('lastName'),
                         email: formData.get('email'),
-                        phone: formData.get('phone'),
-                        visitDate: formData.get('visitDate')
+                        phone: formData.get('phone')
                     },
                     paymentMethod: formData.get('paymentMethod'),
                     total: this.calculateTotal()
@@ -735,7 +721,6 @@
                     alert(`✅ ბილეთი წარმატებით იყიდება!
                     
 📧 დეტალები გამოიგზავნება: ${data.customer.email}
-📅 ვიზიტის თარიღი: ${data.customer.visitDate}
 💰 სულ: ${data.total} ლ
 🎫 ბილეთების რაოდენობა: ${Object.values(data.tickets).reduce((sum, t) => sum + t.quantity, 0)}
                     
