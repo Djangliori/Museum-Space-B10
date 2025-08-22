@@ -675,6 +675,14 @@
                 const hasTickets = Object.values(this.tickets).some(ticket => ticket.quantity > 0);
                 const formValid = this.isFormValid();
 
+                // Debug info
+                console.log('updatePurchaseButton:', {
+                    agreeTerms,
+                    hasTickets,
+                    formValid,
+                    tickets: this.tickets
+                });
+
                 btn.disabled = !agreeTerms || !hasTickets || !formValid;
             }
 
@@ -738,6 +746,7 @@
                 // Get UniPay configuration
                 const uniPayConfig = APP_CONFIG.getUniPayConfig();
                 
+                const btn = document.getElementById('purchaseBtn');
                 // UniPay integration parameters
                 const uniPayParams = {
                     // Required UniPay parameters
