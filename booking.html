@@ -768,19 +768,37 @@
                 // Show redirect message
                 btn.textContent = '🔄 UniPay-ზე გადამისამართება...';
                 
-                // Make API call to create order
+                // Make API call to create order via our proxy
                 setTimeout(async () => {
                     try {
                         console.log('Creating UniPay order with params:', uniPayParams);
                         
-                        const response = await fetch(uniPayConfig.endpoint, {
+                        // Use our Vercel proxy to avoid CORS issues
+                        const proxyEndpoint = `${uniPayConfig.success_url.split('/callback.html')[0]}/api/unipay-create-order`;
+                        
+                        const response = await fetch(proxyEndpoint, {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${uniPayConfig.api_key}`
+                                'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify(uniPayParams)
+                            body: JSON.stringify({
+                                merchantUser: uniPayParams.MerchantUser,
+                                merchantOrderID: uniPayParams.MerchantOrderID,
+                                orderPrice: uniPayParams.OrderPrice,
+                                orderCurrency: uniPayParams.OrderCurrency,
+                                orderName: uniPayParams.OrderName,
+                                orderDescription: uniPayParams.OrderDescription,
+                                successRedirectUrl: uniPayParams.SuccessRedirectUrl,
+                                cancelRedirectUrl: uniPayParams.CancelRedirectUrl,
+                                callBackUrl: uniPayParams.CallBackUrl,
+                                language: uniPayParams.Language,
+                                inApp: uniPayParams.InApp
+                            })
                         });
+                        
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                        }
                         
                         const result = await response.json();
                         console.log('UniPay response:', result);
@@ -788,8 +806,11 @@
                         if (result.success && result.checkoutUrl) {
                             // Redirect to UniPay checkout
                             window.location.href = result.checkoutUrl;
+                        } else if (result.redirect_url) {
+                            // Alternative response format
+                            window.location.href = result.redirect_url;
                         } else {
-                            throw new Error(result.message || 'UniPay order creation failed');
+                            throw new Error(result.message || result.error || 'UniPay order creation failed');
                         }
                         
                     } catch (error) {
