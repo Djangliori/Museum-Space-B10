@@ -762,44 +762,38 @@
                 setTimeout(async () => {
                     try {
                         
-                        // Use our Vercel proxy to avoid CORS issues
-                        const proxyEndpoint = `${uniPayConfig.success_url.split('/callback.html')[0]}/api/unipay-create-order`;
+                        // Create form for direct UniPay payment (no API needed)
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = 'https://mpi.gc.ge/unipay3/';
+                        form.target = '_self';
+                        form.style.display = 'none';
                         
-                        const response = await fetch(proxyEndpoint, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                merchantUser: uniPayParams.MerchantUser,
-                                merchantOrderID: uniPayParams.MerchantOrderID,
-                                orderPrice: uniPayParams.OrderPrice,
-                                orderCurrency: uniPayParams.OrderCurrency,
-                                orderName: uniPayParams.OrderName,
-                                orderDescription: uniPayParams.OrderDescription,
-                                successRedirectUrl: uniPayParams.SuccessRedirectUrl,
-                                cancelRedirectUrl: uniPayParams.CancelRedirectUrl,
-                                callBackUrl: uniPayParams.CallBackUrl,
-                                language: uniPayParams.Language,
-                                inApp: uniPayParams.InApp
-                            })
+                        // UniPay form fields (based on your credentials)
+                        const fields = {
+                            merch_id: '5015191030581',
+                            order_id: uniPayParams.MerchantOrderID,
+                            amount: uniPayParams.OrderPrice.toString(),
+                            currency: 'GEL',
+                            description: uniPayParams.OrderDescription,
+                            success_url: uniPayConfig.success_url,
+                            fail_url: uniPayConfig.fail_url,
+                            callback_url: uniPayConfig.callback_url,
+                            lang: 'ka'
+                        };
+                        
+                        // Create hidden inputs for each field
+                        Object.entries(fields).forEach(([key, value]) => {
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = key;
+                            input.value = value;
+                            form.appendChild(input);
                         });
                         
-                        if (!response.ok) {
-                            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                        }
-                        
-                        const result = await response.json();
-                        
-                        if (result.success && result.checkoutUrl) {
-                            // Redirect to UniPay checkout
-                            window.location.href = result.checkoutUrl;
-                        } else if (result.redirect_url) {
-                            // Alternative response format
-                            window.location.href = result.redirect_url;
-                        } else {
-                            throw new Error(result.message || result.error || 'UniPay order creation failed');
-                        }
+                        // Add to body and submit immediately
+                        document.body.appendChild(form);
+                        form.submit();
                         
                     } catch (error) {
                         console.error('UniPay error:', error);
