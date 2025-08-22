@@ -401,6 +401,8 @@
     </style>
 </head>
 <body>
+    <!-- Load configuration -->
+    <script src="config.js"></script>
     <header class="header">
         <div class="header-container">
             <div class="logo">ბილეთის შესყიდვა</div>
@@ -733,10 +735,13 @@
                 // Store booking data for callback processing
                 localStorage.setItem('bookingData', JSON.stringify(data));
                 
+                // Get UniPay configuration
+                const uniPayConfig = APP_CONFIG.getUniPayConfig();
+                
                 // UniPay integration parameters
                 const uniPayParams = {
                     // Required UniPay parameters
-                    merchant_id: 'YOUR_MERCHANT_ID', // Replace with actual merchant ID from UniPay
+                    merchant_id: uniPayConfig.merchant_id,
                     amount: data.total,
                     currency: 'GEL',
                     description: `Museum Space B10 - ბილეთები (${Object.values(data.tickets).reduce((sum, t) => sum + t.quantity, 0)} ცალი)`,
@@ -747,20 +752,23 @@
                     customer_email: data.customer.email,
                     customer_phone: data.customer.phone,
                     
-                    // Callback URLs - THESE ARE THE IMPORTANT ONES FOR UNIPAY!
-                    success_url: window.location.origin + '/callback.html?status=success',
-                    fail_url: window.location.origin + '/callback.html?status=failed',
-                    callback_url: window.location.origin + '/callback.html',
+                    // Callback URLs using config
+                    success_url: uniPayConfig.success_url,
+                    fail_url: uniPayConfig.fail_url,
+                    callback_url: uniPayConfig.callback_url,
                     
                     // Optional parameters
                     language: 'ka', // Georgian
                     preauth: 0, // 0 = immediate charge, 1 = preauthorization
+                    
+                    // API Key for authentication
+                    api_key: uniPayConfig.api_key
                 };
 
                 // Create form and submit to UniPay
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = 'https://secure.unipayment.ge/payment'; // Replace with actual UniPay URL
+                form.action = uniPayConfig.endpoint;
                 
                 // Add parameters as hidden inputs
                 Object.entries(uniPayParams).forEach(([key, value]) => {
