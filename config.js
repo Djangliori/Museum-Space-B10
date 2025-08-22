@@ -19,7 +19,7 @@ class Config {
             SITE_URL: isDevelopment ? 
                 `${window.location.protocol}//${window.location.host}` : 
                 'https://museum-space-b10.vercel.app',
-            UNIPAY_ENDPOINT: 'https://www.unipay.ge/checkout', // Georgian UniPay endpoint (test URL)
+            UNIPAY_ENDPOINT: 'https://business.unipay.com/payment', // Georgian UniPay endpoint
             ENVIRONMENT: isDevelopment ? 'development' : 'production'
         };
     }

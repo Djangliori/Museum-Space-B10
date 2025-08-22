@@ -794,10 +794,24 @@
                 // Show redirect message
                 btn.textContent = '🔄 UniPay-ზე გადამისამართება...';
                 
-                // Real UniPay redirect
+                // Show what would happen (SAFE MODE)
                 setTimeout(() => {
-                    console.log('Redirecting to UniPay with params:', uniPayParams);
-                    form.submit();
+                    console.log('UniPay params that would be sent:', uniPayParams);
+                    alert(`🔧 UniPay DEBUGGING MODE
+                    
+📍 Target URL: ${uniPayConfig.endpoint}
+💳 Amount: ${data.total} ლარი
+🆔 Merchant ID: ${uniPayConfig.merchant_id}
+📧 Customer: ${data.customer.email}
+
+⚠️ URL ტესტირება საჭიროა!
+დააჭირეთ OK რომ ვნახოთ console-ში ყველა პარამეტრი`);
+                    
+                    btn.textContent = '🛒 ბილეთის შეძენა';
+                    btn.disabled = false;
+                    
+                    // COMMENTED: Real redirect (enable after URL confirmation)
+                    // form.submit();
                 }, 1000);
             }
 
