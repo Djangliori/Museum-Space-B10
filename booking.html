@@ -794,9 +794,28 @@
                 // Show redirect message
                 btn.textContent = '🔄 UniPay-ზე გადამისამართება...';
                 
+                // TEMPORARY: Show test mode instead of real redirect
                 setTimeout(() => {
-                    form.submit();
+                    alert(`⚠️ UNIPAY INTEGRATION PAUSED ⚠️
+                    
+🔧 საჭიროა UniPay Georgia-სთან კონტაქტი სწორი API endpoint-ისთვის
+                    
+💳 ბილეთის მონაცემები მზადაა:
+• რაოდენობა: ${Object.values(data.tickets).reduce((sum, t) => sum + t.quantity, 0)} ბილეთი
+• თანხა: ${data.total} ლარი
+• მყიდველი: ${data.customer.firstName} ${data.customer.lastName}
+• ელ.ფოსტა: ${data.customer.email}
+
+📞 კონტაქტი: UniPay Georgia Support
+📧 ამ მონაცემებით უნდა დაგიკავშირდეთ UniPay-ს`);
+                    
+                    // Reset button 
+                    btn.textContent = '🛒 ბილეთის შეძენა';
+                    btn.disabled = false;
                 }, 1000);
+                
+                // Real submission (commented out until correct URL found)
+                // form.submit();
             }
 
             showBankTransfer(data) {
