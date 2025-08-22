@@ -675,13 +675,6 @@
                 const hasTickets = Object.values(this.tickets).some(ticket => ticket.quantity > 0);
                 const formValid = this.isFormValid();
 
-                // Debug info
-                console.log('updatePurchaseButton:', {
-                    agreeTerms,
-                    hasTickets,
-                    formValid,
-                    tickets: this.tickets
-                });
 
                 btn.disabled = !agreeTerms || !hasTickets || !formValid;
             }
@@ -758,10 +751,7 @@
                     "OrderCurrency": "GEL", 
                     "OrderName": `Museum Space B10 - ბილეთი`,
                     "OrderDescription": `ბილეთები: ${Object.values(data.tickets).reduce((sum, t) => sum + t.quantity, 0)} ცალი - ${data.customer.firstName} ${data.customer.lastName}`,
-                    "SuccessRedirectUrl": uniPayConfig.success_url, // Will be base64 encoded by API
-                    "CancelRedirectUrl": uniPayConfig.fail_url, // Will be base64 encoded by API
-                    "CallBackUrl": uniPayConfig.callback_url, // Will be base64 encoded by API
-                    "Language": "GE",
+                    "SuccessRedirectUrl": uniPayConfig.success_url,                    "CancelRedirectUrl": uniPayConfig.fail_url,                    "CallBackUrl": uniPayConfig.callback_url,                    "Language": "GE",
                     "InApp": 0 // 0 = web browser, 1 = mobile app
                 };
 
@@ -771,7 +761,6 @@
                 // Make API call to create order via our proxy
                 setTimeout(async () => {
                     try {
-                        console.log('Creating UniPay order with params:', uniPayParams);
                         
                         // Use our Vercel proxy to avoid CORS issues
                         const proxyEndpoint = `${uniPayConfig.success_url.split('/callback.html')[0]}/api/unipay-create-order`;
@@ -801,7 +790,6 @@
                         }
                         
                         const result = await response.json();
-                        console.log('UniPay response:', result);
                         
                         if (result.success && result.checkoutUrl) {
                             // Redirect to UniPay checkout

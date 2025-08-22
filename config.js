@@ -1,4 +1,3 @@
-// Environment Configuration Loader
 class Config {
     constructor() {
         this.config = {};
@@ -6,9 +5,6 @@ class Config {
     }
 
     loadConfig() {
-        // In production, these would be set via environment variables or build process
-        // For development/testing, we'll use the values directly
-        
         const isDevelopment = window.location.hostname === 'localhost' || 
                              window.location.hostname === '127.0.0.1' ||
                              window.location.hostname === '';
@@ -16,11 +12,11 @@ class Config {
         this.config = {
             UNIPAY_MERCHANT_ID: '5015191030581',
             UNIPAY_API_KEY: 'bc6f5073-6d1c-4abe-8456-1bb814077f6e',
-            UNIPAY_MERCHANT_USER: 'betlemi.museum@gmail.com', // Your merchant email
+            UNIPAY_MERCHANT_USER: 'betlemi.museum@gmail.com',
             SITE_URL: isDevelopment ? 
                 `${window.location.protocol}//${window.location.host}` : 
                 'https://museum-space-b10.vercel.app',
-            UNIPAY_ENDPOINT: 'https://apiv2.unipay.com/v3/api/order/create', // Georgian UniPay endpoint
+            UNIPAY_ENDPOINT: 'https://apiv2.unipay.com/v3/api/order/create',
             ENVIRONMENT: isDevelopment ? 'development' : 'production'
         };
     }
