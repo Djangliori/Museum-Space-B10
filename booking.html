@@ -762,38 +762,26 @@
                 setTimeout(async () => {
                     try {
                         
-                        // Create form for direct UniPay payment (no API needed)
-                        const form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = 'https://mpi.gc.ge/unipay3/';
-                        form.target = '_self';
-                        form.style.display = 'none';
+                        // Temporary message until UniPay integration is completed
+                        alert(`🎫 ბილეთის ინფორმაცია:
                         
-                        // UniPay form fields (based on your credentials)
-                        const fields = {
-                            merch_id: '5015191030581',
-                            order_id: uniPayParams.MerchantOrderID,
-                            amount: uniPayParams.OrderPrice.toString(),
-                            currency: 'GEL',
-                            description: uniPayParams.OrderDescription,
-                            success_url: uniPayConfig.success_url,
-                            fail_url: uniPayConfig.fail_url,
-                            callback_url: uniPayConfig.callback_url,
-                            lang: 'ka'
-                        };
+📧 მომხმარებელი: ${data.customer.firstName} ${data.customer.lastName}
+💰 ჯამური ღირებულება: ${data.total} ₾
+🎟️ ბილეთები: ${Object.values(data.tickets).reduce((sum, t) => sum + t.quantity, 0)} ცალი
+
+📞 გადახდისთვის დაგვირეკეთ: +995 555 123 456
+📧 ან გამოგვიგზავნეთ ელ-ფოსტა: betlemi.museum@gmail.com
+
+🔧 UniPay ონლაინ გადახდა მალე დაემატება!`);
                         
-                        // Create hidden inputs for each field
-                        Object.entries(fields).forEach(([key, value]) => {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = key;
-                            input.value = value;
-                            form.appendChild(input);
-                        });
-                        
-                        // Add to body and submit immediately
-                        document.body.appendChild(form);
-                        form.submit();
+                        // Store booking data for future processing
+                        localStorage.setItem('pendingBooking', JSON.stringify({
+                            customer: data.customer,
+                            tickets: data.tickets,
+                            total: data.total,
+                            orderId: uniPayParams.MerchantOrderID,
+                            timestamp: new Date().toISOString()
+                        }));
                         
                     } catch (error) {
                         console.error('UniPay error:', error);
