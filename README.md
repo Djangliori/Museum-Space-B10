@@ -102,3 +102,5 @@ vercel --prod
 
 ## 🔄 Auto-Deployment
 This project is connected to Vercel with automatic deployments from the `master` branch. Any push to the repository will trigger a new deployment automatically.
+
+✅ **Correct Setup:** Connected to `museum-space-b10` project on Vercel.
