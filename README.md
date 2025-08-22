@@ -98,7 +98,7 @@ vercel --prod
 ---
 
 ⚡ Built with ❤️ for Georgian Museum Experience
-🎯 Live Demo: [Museum-Space-B10 on Vercel](https://museum-space-b10.vercel.app)
+🎯 Live Demo: [Museum-Space-B10 on Vercel](https://museum-space-b10.vercel.app) ✨
 
 ## 🔄 Auto-Deployment
 This project is connected to Vercel with automatic deployments from the `master` branch. Any push to the repository will trigger a new deployment automatically.
