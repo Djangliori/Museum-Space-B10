@@ -758,9 +758,9 @@
                     "OrderCurrency": "GEL", 
                     "OrderName": `Museum Space B10 - ბილეთი`,
                     "OrderDescription": `ბილეთები: ${Object.values(data.tickets).reduce((sum, t) => sum + t.quantity, 0)} ცალი - ${data.customer.firstName} ${data.customer.lastName}`,
-                    "SuccessRedirectUrl": btoa(uniPayConfig.success_url), // Base64 encoded
-                    "CancelRedirectUrl": btoa(uniPayConfig.fail_url), // Base64 encoded  
-                    "CallBackUrl": btoa(uniPayConfig.callback_url), // Base64 encoded
+                    "SuccessRedirectUrl": uniPayConfig.success_url, // Will be base64 encoded by API
+                    "CancelRedirectUrl": uniPayConfig.fail_url, // Will be base64 encoded by API
+                    "CallBackUrl": uniPayConfig.callback_url, // Will be base64 encoded by API
                     "Language": "GE",
                     "InApp": 0 // 0 = web browser, 1 = mobile app
                 };
