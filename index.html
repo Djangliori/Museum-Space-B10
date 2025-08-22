@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ილუზიების მუზეუმი & ჰოლოზეუმი – ბილეთები, საათები, ლოკაცია</title>
+    <meta name="description" content="ნახე ორი უნიკალური გამოცდილება ერთ სივრცეში – ილუზიების მუზეუმი და ჰოლოზეუმი. იყიდე ბილეთი ონლაინ, გაიგე საათები და მისამართი.">
+    
+    <!-- Open Graph & Twitter Cards -->
+    <meta property="og:title" content="ილუზიების მუზეუმი & ჰოლოზეუმი – ბილეთები, საათები, ლოკაცია">
+    <meta property="og:description" content="ნახე ორი უნიკალური გამოცდილება ერთ სივრცეში – ილუზიების მუზეუმი და ჰოლოზეუმი. იყიდე ბილეთი ონლაინ, გაიგე საათები და მისამართი.">
+    <meta property="og:image" content="{{OG_IMAGE_URL}}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ილუზიების მუზეუმი & ჰოლოზეუმი",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ADDRESS}}"
+      },
+      "telephone": "{{PHONE}}",
+      "email": "{{EMAIL}}",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Museum Tickets",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Event",
+              "name": "ილუზიების მუზეუმი & ჰოლოზეუმი",
+              "startDate": "{{EVENT_START_DATE}}",
+              "endDate": "{{EVENT_END_DATE}}"
+            },
+            "price": "{{ADULT_PRICE}}",
+            "priceCurrency": "GEL"
+          }
+        ]
+      }
+    }
+    </script>
+
+    <!--
+    PLACEHOLDER VALUES FOR EASY EDITING:
+    {{ADULT_PRICE}} - Adult ticket price in GEL
+    {{STUDENT_PRICE}} - Student ticket price in GEL  
+    {{CHILD_PRICE}} - Child ticket price in GEL
+    {{HOURS}} - Opening hours
+    {{ADDRESS}} - Physical address
+    {{PHONE}} - Contact phone number
+    {{EMAIL}} - Contact email
+    {{TICKETS_URL}} - URL for ticket purchase
+    {{MAPS_LINK}} - Google Maps link
+    {{EVENT_START_DATE}} - Event start date (ISO format)
+    {{EVENT_END_DATE}} - Event end date (ISO format)
+    {{OG_IMAGE_URL}} - Open Graph image URL
+    -->
+
+    <style>
+        :root {
+            --bg: #0b0b12;
+            --bg-soft: #121222;
+            --text: #EAEAF2;
+            --muted: #A6A7BC;
+            --accent: #FFD34D;
+            --accent-2: #7C5CFF;
+            --card: #17172A;
+            --success: #2FE6A6;
+            --error: #FF5C7A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(11, 11, 18, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(124, 92, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .cta-header {
+            background: linear-gradient(45deg, var(--accent), #ffb347);
+            color: var(--bg);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 211, 77, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--bg) 0%, var(--bg-soft) 50%, var(--bg) 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(124, 92, 255, 0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 3rem;
+            color: var(--muted);
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .cta-primary {
+            background: linear-gradient(45deg, var(--accent), #ffb347);
+            color: var(--bg);
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 211, 77, 0.4);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--text);
+            padding: 1rem 2rem;
+            border: 2px solid var(--accent-2);
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-secondary:hover {
+            background: var(--accent-2);
+            color: var(--bg);
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .trust-badge {
+            background: var(--card);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(124, 92, 255, 0.2);
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .illusions-section h2 {
+            color: var(--accent-2);
+        }
+
+        .holo-section h2 {
+            color: var(--accent);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(124, 92, 255, 0.1);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-2);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .section-cta {
+            text-align: center;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            background: var(--bg-soft);
+            padding: 5rem 0;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .benefit {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .benefit h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 5rem 0;
+            background: var(--bg);
+        }
+
+        .pricing-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        .pricing-table {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(124, 92, 255, 0.2);
+        }
+
+        .ticket-card {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            background: linear-gradient(135deg, rgba(124, 92, 255, 0.1), rgba(0, 255, 255, 0.05));
+            border: 1px solid rgba(124, 92, 255, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ticket-link {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .ticket-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0, 255, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(124, 92, 255, 0.2);
+        }
+
+        .ticket-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #7c5cff, #00ffff);
+        }
+
+        .ticket-icon {
+            font-size: 2.5rem;
+            margin-right: 1.5rem;
+            filter: drop-shadow(0 0 10px rgba(124, 92, 255, 0.5));
+        }
+
+        .ticket-details {
+            flex: 1;
+        }
+
+        .ticket-type {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .ticket-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        .ticket-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #7c5cff, #00ffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(124, 92, 255, 0.5);
+            margin-right: 1rem;
+        }
+
+        .ticket-buy-btn {
+            background: linear-gradient(45deg, #7c5cff, #00ffff);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .ticket-card:hover .ticket-buy-btn {
+            background: linear-gradient(45deg, #00ffff, #7c5cff);
+            box-shadow: 0 6px 20px rgba(0, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        .ticket-info {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(234, 234, 242, 0.1);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .info-icon {
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(234, 234, 242, 0.1);
+        }
+
+        .price-row:last-child {
+            border-bottom: none;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .toggle-container {
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--card);
+            border-radius: 15px;
+            border: 2px solid var(--accent-2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle.active {
+            background: var(--accent-2);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: var(--text);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle.active .toggle-slider {
+            transform: translateX(28px);
+        }
+
+        .pricing-summary {
+            background: var(--bg-soft);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+
+        /* Reviews Section */
+        .reviews {
+            padding: 5rem 0;
+            background: var(--bg-soft);
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .review {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(124, 92, 255, 0.1);
+        }
+
+        .stars {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .reviewer {
+            font-weight: 600;
+            color: var(--accent-2);
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 5rem 0;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .faq-item {
+            background: var(--card);
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(124, 92, 255, 0.1);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(124, 92, 255, 0.1);
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-answer.active {
+            padding: 1.5rem;
+            max-height: 200px;
+        }
+
+        /* Location Section */
+        .location {
+            padding: 5rem 0;
+            background: var(--bg-soft);
+        }
+
+        .location-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .contact-info h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .contact-item {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .map-placeholder {
+            background: var(--card);
+            height: 300px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed rgba(124, 92, 255, 0.3);
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .map-cta {
+            background: var(--accent-2);
+            color: var(--text);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .map-cta:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+
+        /* Footer */
+        .footer {
+            background: var(--bg);
+            padding: 3rem 0 1rem;
+            border-top: 1px solid rgba(124, 92, 255, 0.1);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(234, 234, 242, 0.1);
+            color: var(--muted);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent);
+            color: var(--bg);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 211, 77, 0.4);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .trust-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .location-container {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 3rem 0;
+            }
+        }
+
+        /* Focus states for accessibility */
+        button:focus,
+        a:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" role="banner">
+        <nav class="nav-container" role="navigation" aria-label="Main navigation">
+            <div class="logo">Museum Space</div>
+            <ul class="nav-links">
+                <li><a href="#home">სახლი</a></li>
+                <li><a href="#illusions">ილუზიების მუზეუმი</a></li>
+                <li><a href="#holozeum">ჰოლოზეუმი</a></li>
+                <li><a href="#tickets">ბილეთები</a></li>
+                <li><a href="#contact">კონტაქტი</a></li>
+            </ul>
+            <a href="booking.html" class="cta-header">იყიდე ბილეთი</a>
+        </nav>
+    </header>
+
+    <main role="main">
+        <!-- Hero Section -->
+        <section id="home" class="hero" role="banner">
+            <div class="hero-content">
+                <h1>შეხე რეალობას ახალ თვალით!</h1>
+                <p>ორი სამყაროს გამოცდილება ერთ სივრცეში — ილუზიების მუზეუმი და ჰოლოზეუმი.</p>
+                <div class="cta-group">
+                    <a href="booking.html" class="cta-primary">🎫 იყიდე ბილეთი</a>
+                    <a href="#tickets" class="cta-secondary">ნახე ფასები</a>
+                </div>
+                <div class="trust-badges">
+                    <div class="trust-badge">🏠 ოჯახებისთვის</div>
+                    <div class="trust-badge">📸 ფოტოებისთვის იდეალური</div>
+                    <div class="trust-badge">🎮 ინტერაქტიული</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Illusions Museum Section -->
+        <section id="illusions" class="section illusions-section">
+            <h2>ილუზიების მუზეუმი</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>ოპტიკური ილუზიები</h3>
+                    <p>ოთახები, რომელსაც ტვინი ვერ ხსნის — გამოსცადე, როგორ ატყუებს შენს თვალებს რეალობა.</p>
+                </div>
+                <div class="card">
+                    <h3>თავსატეხები</h3>
+                    <p>პერსპექტივის თამაშები და ინტერაქტიული გამოწვევები, რომელიც გააკეთებს შენს ტვინს სპორტს.</p>
+                </div>
+                <div class="card">
+                    <h3>სოციალური ფოტო-ზონები</h3>
+                    <p>იდეალური ფონი შენი სოციალური ქსელებისთვის — ფოტოები, რომელსაც ყველა შეხედავს.</p>
+                </div>
+            </div>
+            <p class="section-description">
+                ოთახები, რომლებსაც ტვინი ვერ ხსნის — ოპტიკური ილუზიები, პერსპექტივის თამაშები და თავსატეხები, სადაც ფოტოები საკუთარ თავზე ლაპარაკობს.
+            </p>
+            <div class="section-cta">
+                <a href="#tickets" class="cta-primary">ნახე მეტი</a>
+            </div>
+        </section>
+
+        <!-- Holozeum Section -->
+        <section id="holozeum" class="section holo-section">
+            <h2>ჰოლოზეუმი</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>360° პროექციები</h3>
+                    <p>ჩაირთოს მხატვრების სამყაროში სრული პროექციით, რომელიც შენს გარშემო ცოცხალდება.</p>
+                </div>
+                <div class="card">
+                    <h3>მუსიკის სინქი</h3>
+                    <p>ხმა და გამოსახულება იქცევა ერთ ჰარმონიულ ისტორიად, რომელიც იქვეშ გრძნობებს.</p>
+                </div>
+                <div class="card">
+                    <h3>არტისტების სერიის შოუები</h3>
+                    <p>ვან გოგიდან დალის მხატვრობამდე — თითოეული შოუ ახალი სამყაროა.</p>
+                </div>
+            </div>
+            <p class="section-description">
+                ჰოლოგრაფიული შოუები და ცოცხალი ფერები — მხატვრების სამყაროებში ჩაძირვა, სადაც მუსიკა და გამოსახულება ერთ მთლიან ისტორიად იქცევა.
+            </p>
+            <div class="section-cta">
+                <a href="#tickets" class="cta-primary">დაჯავშნე შოუ</a>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="benefits">
+            <div class="section">
+                <h2>რატომ ჩვენთან?</h2>
+                <div class="benefits-grid">
+                    <div class="benefit">
+                        <div class="benefit-icon">🏛️</div>
+                        <h3>ორი სივრცე ერთ ადგილას</h3>
+                        <p>ერთ ვიზიტში ნახე ორივე გამოცდილება</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">⚡</div>
+                        <h3>სწრაფი ონლაინ ბილეთი</h3>
+                        <p>5 წუთში დაამთავრებ ყიდვას</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">👨‍👩‍👧‍👦</div>
+                        <h3>მეგობრებთან და ოჯახთან</h3>
+                        <p>365 დღე — ახალი ფოტოები შენთვის</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">🎉</div>
+                        <h3>დაბადების დღეებისა და ჯგუფებისთვის</h3>
+                        <p>სპეციალური ღონისძიებები და ფასდაკლებები</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="tickets" class="pricing">
+            <div class="pricing-container">
+                <h2>ბილეთები და ფასები</h2>
+                <div class="pricing-table">
+                    <a href="booking.html" class="ticket-card ticket-link">
+                        <div class="ticket-icon">🎫</div>
+                        <div class="ticket-details">
+                            <div class="ticket-type">მოზრდილი</div>
+                            <div class="ticket-description">18+ წლის ასაკისთვის</div>
+                        </div>
+                        <div class="ticket-price">30 ლ</div>
+                        <div class="ticket-buy-btn">შეძენა →</div>
+                    </a>
+                    
+                    <a href="booking.html" class="ticket-card ticket-link">
+                        <div class="ticket-icon">📚</div>
+                        <div class="ticket-details">
+                            <div class="ticket-type">სტუდენტი</div>
+                            <div class="ticket-description">სტუდენტური ბარათით</div>
+                        </div>
+                        <div class="ticket-price">25 ლ</div>
+                        <div class="ticket-buy-btn">შეძენა →</div>
+                    </a>
+                    
+                    <a href="booking.html" class="ticket-card ticket-link">
+                        <div class="ticket-icon">👶</div>
+                        <div class="ticket-details">
+                            <div class="ticket-type">ბავშვი</div>
+                            <div class="ticket-description">6-16 წლის ასაკისთვის</div>
+                        </div>
+                        <div class="ticket-price">20 ლ</div>
+                        <div class="ticket-buy-btn">შეძენა →</div>
+                    </a>
+                    
+                    <div class="ticket-info">
+                        <div class="info-item">
+                            <span class="info-icon">⏰</span>
+                            <span>საშუალო ვიზიტის ხანგრძლივობა: 1.5 საათი</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">📸</span>
+                            <span>ფოტოგრაფირება უფასო</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">♿</span>
+                            <span>ხელმისაწვდომია ყველა ასაკისთვის</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <span>ორი სივრცე ერთ ბილეთში</span>
+                    <div class="toggle" id="spaceToggle" tabindex="0" role="switch" aria-checked="false">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                
+                <div class="pricing-summary" id="pricingSummary">
+                    ერთი სივრცე: {{ADULT_PRICE}} ლ მოზრდილისთვის
+                </div>
+                
+                <p style="margin: 1rem 0; font-size: 0.9rem; color: var(--muted);">
+                    ⚡ ბილეთები იწურება სწრაფად
+                </p>
+                
+                <a href="booking.html" class="cta-primary" style="font-size: 1.2rem; padding: 1.2rem 2.5rem;">
+                    იყიდე ბილეთი ონლაინ
+                </a>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section class="reviews">
+            <div class="section">
+                <h2>რას ამბობენ სტუმრები</h2>
+                <div class="reviews-grid">
+                    <div class="review">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-text">
+                            "ავენტურული გამოცდილება მთელი ოჯახისთვის! ბავშვები აღფრთოვანებული იყვნენ ილუზიებით."
+                        </div>
+                        <div class="reviewer">- ნანა, მშობელი</div>
+                    </div>
+                    <div class="review">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-text">
+                            "ჰოლოზეუმის შოუმ გულში ღია ბალღები დამიტოვა. ნამდვილად უნიკალური!"
+                        </div>
+                        <div class="reviewer">- დავითი, სტუდენტი</div>
+                    </div>
+                    <div class="review">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-text">
+                            "საუკეთესო ადგილი ფოტოებისთვის! ინსტაგრამზე 1000+ ლაიქი მივიღე."
+                        </div>
+                        <div class="reviewer">- ანი, ბლოგერი</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq">
+            <div class="faq-container">
+                <h2>ხშირად დასმული კითხვები</h2>
+                
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        სამუშაო საათები
+                    </button>
+                    <div class="faq-answer">
+                        <p>09:00-21:00 (ორშაბათი დღის გარდა)</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        ბილეთის ვალიდურობა
+                    </button>
+                    <div class="faq-answer">
+                        <p>ბილეთი ვალიდურია ყიდვიდან 6 თვის განმავლობაში. შეგიძლიათ ნებისმიერ დღეს ჩამობრძანდეთ.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        პარკინგი
+                    </button>
+                    <div class="faq-answer">
+                        <p>ჩვენს თან უფასო პარკინგია ხელმისაწვდომი ყველა სტუმრისთვის.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        ფოტოების გადაღება შეიძლება?
+                    </button>
+                    <div class="faq-answer">
+                        <p>კი! ფოტოგრაფირება მთლიანად დაშვებულია. ჩვენ გვაქვს სპეციალური ფოტო-ზონები შესანიშნავი კადრებისთვის.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        წვდომა შშმ პირებისთვის?
+                    </button>
+                    <div class="faq-answer">
+                        <p>კი, ჩვენი მუზეუმი სრულიად ხელმისაწვდომია ნებისმიერი შშმ პირისთვის. გვაქვს ელევატორი და სპეციალური გადაადგილების ზონები.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location Section -->
+        <section id="contact" class="location">
+            <div class="section">
+                <h2>როგორ მოგვწვდები</h2>
+                <div class="location-container">
+                    <div class="contact-info">
+                        <h3>კონტაქტი</h3>
+                        <div class="contact-item">
+                            <span>📍</span>
+                            <span>ბეთლემის ქუჩა 10N, სოლოლაკი<br>თბილისი, საქართველო</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>🕒</span>
+                            <span>09:00-21:00<br><small style="opacity: 0.7;">ორშაბათი დღის გარდა</small></span>
+                        </div>
+                        <div class="contact-item">
+                            <span>📞</span>
+                            <span><a href="tel:+995322123456" style="color: inherit; text-decoration: none;">+995 32 2 123 456</a></span>
+                        </div>
+                        <div class="contact-item">
+                            <span>✉️</span>
+                            <span><a href="mailto:betlemi.museum@gmail.com" style="color: var(--primary); text-decoration: none;">betlemi.museum@gmail.com</a></span>
+                        </div>
+                        <div class="contact-item">
+                            <span>📱</span>
+                            <span><a href="https://www.facebook.com/profile.php?id=61567248502180" target="_blank" style="color: var(--primary); text-decoration: none;">Facebook გვერდი</a></span>
+                        </div>
+                    </div>
+                    <div class="map-placeholder">
+                        <span style="font-size: 3rem; color: var(--muted);">🗺️</span>
+                        <p style="color: var(--muted); margin-bottom: 1rem;">რუკის გამოსახულება</p>
+                        <a href="https://maps.google.com/maps?q=ბეთლემის+ქუჩა+10N+თბილისი" target="_blank" class="map-cta">გახსენი რუკა</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Museum Space</h4>
+                <ul class="footer-links">
+                    <li><a href="#illusions">ილუზიების მუზეუმი</a></li>
+                    <li><a href="#holozeum">ჰოლოზეუმი</a></li>
+                    <li><a href="#tickets">ბილეთები</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>ინფორმაცია</h4>
+                <ul class="footer-links">
+                    <li><a href="#contact">კონტაქტი</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="terms.html">წესები და პირობები</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>სოციალური ქსელები</h4>
+                <ul class="footer-links">
+                    <li><a href="https://www.facebook.com/profile.php?id=61567248502180" target="_blank">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">TikTok</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Museum Space. ყველა უფლება დაცულია.</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#home" class="back-to-top" id="backToTop" aria-label="Back to top">
+        ↑
+    </a>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerHeight = 80;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // FAQ Accordion functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isActive = question.classList.contains('active');
+                
+                // Close all other FAQs
+                document.querySelectorAll('.faq-question').forEach(q => {
+                    q.classList.remove('active');
+                    q.nextElementSibling.classList.remove('active');
+                    q.setAttribute('aria-expanded', 'false');
+                });
+                
+                // Toggle current FAQ
+                if (!isActive) {
+                    question.classList.add('active');
+                    answer.classList.add('active');
+                    question.setAttribute('aria-expanded', 'true');
+                }
+            });
+
+            // Keyboard support
+            question.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    question.click();
+                }
+            });
+        });
+
+        // Pricing toggle functionality
+        const toggle = document.getElementById('spaceToggle');
+        const summary = document.getElementById('pricingSummary');
+        
+        toggle.addEventListener('click', () => {
+            const isActive = toggle.classList.contains('active');
+            toggle.classList.toggle('active');
+            toggle.setAttribute('aria-checked', !isActive);
+            
+            // Update pricing summary (placeholder calculation)
+            const adultPrice = '{{ADULT_PRICE}}';
+            if (!isActive) {
+                summary.textContent = `ორივე სივრცე: ${adultPrice} × 1.5 = ${Math.round(adultPrice * 1.5)} ლ მოზრდილისთვის`;
+            } else {
+                summary.textContent = `ერთი სივრცე: ${adultPrice} ლ მოზრდილისთვის`;
+            }
+        });
+
+        // Keyboard support for toggle
+        toggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggle.click();
+            }
+        });
+
+        // Back to top button
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Lazy loading for images (when added)
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Performance optimization: reduce motion for users who prefer it
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.style.scrollBehavior = 'auto';
+        }
+
+    </script>
+</body>
+</html>

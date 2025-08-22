@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>წესები და პირობები - ილუზიების მუზეუმი & ჰოლოზეუმი</title>
+    <style>
+        :root {
+            --primary: #7c5cff;
+            --accent: #00ffff;
+            --bg: #0a0a0a;
+            --bg-soft: #111111;
+            --card: rgba(28, 28, 38, 0.8);
+            --text: #ffffff;
+            --text-secondary: #b0b0b0;
+            --success: #00ff88;
+            --error: #ff4444;
+            --warning: #ffaa00;
+            --muted: #666666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #1a1a2e 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--accent);
+            color: var(--bg);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(124, 92, 255, 0.5);
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .terms-section {
+            margin-bottom: 3rem;
+            background: var(--card);
+            border-radius: 15px;
+            padding: 2.5rem;
+            border: 1px solid rgba(124, 92, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terms-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .terms-section:hover {
+            border-color: rgba(124, 92, 255, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .terms-section h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .terms-section h3::before {
+            content: '📋';
+            font-size: 1.3rem;
+            filter: drop-shadow(0 0 10px rgba(124, 92, 255, 0.5));
+        }
+
+        .terms-subsection {
+            margin: 2rem 0;
+            padding-left: 2rem;
+            border-left: 3px solid rgba(124, 92, 255, 0.4);
+            background: rgba(124, 92, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .terms-subsection h4 {
+            color: var(--accent);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .terms-section p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .contact-details {
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-details h4 {
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-details p {
+            margin-bottom: 0.8rem;
+        }
+
+        .contact-details a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .contact-details a:hover {
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .terms-footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+            background: linear-gradient(135deg, rgba(124, 92, 255, 0.1), rgba(0, 255, 255, 0.1));
+            border: 2px solid rgba(124, 92, 255, 0.2);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terms-footer::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(124, 92, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .terms-footer h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .terms-footer p {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin: 0.5rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .company-info {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .last-updated {
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(124, 92, 255, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .terms-section {
+                padding: 2rem;
+            }
+
+            .terms-subsection {
+                padding-left: 1rem;
+                padding: 1rem;
+            }
+
+            .header-container {
+                padding: 0 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .back-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .header,
+            .scroll-to-top,
+            .back-btn {
+                display: none;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+
+            .terms-section {
+                background: white;
+                border: 1px solid #ddd;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">📋 წესები და პირობები</div>
+            <a href="index.html" class="back-btn">
+                <span>←</span>
+                <span>უკან დაბრუნება</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>📋 წესები და პირობები</h1>
+            <p>ილუზიების მუზეუმი & ჰოლოზეუმი - სამუზეუმო სივრცე</p>
+        </div>
+
+        <div class="terms-section">
+            <h3>1. ზოგადი დებულებები</h3>
+            <p>მოგესალმებათ. შპს სამუზეუმო სივრცე (ს/კ406474676) ჩვენი ვებგვერდის გამოყენებით, თქვენ თანხმდებით ამ წესებისა და პირობების დაცვას. გთხოვთ, ყურადღებით გაეცნოთ ამ წესებს. თუ თქვენ არ ეთანხმებით ამ წესებს, ნუ გამოიყენებთ ვებგვერდს.</p>
+            <p>ეს წესები და პირობები ვრცელდება ჩვენს ყველა სერვისზე, მათ შორის ვებგვერდზე, მუზეუმის ვიზიტზე და ყველა ონლაინ თუ ოფლაინ სერვისზე.</p>
+        </div>
+
+        <div class="terms-section">
+            <h3>2. მომხმარებლის ქცევა</h3>
+            <p>ვებგვერდს გამოიყენებთ მხოლოდ კანონიერ მიზნებისთვის. არ გაქვთ უფლება განათავსოთ ან გადმოსცეთ მასალა, რომელიც არღვევს მოქმედ კანონებს ან შესაძლოა დააზიანოს, შეურაცხყოს ან დააშინოს სხვა მომხმარებლები.</p>
+            <p>მუზეუმში ვიზიტისას ყველა სტუმარმა უნდა დაიცვას წყნარი და მშვიდი ატმოსფერო. დაუშვებელია ხმამაღალი ქცევა, ღოუნება ან სხვა სტუმრების შეწუხება.</p>
+        </div>
+
+        <div class="terms-section">
+            <h3>3. ბილეთები და შესყიდვები</h3>
+            
+            <div class="terms-subsection">
+                <h4>3.1. შესყიდვები</h4>
+                <p>ვებგვერდის მეშვეობით განხორციელებული ყველა ბილეთისა და სხვა პროდუქტების შესყიდვები ემყარება ხელმისაწვდომობას. ბილეთებისა და სერვისების ფასები და ხელმისაწვდომობა შეიძლება შეიცვალოს წინასწარი შეტყობინების გარეშე.</p>
+                <p>ბილეთების შეძენა შესაძლებელია ონლაინ ჩვენს ვებგვერდზე ან მუზეუმში ადგილზე. ონლაინ შესყიდული ბილეთები მოქმედია შესყიდვიდან 6 თვის განმავლობაში.</p>
+            </div>
+            
+            <div class="terms-subsection">
+                <h4>3.2. გადახდა</h4>
+                <p>ყველა გადახდა უნდა მოხდეს მუზეუმში ვიზიტის წინ. ჩვენ ვიღებთ ნაღდი თანხას, საბანკო ბარათებს და ელექტრონული გადახდის სხვა ფორმებს.</p>
+                <p>ონლაინ გადახდისას მოქმედებს დამატებითი უსაფრთხოების ღონისძიებები. ყველა ფინანსური ტრანზაქცია დაცულია SSL შიფრაციით.</p>
+            </div>
+            
+            <div class="terms-subsection">
+                <h4>3.3. გაუქმება და დაბრუნება</h4>
+                <p>ბილეთების გაუქმება და თანხის დაბრუნება შესაძლებელია მუზეუმში ვიზიტამდე 24 საათით ადრე. გვიან გაუქმების შემთხვევაში თანხის დაბრუნება არ ხდება.</p>
+                <p>განსაკუთრებულ გარემოებებში (ავადმყოფობა, ფორს-მაჟორი) შეიძლება გავითვალისწინოთ ინდივიდუალური მიდგომა. ასეთ შემთხვევებში დაგვიკავშირდით ტელეფონით ან ელ-ფოსტით.</p>
+            </div>
+        </div>
+
+        <div class="terms-section">
+            <h3>4. ინტელექტუალური საკუთრება</h3>
+            <p>ვებგვერდზე განთავსებული ყველა სავაჭრო ნიშანი, ლოგო და სერვისის ნიშანი ეკუთვნის სამუზეუმო სივრცე-ს ან მესამე პირებს. თქვენ არ გაქვთ უფლება გამოიყენოთ ეს მასალები ჩვენი წერილობითი ნებართვის გარეშე.</p>
+            <p>მუზეუმში ფოტოგრაფირება ნებადართულია პირადი გამოყენებისთვის. კომერციული ან პროფესიონალური ფოტო/ვიდეო გადაღებისთვის საჭიროა წინასწარი შეთანხმება ადმინისტრაციასთან.</p>
+        </div>
+
+        <div class="terms-section">
+            <h3>5. კონფიდენციალურობა</h3>
+            <p>ჩვენ ვალდებულნი ვართ დავიცვათ თქვენი კონფიდენციალურობა. თქვენი პერსონალური მონაცემები გამოვიყენებთ მხოლოდ მუზეუმის სერვისების უზრუნველსაყოფად. მესამე პირებთან არ გავუზიარებთ თქვენს ინფორმაციას თქვენი თანხმობის გარეშე.</p>
+            <p>ჩვენ ვიყენებთ თქვენს მონაცემებს შემდეგი მიზნებისთვის: ბილეთების გაყიდვა, კომუნიკაცია, მარკეტინგული შეტყობინებები (თქვენი თანხმობით). ნებისმიერ დროს შეგიძლიათ მოითხოვოთ თქვენი მონაცემების წაშლა.</p>
+        </div>
+
+        <div class="terms-section">
+            <h3>6. პასუხისმგებლობის შეზღუდვა</h3>
+            <p>მუზეუმი არ არის პასუხისმგებელი ნებისმიერ პირდაპირ, არაპირდაპირ, შემთხვევით ან შედეგობრივ ზიანზე, რომელიც შეიძლება წარმოიშვას ვებგვერდის გამოყენების შედეგად.</p>
+            <p>მუზეუმი ძალისხმევას დებს უსაფრთხო გარემოს შესაქმნელად, მაგრამ ვისიტორები თავად არიან პასუხისმგებელნი თავიანთ უსაფრთხოებაზე და ბავშვების ზედამხედველობაზე.</p>
+        </div>
+
+        <div class="terms-section">
+            <h3>7. მოქმედი კანონმდებლობა</h3>
+            <p>ეს წესები და პირობები რეგულირდება საქართველოს კანონმდებლობით. ყველა დავა განიხილება საქართველოს სასამართლოში.</p>
+            <p>თუ ამ წესების რომელიმე პუნქტი ინახება არავალიდურად, დანარჩენი პუნქტები რჩება ძალაში და მოქმედი.</p>
+        </div>
+
+        <div class="terms-section">
+            <h3>8. კონტაქტი</h3>
+            <p>თუ გაქვთ შეკითხვები ამ წესების შესახებ, მოგვმართეთ:</p>
+            
+            <div class="contact-details">
+                <h4>📞 საკონტაქტო ინფორმაცია</h4>
+                <p><strong>ელ. ფოსტა:</strong> <a href="mailto:betlemi.museum@gmail.com">betlemi.museum@gmail.com</a></p>
+                <p><strong>ტელეფონი:</strong> <a href="tel:+995322123456">+995 32 2 123 456</a></p>
+                <p><strong>მისამართი:</strong> ბეთლემის ქუჩა 10N, სოლოლაკი, თბილისი, საქართველო</p>
+                <p><strong>მუშაობის საათები:</strong> 09:00-21:00 (ორშაბათი დღის გარდა)</p>
+                <p><strong>Facebook:</strong> <a href="https://www.facebook.com/profile.php?id=61567248502180" target="_blank">ჩვენი Facebook გვერდი</a></p>
+            </div>
+        </div>
+
+        <div class="terms-footer">
+            <h3>⚖️ იურიდიული ინფორმაცია</h3>
+            <p class="company-info">შპს სამუზეუმო სივრცე</p>
+            <p>საიდენტიფიკაციო კოდი: 406474676</p>
+            <p>იურიდიული მისამართი: თბილისი, საქართველო</p>
+            <p class="last-updated">ეს წესები და პირობები განახლდა: 2024 წელი</p>
+            <p>ვერსია: 1.2 | ბოლო რედაქტირება: დეკემბერი, 2024</p>
+        </div>
+    </div>
+
+    <button class="scroll-to-top" id="scrollToTop">↑</button>
+
+    <script>
+        // Smooth scroll to top functionality
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Add subtle animations when sections come into view
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all terms sections
+        document.querySelectorAll('.terms-section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+
+        // Print functionality
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                window.print();
+            }
+        });
+    </script>
+</body>
+</html>
