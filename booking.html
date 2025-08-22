@@ -712,23 +712,116 @@
             }
 
             processBooking(data) {
-                // Simulate booking process
                 const btn = document.getElementById('purchaseBtn');
                 btn.disabled = true;
                 btn.textContent = '⏳ მიმდინარეობს დამუშავება...';
 
+                // Check payment method
+                if (data.paymentMethod === 'card') {
+                    // Redirect to UniPay for card payment
+                    this.redirectToUniPay(data);
+                } else if (data.paymentMethod === 'transfer') {
+                    // Show bank transfer instructions
+                    this.showBankTransfer(data);
+                } else {
+                    // On-site payment
+                    this.confirmOnSitePayment(data);
+                }
+            }
+
+            redirectToUniPay(data) {
+                // Store booking data for callback processing
+                localStorage.setItem('bookingData', JSON.stringify(data));
+                
+                // UniPay integration parameters
+                const uniPayParams = {
+                    // Required UniPay parameters
+                    merchant_id: 'YOUR_MERCHANT_ID', // Replace with actual merchant ID from UniPay
+                    amount: data.total,
+                    currency: 'GEL',
+                    description: `Museum Space B10 - ბილეთები (${Object.values(data.tickets).reduce((sum, t) => sum + t.quantity, 0)} ცალი)`,
+                    order_id: 'MS-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
+                    
+                    // Customer information
+                    customer_name: `${data.customer.firstName} ${data.customer.lastName}`,
+                    customer_email: data.customer.email,
+                    customer_phone: data.customer.phone,
+                    
+                    // Callback URLs - THESE ARE THE IMPORTANT ONES FOR UNIPAY!
+                    success_url: window.location.origin + '/callback.html?status=success',
+                    fail_url: window.location.origin + '/callback.html?status=failed',
+                    callback_url: window.location.origin + '/callback.html',
+                    
+                    // Optional parameters
+                    language: 'ka', // Georgian
+                    preauth: 0, // 0 = immediate charge, 1 = preauthorization
+                };
+
+                // Create form and submit to UniPay
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = 'https://secure.unipayment.ge/payment'; // Replace with actual UniPay URL
+                
+                // Add parameters as hidden inputs
+                Object.entries(uniPayParams).forEach(([key, value]) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = value;
+                    form.appendChild(input);
+                });
+
+                // Add form to page and submit
+                document.body.appendChild(form);
+                
+                // Show redirect message
+                btn.textContent = '🔄 UniPay-ზე გადამისამართება...';
+                
                 setTimeout(() => {
-                    alert(`✅ ბილეთი წარმატებით იყიდება!
+                    form.submit();
+                }, 1000);
+            }
+
+            showBankTransfer(data) {
+                setTimeout(() => {
+                    const bankInfo = `💳 ბანკის გადმორიცხვისთვის:
                     
-📧 დეტალები გამოიგზავნება: ${data.customer.email}
-💰 სულ: ${data.total} ლ
-🎫 ბილეთების რაოდენობა: ${Object.values(data.tickets).reduce((sum, t) => sum + t.quantity, 0)}
+🏦 ბანკი: TBC Bank
+💰 ანგარიში: GE29TB1234567890123456
+🏢 მიმღები: შპს სამუზეუმო სივრცე
+🆔 საიდ. კოდი: 406474676
+
+💵 თანხა: ${data.total} ლარი
+📝 დანიშნულება: ბილეთების შეძენა - ${data.customer.firstName} ${data.customer.lastName}
+
+📧 გადახდის შემდეგ გაგზავნეთ ქვითარი: betlemi.museum@gmail.com
+📞 ინფორმაციისთვის: +995 32 2 123 456`;
+
+                    alert(bankInfo);
                     
-მადლობა, რომ ამირჩიეთ ჩვენი მუზეუმი!`);
-                    
-                    // Redirect back to main page
+                    // Redirect to main page
                     window.location.href = 'index.html';
-                }, 2000);
+                }, 1000);
+            }
+
+            confirmOnSitePayment(data) {
+                setTimeout(() => {
+                    alert(`✅ ბილეთი დაჯავშნილია!
+                    
+📧 დადასტურება გამოიგზავნება: ${data.customer.email}
+💰 თანხა: ${data.total} ლ
+🎫 რაოდენობა: ${Object.values(data.tickets).reduce((sum, t) => sum + t.quantity, 0)} ცალი
+
+🏛️ გადახდა ადგილზე:
+📍 ბეთლემის ქუჩა 10N, სოლოლაკი
+🕒 09:00-21:00 (ორშაბათი გარდა)
+💳 მიღება: ნაღდი ან ბარათი
+
+მადლობა!`);
+                    
+                    // Redirect to main page
+                    window.location.href = 'index.html';
+                }, 1500);
             }
         }
 
