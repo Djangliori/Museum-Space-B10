@@ -42,8 +42,8 @@ export default async function handler(req, res) {
             });
         }
 
-        const MERCHANT_ID = '5015191030581';
-        const API_KEY = 'bc6f5073-6d1c-4abe-8456-1bb814077f6e';
+        const MERCHANT_ID = process.env.UNIPAY_MERCHANT_ID || '5015191030581';
+        const API_KEY = process.env.UNIPAY_API_KEY || 'bc6f5073-6d1c-4abe-8456-1bb814077f6e';
         const authResponse = await fetch('https://apiv2.unipay.com/v3/auth', {
             method: 'POST',
             headers: {
