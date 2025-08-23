@@ -1,12 +1,16 @@
 // SECURE VERSION - UniPay Callback Handler
 // Security improvements applied:
-// - Fixed CORS policy
+// - Fixed CORS policy (betlemi10.com only)
 // - Removed sensitive logging
 // - Added input validation
+// - HMAC SHA256 webhook verification
 // - Improved error handling
 
+const crypto = require('crypto');
+
 const allowedOrigins = [
-  'https://museum-space-b10.vercel.app'
+  'https://betlemi10.com',
+  'https://www.betlemi10.com'
 ];
 
 const setCorsHeaders = (req, res) => {
@@ -31,6 +35,29 @@ const logSecurely = (orderId, status, amount, currency) => {
   });
 };
 
+const verifyWebhookSignature = (payload, signature, secret) => {
+  if (!signature || !secret) {
+    return false;
+  }
+  
+  try {
+    // Generate expected signature
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(JSON.stringify(payload))
+      .digest('hex');
+    
+    // Compare signatures using timing-safe comparison
+    return crypto.timingSafeEqual(
+      Buffer.from(signature, 'hex'),
+      Buffer.from(expectedSignature, 'hex')
+    );
+  } catch (error) {
+    console.error('Signature verification error:', error.message);
+    return false;
+  }
+};
+
 module.exports = async (req, res) => {
   setCorsHeaders(req, res);
 
@@ -42,6 +69,18 @@ module.exports = async (req, res) => {
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Verify webhook signature first
+  const signature = req.headers['x-unipay-signature'] || req.headers['unipay-signature'];
+  const secret = process.env.UNIPAY_SECRET;
+  
+  if (!verifyWebhookSignature(req.body, signature, secret)) {
+    console.warn('Invalid webhook signature:', {
+      ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+      timestamp: new Date().toISOString()
+    });
+    return res.status(401).json({ error: 'Unauthorized - Invalid signature' });
   }
 
   // Log request securely (no sensitive data)

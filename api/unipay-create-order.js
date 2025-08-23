@@ -10,7 +10,7 @@ const validator = require('validator'); // npm install validator
 const CONSTANTS = {
   UNIPAY_AUTH_URL: 'https://apiv2.unipay.com/v3/auth',
   UNIPAY_ORDER_URL: 'https://apiv2.unipay.com/v3/api/order/create',
-  BASE_URL: 'https://museum-space-b10.vercel.app',
+  BASE_URL: 'https://betlemi10.com',
   MAX_AMOUNT: 1000,
   MIN_AMOUNT: 1,
   ORDER_PREFIX: 'MS'
@@ -110,8 +110,17 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // CORS configuration - specific domain only
-  res.setHeader('Access-Control-Allow-Origin', CONSTANTS.BASE_URL);
+  // CORS configuration - betlemi10.com only
+  const allowedOrigins = [
+    'https://betlemi10.com',
+    'https://www.betlemi10.com'
+  ];
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
