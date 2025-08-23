@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>გადახდა გაუქმებულია - სამუზეუმო სივრცე</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Georgian', Arial, sans-serif;
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .cancel-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+        }
+
+        .cancel-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            background: #FF9800;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .cancel-icon::before {
+            content: '⚠';
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        .cancel-icon::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 3px solid #FF9800;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.1; }
+            100% { transform: scale(1); opacity: 0.3; }
+        }
+
+        h1 {
+            color: #E65100;
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .cancel-message {
+            color: #F57C00;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .order-info {
+            background: #fff3e0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .order-info h3 {
+            color: #E65100;
+            font-size: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ffcc02;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: #E65100;
+            font-weight: 600;
+        }
+
+        .reasons {
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .reasons h3 {
+            color: #666;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .reasons ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .reasons li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 25px;
+            color: #666;
+        }
+
+        .reasons li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #FF9800;
+            font-weight: bold;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .contact-info h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .contact-info p {
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #FF9800;
+            border: 2px solid #FF9800;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 600px) {
+            .cancel-container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+        }
+
+        .retry-notice {
+            background: linear-gradient(135deg, #E1F5FE, #B3E5FC);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .retry-notice h4 {
+            color: #1976D2;
+            margin-bottom: 10px;
+        }
+
+        .retry-notice p {
+            color: #0277BD;
+        }
+    </style>
+</head>
+<body>
+    <div class="cancel-container">
+        <div class="cancel-icon"></div>
+        <h1>გადახდა გაუქმებულია</h1>
+        
+        <p class="cancel-message">
+            თქვენი გადახდა არ დასრულებულა. არ გადახვეწოთ, შეგიძლიათ ნებისმიერ დროს კვლავ სცადოთ.
+        </p>
+
+        <div class="order-info" id="orderInfo">
+            <h3>📋 შეკვეთის ინფორმაცია</h3>
+            <div class="detail-row">
+                <span class="detail-label">შეკვეთის ID:</span>
+                <span class="detail-value" id="orderIdDisplay">MS-xxxxxxx</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">სტატუსი:</span>
+                <span class="detail-value">გაუქმებული</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">თარიღი:</span>
+                <span class="detail-value" id="cancelDate"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">ღირებულება:</span>
+                <span class="detail-value">10.00 ₾</span>
+            </div>
+        </div>
+
+        <div class="retry-notice">
+            <h4>💡 რჩევა</h4>
+            <p>შეგიძლიათ კვლავ სცადოთ გადახდა. თქვენი ბანკიდან თანხა არ ჩამოგებული.</p>
+        </div>
+
+        <div class="reasons">
+            <h3>🤔 შესაძლო მიზეზები</h3>
+            <ul>
+                <li>მომხმარებლის მიერ გადახდის პროცესის გაუქმება</li>
+                <li>ბანკის ბარათის არასაკმარისი ბალანსი</li>
+                <li>ტექნიკური შეცდომა</li>
+                <li>ბარათის ვადის გასვლა</li>
+                <li>3D Secure-ის ვერიფიკაცია ვერ გაიარა</li>
+                <li>ინტერნეტ კავშირის პრობლემა</li>
+            </ul>
+        </div>
+
+        <div class="contact-info">
+            <h4>📞 დახმარება საჭიროა?</h4>
+            <p>📧 Email: betlemi.museum@gmail.com</p>
+            <p>📞 ტელეფონი: +995 32 2 123 456</p>
+            <p>🏛️ მისამართი: ბეთლემის ქუჩა 10N, სოლოლაკი, თბილისი</p>
+            <p style="margin-top: 10px; font-style: italic;">
+                ჩვენი გუნდი ყოველთვის მზადაა დაგეხმაროთ!
+            </p>
+        </div>
+
+        <div class="buttons">
+            <a href="/simple-booking.html" class="btn btn-primary">🔄 კვლავ ცდა</a>
+            <a href="/" class="btn btn-secondary">🏠 მთავარ გვერდზე</a>
+            <a href="mailto:betlemi.museum@gmail.com" class="btn btn-outline">✉️ დახმარება</a>
+        </div>
+    </div>
+
+    <script>
+        // Get order ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('order');
+        
+        if (orderId) {
+            document.getElementById('orderIdDisplay').textContent = orderId;
+        }
+
+        // Set current date
+        const now = new Date();
+        const georgianDate = now.toLocaleDateString('ka-GE', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        document.getElementById('cancelDate').textContent = georgianDate;
+
+        // Log cancelled payment for analytics
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'purchase_cancelled', {
+                transaction_id: orderId,
+                value: 10.00,
+                currency: 'GEL'
+            });
+        }
+
+        console.log('Payment cancelled for order:', orderId);
+    </script>
+</body>
+</html>

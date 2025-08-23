@@ -9,10 +9,32 @@
     <!-- Open Graph & Twitter Cards -->
     <meta property="og:title" content="ილუზიების მუზეუმი & ჰოლოზეუმი – ბილეთები, საათები, ლოკაცია">
     <meta property="og:description" content="ნახე ორი უნიკალური გამოცდილება ერთ სივრცეში – ილუზიების მუზეუმი და ჰოლოზეუმი. იყიდე ბილეთი ონლაინ, გაიგე საათები და მისამართი.">
-    <meta property="og:image" content="{{OG_IMAGE_URL}}">
+    <meta property="og:image" content="https://museum-space-b10.vercel.app/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://museum-space-b10.vercel.app">
+    <meta name="twitter:image" content="https://museum-space-b10.vercel.app/og-image.jpg">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     
+    <!-- Preload critical resources -->
+    <link rel="preload" href="config.js" as="script">
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="preconnect" href="https://www.google-analytics.com">
+    
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX', {
+            page_title: 'ილუზიების მუზეუმი & ჰოლოზეუმი',
+            page_location: window.location.href,
+            send_page_view: true
+        });
+    </script>
+
     <!-- JSON-LD Schema -->
     <script type="application/ld+json">
     {
@@ -831,7 +853,7 @@
                 <h1>შეხე რეალობას ახალ თვალით!</h1>
                 <p>ორი სამყაროს გამოცდილება ერთ სივრცეში — ილუზიების მუზეუმი და ჰოლოზეუმი.</p>
                 <div class="cta-group">
-                    <a href="booking.html" class="cta-primary">🎫 იყიდე ბილეთი</a>
+                    <a href="booking.html" class="cta-primary" onclick="gtag('event', 'click', { event_category: 'CTA', event_label: 'Hero Buy Ticket' });">🎫 იყიდე ბილეთი</a>
                     <a href="#tickets" class="cta-secondary">ნახე ფასები</a>
                 </div>
                 <div class="trust-badges">
