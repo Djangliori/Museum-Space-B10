@@ -113,7 +113,8 @@ module.exports = async (req, res) => {
   // CORS configuration - betlemi10.com only
   const allowedOrigins = [
     'https://betlemi10.com',
-    'https://www.betlemi10.com'
+    'https://www.betlemi10.com',
+    'https://museum-space-b10.vercel.app'
   ];
   
   const origin = req.headers.origin;

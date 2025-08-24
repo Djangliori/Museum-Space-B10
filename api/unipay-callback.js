@@ -10,7 +10,8 @@ const crypto = require('crypto');
 
 const allowedOrigins = [
   'https://betlemi10.com',
-  'https://www.betlemi10.com'
+  'https://www.betlemi10.com',
+  'https://museum-space-b10.vercel.app'
 ];
 
 const setCorsHeaders = (req, res) => {
