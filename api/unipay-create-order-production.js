@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
     }
     
     res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
     
     if (req.method === 'OPTIONS') {
@@ -75,13 +75,7 @@ module.exports = async (req, res) => {
             return res.status(500).json({ error: 'Payment system not configured properly' });
         }
         
-        console.log('Starting UniPay payment process...');
-        console.log('Order details:', {
-            firstName: sanitizedFirstName.substring(0, 2) + '***',
-            lastName: sanitizedLastName.substring(0, 2) + '***',
-            amount: parsedAmount,
-            ticketType: sanitizedTicketType
-        });
+        // Starting payment process (logging disabled in production)
         
         // Step 1: Authenticate with UniPay
         let authResponse;
@@ -96,9 +90,9 @@ module.exports = async (req, res) => {
                 }
             });
             
-            console.log('UniPay authentication successful');
+            // Authentication successful
         } catch (authError) {
-            console.error('Authentication error:', authError.response?.data || authError.message);
+            // Authentication failed
             throw new Error(`UniPay authentication failed: ${authError.response?.data?.message || authError.message}`);
         }
         
@@ -109,7 +103,7 @@ module.exports = async (req, res) => {
                            authResponse.data?.token;
                            
         if (!accessToken) {
-            console.error('No access token received');
+            // No access token received
             throw new Error('Failed to authenticate with UniPay - no access token received');
         }
         
@@ -135,11 +129,7 @@ module.exports = async (req, res) => {
             // Removed Language and InApp as they might cause permission issues
         };
         
-        console.log('Creating UniPay order:', {
-            orderId,
-            amount: parsedAmount,
-            currency: 'GEL'
-        });
+        // Creating UniPay order
         
         let orderResponse;
         try {
@@ -154,14 +144,14 @@ module.exports = async (req, res) => {
                 }
             });
             
-            console.log('Order creation response status:', orderResponse.status);
+            // Order creation response received
         } catch (orderError) {
-            console.error('Order creation error:', orderError.response?.data || orderError.message);
+            // Order creation error occurred
             throw new Error(`Failed to create order: ${orderError.response?.data?.message || orderError.message}`);
         }
         
         if (orderResponse.status !== 200 && orderResponse.status !== 201) {
-            console.error('Order creation failed:', orderResponse.data);
+            // Order creation failed
             throw new Error(`Order creation failed with status ${orderResponse.status}: ${JSON.stringify(orderResponse.data)}`);
         }
         
@@ -171,11 +161,11 @@ module.exports = async (req, res) => {
         
         // Check for error in response
         if (orderResponse.data.errorcode && orderResponse.data.errorcode !== 0) {
-            console.error('UniPay error:', orderResponse.data);
+            // UniPay returned error
             throw new Error(`UniPay error: ${orderResponse.data.message || 'Unknown error'}`);
         }
         
-        console.log('Order created successfully');
+        // Order created successfully
         
         // UniPay returns the checkout URL in data.data.Checkout
         const paymentUrl = orderResponse.data.data?.Checkout || 
@@ -185,11 +175,11 @@ module.exports = async (req, res) => {
                           orderResponse.data.redirect_url;
         
         if (!paymentUrl) {
-            console.error('No payment URL in response:', orderResponse.data);
+            // No payment URL in response
             throw new Error('No payment URL returned from UniPay');
         }
         
-        console.log('Payment URL generated successfully');
+        // Payment URL generated successfully
         
         return res.status(200).json({
             success: true,
@@ -203,10 +193,7 @@ module.exports = async (req, res) => {
         });
         
     } catch (error) {
-        console.error('Payment processing error:', {
-            message: error.message,
-            timestamp: new Date().toISOString()
-        });
+        // Payment processing error occurred
         
         return res.status(500).json({
             error: 'Payment processing failed',

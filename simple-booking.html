@@ -342,7 +342,7 @@
                 
                 // Show loading state
                 this.cardPaymentBtn.disabled = true;
-                this.cardPaymentBtn.innerHTML = '⏳ გადახდა მუშავდება...';
+                this.cardPaymentBtn.textContent = '⏳ გადახდა მუშავდება...';
 
                 try {
                     // Call UniPay API
@@ -365,11 +365,7 @@
                     if (result.success && result.paymentUrl) {
                         // Show success message briefly
                         this.updateStepIndicator(2);
-                        this.successMessage.innerHTML = `
-                            <strong>✅ შეკვეთა შექმნილია!</strong><br>
-                            🆔 შეკვეთის კოდი: <strong>${result.orderId}</strong><br>
-                            <em>გადამისამართება უნიფეის გვერდზე...</em>
-                        `;
+                        this.successMessage.textContent = '✅ შეკვეთა შექმნილია! გადამისამართება უნიფეის გვერდზე...';
                         this.successMessage.style.display = 'block';
                         this.form.style.display = 'none';
 
@@ -386,16 +382,12 @@
                     console.error('Payment error:', error);
                     
                     // Show error message
-                    this.successMessage.innerHTML = `
-                        <strong style="color: #e74c3c;">❌ შეცდომა!</strong><br>
-                        ${error.message}<br>
-                        <em>გთხოვთ კვლავ სცადოთ ან დაუკავშირდით მხარდაჭერას</em>
-                    `;
+                    this.successMessage.textContent = `❌ შეცდომა! ${error.message}. გთხოვთ კვლავ სცადოთ ან დაუკავშირდით მხარდაჭერას`;
                     this.successMessage.style.display = 'block';
                     
                     // Reset button
                     this.cardPaymentBtn.disabled = false;
-                    this.cardPaymentBtn.innerHTML = '💳 ბარათით გადახდა';
+                    this.cardPaymentBtn.textContent = '💳 ბარათით გადახდა';
                 }
             }
 
@@ -432,7 +424,7 @@
                     `;
                 }
 
-                this.successMessage.innerHTML = message;
+                this.successMessage.textContent = message.replace(/<[^>]*>/g, '');
                 this.successMessage.style.display = 'block';
 
                 // Hide form

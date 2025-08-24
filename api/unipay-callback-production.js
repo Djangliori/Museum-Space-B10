@@ -2,11 +2,12 @@
 const crypto = require('crypto');
 
 module.exports = async (req, res) => {
-    console.log('UniPay callback received:', {
-        method: req.method,
-        timestamp: new Date().toISOString(),
-        ip: req.headers['x-forwarded-for'] || req.connection?.remoteAddress
-    });
+    // Security headers for callback endpoint
+    res.setHeader('Access-Control-Allow-Origin', 'https://apiv2.unipay.com');
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    
+    // UniPay callback received
     
     // UniPay sends POST callbacks with payment status
     if (req.method === 'POST') {
@@ -22,17 +23,7 @@ module.exports = async (req, res) => {
                 TransactionID
             } = req.body;
             
-            console.log('Payment callback data:', {
-                OrderHashID,
-                MerchantOrderID,
-                Status,
-                PaymentStatus,
-                Amount,
-                Currency,
-                PaymentMethod,
-                TransactionID,
-                timestamp: new Date().toISOString()
-            });
+            // Payment callback data received
             
             // Validate required fields
             if (!MerchantOrderID) {
@@ -47,36 +38,26 @@ module.exports = async (req, res) => {
             if (Status === 'Success' || PaymentStatus === 'Success' || Status === '1' || Status === 1) {
                 orderStatus = 'paid';
                 paymentResult = 'success';
-                console.log(`✅ Payment SUCCESS for order ${MerchantOrderID}`);
+                // Payment successful
             } else if (Status === 'Failed' || PaymentStatus === 'Failed' || Status === '0' || Status === 0) {
                 orderStatus = 'failed';
                 paymentResult = 'failed';
-                console.log(`❌ Payment FAILED for order ${MerchantOrderID}`);
+                // Payment failed
             } else if (Status === 'Cancelled' || PaymentStatus === 'Cancelled') {
                 orderStatus = 'cancelled';
                 paymentResult = 'cancelled';
-                console.log(`🚫 Payment CANCELLED for order ${MerchantOrderID}`);
+                // Payment cancelled
             } else if (Status === 'Processing' || PaymentStatus === 'Processing') {
                 orderStatus = 'processing';
                 paymentResult = 'processing';
-                console.log(`⏳ Payment PROCESSING for order ${MerchantOrderID}`);
+                // Payment processing
             } else {
-                console.log(`❓ Unknown payment status for order ${MerchantOrderID}:`, { Status, PaymentStatus });
+                // Unknown payment status
             }
             
             // TODO: Here you would normally update your database
             // For now, we just log the status change
-            console.log('Payment status update:', {
-                orderId: MerchantOrderID,
-                oldStatus: 'pending',
-                newStatus: orderStatus,
-                paymentResult,
-                amount: Amount,
-                currency: Currency,
-                paymentMethod: PaymentMethod,
-                transactionId: TransactionID,
-                timestamp: new Date().toISOString()
-            });
+            // Payment status updated
             
             // TODO: Based on status, you could:
             // - Send confirmation email to customer
@@ -85,7 +66,7 @@ module.exports = async (req, res) => {
             // - Trigger fulfillment processes
             
             if (orderStatus === 'paid') {
-                console.log('TODO: Send confirmation email and generate ticket');
+                // TODO: Send confirmation email and generate ticket
                 // Example: await sendConfirmationEmail(customerEmail, orderDetails);
                 // Example: await generateMuseumTicket(MerchantOrderID);
             }
@@ -101,11 +82,7 @@ module.exports = async (req, res) => {
             });
             
         } catch (error) {
-            console.error('Callback processing error:', {
-                error: error.message,
-                stack: error.stack,
-                timestamp: new Date().toISOString()
-            });
+            // Callback processing error occurred
             
             // Still return 200 to prevent UniPay from retrying
             return res.status(200).json({
