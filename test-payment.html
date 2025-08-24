@@ -95,6 +95,7 @@
             </div>
             
             <button type="submit" id="testBtn">🧪 Test UniPay API</button>
+            <button type="button" id="sandboxBtn" style="margin-left: 10px; background: #28a745;">🔧 Test Endpoints</button>
         </form>
         
         <div id="result" class="result" style="display: none;"></div>
@@ -168,6 +169,52 @@
             } finally {
                 btn.disabled = false;
                 btn.textContent = '🧪 Test UniPay API';
+            }
+        });
+
+        // Sandbox test button
+        document.getElementById('sandboxBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('sandboxBtn');
+            const result = document.getElementById('result');
+            
+            btn.disabled = true;
+            btn.textContent = '⏳ Testing Endpoints...';
+            result.style.display = 'block';
+            result.className = 'result info';
+            result.textContent = 'Testing all UniPay endpoints...\n\n';
+            
+            try {
+                const response = await fetch('/api/unipay-sandbox', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        test: 'endpoint_discovery'
+                    })
+                });
+                
+                result.textContent += `Response Status: ${response.status} ${response.statusText}\n\n`;
+                
+                const responseText = await response.text();
+                const jsonData = JSON.parse(responseText);
+                
+                result.textContent += `Results:\n${JSON.stringify(jsonData, null, 2)}\n`;
+                
+                if (jsonData.recommendation) {
+                    result.className = 'result success';
+                    result.textContent += `\n✅ RECOMMENDATION: ${jsonData.recommendation}`;
+                } else {
+                    result.className = 'result error';
+                    result.textContent += `\n❌ No working endpoints found`;
+                }
+                
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent += `\n💥 Error: ${error.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔧 Test Endpoints';
             }
         });
     </script>
