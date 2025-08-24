@@ -53,7 +53,7 @@ module.exports = async (req, res) => {
 
     console.log('Attempting UniPay authentication...');
 
-    // Step 1: Authenticate
+    // Step 1: Authenticate (Try sandbox first)
     const authResponse = await fetch('https://apiv2.unipay.com/v3/auth', {
       method: 'POST',
       headers: {
