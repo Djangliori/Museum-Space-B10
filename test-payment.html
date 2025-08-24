@@ -125,7 +125,7 @@
                 
                 result.textContent += `Request Data: ${JSON.stringify(requestData, null, 2)}\n\n`;
                 
-                const response = await fetch('/api/unipay-create-order-simple', {
+                const response = await fetch('/api/unipay-create-order-production', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

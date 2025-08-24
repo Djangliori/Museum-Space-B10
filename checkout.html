@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>უნიფეი - გადახდა | სამუზეუმო სივრცე</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Georgian', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .checkout-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .unipay-logo {
+            width: 120px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .order-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .order-row:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            color: #2196F3;
+            font-size: 1.1em;
+        }
+
+        .payment-methods {
+            margin: 30px 0;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            border-color: #2196F3;
+            background: #f8f9ff;
+        }
+
+        .payment-method.selected {
+            border-color: #2196F3;
+            background: #f8f9ff;
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            background: #2196F3;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-pay {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-pay:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .security-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .demo-notice {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 480px) {
+            .checkout-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <div class="unipay-logo">
+            UniPay
+        </div>
+        
+        <h1>გადახდის დასრულება</h1>
+        
+        <div class="demo-notice">
+            <strong>🚧 Demo რეჟიმი</strong><br>
+            ეს არის სატესტო გვერდი. ნამდვილი UniPay API permissions-ის შემდეგ მუშაობს.
+        </div>
+        
+        <div class="order-details" id="orderDetails">
+            <div class="order-row">
+                <span>პროდუქტი:</span>
+                <span id="orderProduct">სამუზეუმო სივრცის ბილეთი</span>
+            </div>
+            <div class="order-row">
+                <span>შეკვეთის კოდი:</span>
+                <span id="orderCode">MOCK-123456789</span>
+            </div>
+            <div class="order-row">
+                <span>თანხა:</span>
+                <span id="orderAmount">10.00 ₾</span>
+            </div>
+            <div class="order-row">
+                <span>სულ გადასახდელი:</span>
+                <span id="orderTotal">10.00 ₾</span>
+            </div>
+        </div>
+        
+        <div class="payment-methods">
+            <div class="payment-method selected" data-method="card">
+                <div class="payment-icon">💳</div>
+                <div>
+                    <div style="font-weight: 600;">ბანკის ბარათი</div>
+                    <div style="font-size: 14px; color: #666;">Visa, Mastercard</div>
+                </div>
+            </div>
+            
+            <div class="payment-method" data-method="bank">
+                <div class="payment-icon">🏦</div>
+                <div>
+                    <div style="font-weight: 600;">ინტერნეტ ბანკი</div>
+                    <div style="font-size: 14px; color: #666;">TBC, BOG, Bank of Georgia</div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="btn-pay" id="payBtn">
+            🔒 გადახდა 10.00 ₾
+        </button>
+        
+        <div class="security-info">
+            🛡️ გადახდა დაცულია SSL შიფრაციით
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('order_id') || 'MOCK-' + Date.now();
+        const amount = urlParams.get('amount') || '10.00';
+        const description = urlParams.get('description') || 'სამუზეუმო სივრცის ბილეთი';
+
+        // Update order details
+        document.getElementById('orderCode').textContent = orderId;
+        document.getElementById('orderAmount').textContent = amount + ' ₾';
+        document.getElementById('orderTotal').textContent = amount + ' ₾';
+        document.getElementById('orderProduct').textContent = decodeURIComponent(description);
+        document.getElementById('payBtn').innerHTML = `🔒 გადახდა ${amount} ₾`;
+
+        // Payment method selection
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', () => {
+                document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+                method.classList.add('selected');
+            });
+        });
+
+        // Payment button
+        document.getElementById('payBtn').addEventListener('click', () => {
+            const btn = document.getElementById('payBtn');
+            const selectedMethod = document.querySelector('.payment-method.selected').dataset.method;
+            
+            btn.disabled = true;
+            btn.innerHTML = '⏳ მუშავდება...';
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                // Mock payment success - redirect to success page
+                const successUrl = urlParams.get('success_url') || 'payment-success.html';
+                window.location.href = successUrl + (successUrl.includes('?') ? '&' : '?') + 'order=' + orderId + '&status=success&method=' + selectedMethod;
+            }, 2000);
+        });
+
+        // Auto-fill from URL parameters if available
+        console.log('Checkout loaded:', {
+            orderId,
+            amount,
+            description,
+            allParams: Object.fromEntries(urlParams.entries())
+        });
+    </script>
+</body>
+</html>
