@@ -5,7 +5,18 @@
 // - Better error handling
 // - Rate limiting ready
 
-const validator = require('validator'); // npm install validator
+// Try to load validator, fallback to basic validation if not available
+let validator;
+try {
+  validator = require('validator');
+} catch (e) {
+  validator = {
+    escape: (str) => str.replace(/[&<>"']/g, (match) => {
+      const escapes = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;' };
+      return escapes[match];
+    })
+  };
+}
 
 const CONSTANTS = {
   UNIPAY_AUTH_URL: 'https://apiv2.unipay.com/v3/auth',
@@ -219,10 +230,20 @@ module.exports = async (req, res) => {
       timestamp: new Date().toISOString()
     });
 
-    // Don't expose internal error details
+    // Don't expose internal error details to client, but log them
+    console.error('Detailed error info:', {
+      stack: error.stack,
+      envCheck: {
+        hasValidator: !!validator,
+        hasMerchantId: !!process.env.UNIPAY_MERCHANT_ID,
+        hasApiKey: !!process.env.UNIPAY_API_KEY
+      }
+    });
+    
     return res.status(500).json({ 
       error: 'Payment system error',
-      details: 'Unable to process payment request' 
+      details: 'Unable to process payment request',
+      debug: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
