@@ -21,8 +21,7 @@ module.exports = async (req, res) => {
     // CORS headers - production domains only
     const allowedOrigins = [
         'https://betlemi10.com',
-        'https://www.betlemi10.com',
-        'https://museum-space-b10.vercel.app'
+        'https://www.betlemi10.com'
     ];
     
     const origin = req.headers.origin;
