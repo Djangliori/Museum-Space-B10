@@ -788,10 +788,175 @@
             box-shadow: 0 5px 15px rgba(255, 211, 77, 0.4);
         }
 
+        /* Mobile Navigation Styles */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--bg-soft);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            z-index: 10000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav-header {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-nav-header h2 {
+            color: var(--text);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .mobile-close-btn {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .mobile-close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .mobile-nav-links li {
+            padding: 0 2rem;
+        }
+
+        .mobile-nav-link {
+            display: block;
+            padding: 1rem 0;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-link:hover {
+            color: var(--accent);
+            background: rgba(255, 211, 77, 0.05);
+            margin: 0 -2rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .mobile-nav-cta {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-cta {
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+            background: var(--accent);
+            color: var(--bg);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-cta:hover {
+            background: #e6c043;
+            transform: translateY(-2px);
+        }
+
+        .mobile-nav-secondary {
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .mobile-nav-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
-            .nav-links {
+            .desktop-nav,
+            .desktop-cta {
                 display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
             }
 
             .hero h1 {
@@ -835,14 +1000,47 @@
     <header class="header" role="banner">
         <nav class="nav-container" role="navigation" aria-label="Main navigation">
             <div class="logo">Museum Space</div>
-            <ul class="nav-links">
+            
+            <!-- Desktop Navigation -->
+            <ul class="nav-links desktop-nav">
                 <li><a href="#home">სახლი</a></li>
                 <li><a href="#illusions">ილუზიების მუზეუმი</a></li>
                 <li><a href="#holozeum">ჰოლოზეუმი</a></li>
                 <li><a href="#tickets">ბილეთები</a></li>
                 <li><a href="#contact">კონტაქტი</a></li>
             </ul>
-            <a href="shop.html" class="cta-header">იყიდე ბილეთი</a>
+            <a href="/biletebi" class="cta-header desktop-cta">იყიდე ბილეთი</a>
+            
+            <!-- Mobile Hamburger Menu -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="მენიუს გახსნა">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Mobile Navigation -->
+            <div class="mobile-nav" id="mobileNav">
+                <div class="mobile-nav-header">
+                    <h2>მენიუ</h2>
+                    <button class="mobile-close-btn" id="mobileCloseBtn" aria-label="მენიუს დახურვა">
+                        ✕
+                    </button>
+                </div>
+                <ul class="mobile-nav-links">
+                    <li><a href="#home" class="mobile-nav-link">🏠 სახლი</a></li>
+                    <li><a href="#illusions" class="mobile-nav-link">🎭 ილუზიების მუზეუმი</a></li>
+                    <li><a href="#holozeum" class="mobile-nav-link">✨ ჰოლოზეუმი</a></li>
+                    <li><a href="#tickets" class="mobile-nav-link">🎫 ბილეთები</a></li>
+                    <li><a href="#contact" class="mobile-nav-link">📞 კონტაქტი</a></li>
+                </ul>
+                <div class="mobile-nav-cta">
+                    <a href="/biletebi" class="cta-primary mobile-cta">🎫 იყიდე ბილეთი</a>
+                    <a href="/wesmdebi" class="mobile-nav-secondary">📋 წესები და პირობები</a>
+                </div>
+            </div>
+            
+            <!-- Mobile Overlay -->
+            <div class="mobile-overlay" id="mobileOverlay"></div>
         </nav>
     </header>
 
@@ -853,7 +1051,7 @@
                 <h1>შეხე რეალობას ახალ თვალით!</h1>
                 <p>ორი სამყაროს გამოცდილება ერთ სივრცეში — ილუზიების მუზეუმი და ჰოლოზეუმი.</p>
                 <div class="cta-group">
-                    <a href="shop.html" class="cta-primary" onclick="gtag('event', 'click', { event_category: 'CTA', event_label: 'Hero Buy Ticket' });">🎫 იყიდე ბილეთი</a>
+                    <a href="/biletebi" class="cta-primary" onclick="gtag('event', 'click', { event_category: 'CTA', event_label: 'Hero Buy Ticket' });">🎫 იყიდე ბილეთი</a>
                     <a href="#tickets" class="cta-secondary">ნახე ფასები</a>
                 </div>
                 <div class="trust-badges">
@@ -948,7 +1146,7 @@
             <div class="pricing-container">
                 <h2>ბილეთები და ფასები</h2>
                 <div class="pricing-table">
-                    <a href="simple-booking.html" class="ticket-card ticket-link">
+                    <a href="/shekveta" class="ticket-card ticket-link">
                         <div class="ticket-icon">🎫</div>
                         <div class="ticket-details">
                             <div class="ticket-type">მოზრდილი</div>
@@ -958,7 +1156,7 @@
                         <div class="ticket-buy-btn">შეძენა →</div>
                     </a>
                     
-                    <a href="simple-booking.html" class="ticket-card ticket-link">
+                    <a href="/shekveta" class="ticket-card ticket-link">
                         <div class="ticket-icon">📚</div>
                         <div class="ticket-details">
                             <div class="ticket-type">სტუდენტი</div>
@@ -968,7 +1166,7 @@
                         <div class="ticket-buy-btn">შეძენა →</div>
                     </a>
                     
-                    <a href="simple-booking.html" class="ticket-card ticket-link">
+                    <a href="/shekveta" class="ticket-card ticket-link">
                         <div class="ticket-icon">👶</div>
                         <div class="ticket-details">
                             <div class="ticket-type">ბავშვი</div>
@@ -1009,7 +1207,7 @@
                     ⚡ ბილეთები იწურება სწრაფად
                 </p>
                 
-                <a href="simple-booking.html" class="cta-primary" style="font-size: 1.2rem; padding: 1.2rem 2.5rem;">
+                <a href="/shekveta" class="cta-primary" style="font-size: 1.2rem; padding: 1.2rem 2.5rem;">
                     იყიდე ბილეთი ონლაინ
                 </a>
             </div>
@@ -1152,7 +1350,7 @@
                 <ul class="footer-links">
                     <li><a href="#contact">კონტაქტი</a></li>
                     <li><a href="#faq">FAQ</a></li>
-                    <li><a href="terms.html">წესები და პირობები</a></li>
+                    <li><a href="/wesmdebi">წესები და პირობები</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -1276,6 +1474,59 @@
                 imageObserver.observe(img);
             });
         }
+
+        // Mobile Navigation Functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        // Open mobile menu
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.add('active');
+            mobileOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        });
+
+        // Close mobile menu
+        const closeMobileMenu = () => {
+            mobileNav.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        };
+
+        mobileCloseBtn.addEventListener('click', closeMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+
+        // Close mobile menu when clicking nav links
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileMenu();
+                // Small delay to allow menu to close before scrolling
+                setTimeout(() => {
+                    if (link.getAttribute('href').startsWith('#')) {
+                        const target = document.querySelector(link.getAttribute('href'));
+                        if (target) {
+                            const headerHeight = 80;
+                            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                            
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                }, 300);
+            });
+        });
+
+        // Close mobile menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
 
         // Performance optimization: reduce motion for users who prefer it
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
