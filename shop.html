@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ბილეთები - სამუზეუმო სივრცე</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Georgian', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            position: relative;
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .product-info {
+            padding: 30px;
+        }
+
+        .product-title {
+            color: #333;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .product-description {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .product-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .product-features li {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .product-features li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .buy-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .buy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .age-tag {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .combo-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .product-info {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">მს</div>
+            <h1>მუზეუმის ბილეთები</h1>
+            <p class="subtitle">აირჩიეთ თქვენთვის სასურველი ბილეთი</p>
+        </div>
+
+        <div class="products-grid">
+            <!-- 1. 2 მუზეუმის კომბო – ჰოლოზეუმი და ილუზიები (ზრდასრული) -->
+            <div class="product-card" onclick="buyTicket('combo-adult')">
+                <div class="product-image">
+                    <div class="combo-badge">კომბო</div>
+                    <div class="age-tag">ზრდასრული</div>
+                    🏛️
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">2 მუზეუმის კომბო – ჰოლოზეუმი და ილუზიები</h3>
+                    <p class="product-description">ორივე მუზეუმის ერთად მონახულების უფლება. ზრდასრულთათვის.</p>
+                    <div class="product-price">35₾</div>
+                    <ul class="product-features">
+                        <li>ჰოლოზეუმი - ვან გოგის ციფრული გამოფენა</li>
+                        <li>ილუზიების მუზეუმი</li>
+                        <li>ზრდასრული ბილეთი</li>
+                        <li>1 დღიანი ვისიტი</li>
+                    </ul>
+                    <button class="buy-button">🎫 ბილეთის შეძენა</button>
+                </div>
+            </div>
+
+            <!-- 2. 2 მუზეუმის კომბო – ჰოლოზეუმი და ილუზიები (საბავშვო) -->
+            <div class="product-card" onclick="buyTicket('combo-child')">
+                <div class="product-image">
+                    <div class="combo-badge">კომბო</div>
+                    <div class="age-tag">15 წლამდე</div>
+                    👶
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">2 მუზეუმის კომბო – ჰოლოზეუმი და ილუზიები</h3>
+                    <p class="product-description">ორივე მუზეუმის ერთად მონახულების უფლება. 15 წლამდე ასაკისთვის.</p>
+                    <div class="product-price">20₾</div>
+                    <ul class="product-features">
+                        <li>ჰოლოზეუმი - ვან გოგის ციფრული გამოფენა</li>
+                        <li>ილუზიების მუზეუმი</li>
+                        <li>საბავშვო ბილეთი (15 წლამდე)</li>
+                        <li>1 დღიანი ვისიტი</li>
+                    </ul>
+                    <button class="buy-button">🎫 ბილეთის შეძენა</button>
+                </div>
+            </div>
+
+            <!-- 3. ილუზიების მუზეუმი (ზრდასრული) -->
+            <div class="product-card" onclick="buyTicket('illusions-adult')">
+                <div class="product-image">
+                    <div class="age-tag">ზრდასრული</div>
+                    🎭
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">ილუზიების მუზეუმი</h3>
+                    <p class="product-description">ოპტიკური ილუზიებისა და ინტერაქტიული ექსპონატების მუზეუმი.</p>
+                    <div class="product-price">25₾</div>
+                    <ul class="product-features">
+                        <li>ინტერაქტიული ექსპონატები</li>
+                        <li>ოპტიკური ილუზიები</li>
+                        <li>ზრდასრული ბილეთი</li>
+                        <li>ფოტოგრაფირების უფლება</li>
+                    </ul>
+                    <button class="buy-button">🎫 ბილეთის შეძენა</button>
+                </div>
+            </div>
+
+            <!-- 4. ილუზიების მუზეუმი (საბავშვო) -->
+            <div class="product-card" onclick="buyTicket('illusions-child')">
+                <div class="product-image">
+                    <div class="age-tag">15 წლამდე</div>
+                    🧸
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">ილუზიების მუზეუმი</h3>
+                    <p class="product-description">ოპტიკური ილუზიებისა და ინტერაქტიული ექსპონატების მუზეუმი. 15 წლამდე ასაკისთვის.</p>
+                    <div class="product-price">15₾</div>
+                    <ul class="product-features">
+                        <li>ინტერაქტიული ექსპონატები</li>
+                        <li>ოპტიკური ილუზიები</li>
+                        <li>საბავშვო ბილეთი (15 წლამდე)</li>
+                        <li>ფოტოგრაფირების უფლება</li>
+                    </ul>
+                    <button class="buy-button">🎫 ბილეთის შეძენა</button>
+                </div>
+            </div>
+
+            <!-- 5. ჰოლოზეუმი (ზრდასრული) -->
+            <div class="product-card" onclick="buyTicket('holoseum-adult')">
+                <div class="product-image">
+                    <div class="age-tag">ზრდასრული</div>
+                    🎨
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">ჰოლოზეუმი – ვან გოგის ციფრული გამოფენა</h3>
+                    <p class="product-description">ვან გოგის ნამუშევრების დიდფორმატიანი ციფრული პროექცია.</p>
+                    <div class="product-price">25₾</div>
+                    <ul class="product-features">
+                        <li>ვან გოგის ციფრული გამოფენა</li>
+                        <li>360° იმერსიული გამოცდილება</li>
+                        <li>ზრდასრული ბილეთი</li>
+                        <li>45 წუთიანი შოუ</li>
+                    </ul>
+                    <button class="buy-button">🎫 ბილეთის შეძენა</button>
+                </div>
+            </div>
+
+            <!-- 6. ჰოლოზეუმი (საბავშვო) -->
+            <div class="product-card" onclick="buyTicket('holoseum-child')">
+                <div class="product-image">
+                    <div class="age-tag">15 წლამდე</div>
+                    🌟
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">ჰოლოზეუმი – ვან გოგის ციფრული გამოფენა</h3>
+                    <p class="product-description">ვან გოგის ნამუშევრების დიდფორმატიანი ციფრული პროექცია. 15 წლამდე ასაკისთვის.</p>
+                    <div class="product-price">15₾</div>
+                    <ul class="product-features">
+                        <li>ვან გოგის ციფრული გამოფენა</li>
+                        <li>360° იმერსიული გამოცდილება</li>
+                        <li>საბავშვო ბილეთი (15 წლამდე)</li>
+                        <li>45 წუთიანი შოუ</li>
+                    </ul>
+                    <button class="buy-button">🎫 ბილეთის შეძენა</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function buyTicket(ticketType) {
+            // Map ticket types to prices and names
+            const tickets = {
+                'combo-adult': {
+                    name: '2 მუზეუმის კომბო – ჰოლოზეუმი და ილუზიები (ზრდასრული)',
+                    price: 35
+                },
+                'combo-child': {
+                    name: '2 მუზეუმის კომბო – ჰოლოზეუმი და ილუზიები (საბავშვო – 15 წლამდე)',
+                    price: 20
+                },
+                'illusions-adult': {
+                    name: 'ილუზიების მუზეუმი (ზრდასრული)',
+                    price: 25
+                },
+                'illusions-child': {
+                    name: 'ილუზიების მუზეუმი (საბავშვო – 15 წლამდე)',
+                    price: 15
+                },
+                'holoseum-adult': {
+                    name: 'ჰოლოზეუმი – ვან გოგის ციფრული გამოფენა (ზრდასრული)',
+                    price: 25
+                },
+                'holoseum-child': {
+                    name: 'ჰოლოზეუმი – ვან გოგის ციფრული გამოფენა (საბავშვო – 15 წლამდე)',
+                    price: 15
+                }
+            };
+
+            const ticket = tickets[ticketType];
+            if (ticket) {
+                // Store selected ticket in sessionStorage
+                sessionStorage.setItem('selectedTicket', JSON.stringify(ticket));
+                
+                // Redirect to booking page
+                window.location.href = 'simple-booking.html';
+                
+                // Track Google Analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'click', {
+                        event_category: 'Ticket Purchase',
+                        event_label: ticket.name,
+                        value: ticket.price
+                    });
+                }
+            }
+        }
+
+        // Google Analytics 4
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+</body>
+</html>

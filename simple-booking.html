@@ -477,6 +477,28 @@
 
         // Initialize the booking system when page loads
         document.addEventListener('DOMContentLoaded', () => {
+            // Load selected ticket from shop page
+            const selectedTicket = sessionStorage.getItem('selectedTicket');
+            if (selectedTicket) {
+                try {
+                    const ticket = JSON.parse(selectedTicket);
+                    // Update page title and ticket info
+                    const titleElement = document.querySelector('.subtitle');
+                    if (titleElement) {
+                        titleElement.textContent = `შერჩეული: ${ticket.name} - ${ticket.price}₾`;
+                    }
+                    
+                    // Auto-fill ticket type field if it exists
+                    const ticketTypeField = document.getElementById('ticketType');
+                    if (ticketTypeField) {
+                        ticketTypeField.value = ticket.name;
+                    }
+                    
+                } catch (error) {
+                    console.error('Error loading selected ticket:', error);
+                }
+            }
+            
             new SimpleBookingSystem();
         });
 
