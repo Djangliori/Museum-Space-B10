@@ -7,6 +7,18 @@
       "destination": "/index.html"
     },
     {
+      "source": "/biletebi",
+      "destination": "/shop.html"
+    },
+    {
+      "source": "/shekveta",
+      "destination": "/simple-booking.html"
+    },
+    {
+      "source": "/wesmdebi",
+      "destination": "/terms.html"
+    },
+    {
       "source": "/api/unipay-create-order",
       "destination": "/api/unipay-create-order.js"
     }
