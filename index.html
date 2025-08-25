@@ -383,24 +383,27 @@
         }
 
         .pricing-table {
-            background: var(--card);
-            border-radius: 15px;
-            padding: 3rem 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(124, 92, 255, 0.2);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
         }
 
         .ticket-card {
-            display: flex;
-            align-items: center;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            background: linear-gradient(135deg, rgba(124, 92, 255, 0.1), rgba(0, 255, 255, 0.05));
-            border: 1px solid rgba(124, 92, 255, 0.3);
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: 220px;
+            justify-content: space-between;
         }
 
         .ticket-link {
@@ -410,90 +413,122 @@
         }
 
         .ticket-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(0, 255, 255, 0.5);
-            box-shadow: 0 10px 30px rgba(124, 92, 255, 0.2);
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
-        .ticket-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #7c5cff, #00ffff);
-        }
 
         .ticket-icon {
             font-size: 2.5rem;
-            margin-right: 1.5rem;
-            filter: drop-shadow(0 0 10px rgba(124, 92, 255, 0.5));
+            margin-bottom: 1rem;
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .ticket-details {
-            flex: 1;
+            margin-bottom: 1.5rem;
         }
 
         .ticket-type {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 0.3rem;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 0.5rem;
         }
 
         .ticket-description {
             font-size: 0.9rem;
-            color: var(--text-secondary);
+            color: var(--muted);
             opacity: 0.8;
         }
 
         .ticket-price {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, #7c5cff, #00ffff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 20px rgba(124, 92, 255, 0.5);
-            margin-right: 1rem;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .ticket-buy-btn {
-            background: linear-gradient(45deg, #7c5cff, #00ffff);
-            color: white;
-            padding: 0.8rem 1.5rem;
+            background: rgba(255, 211, 77, 0.1);
+            border: 1px solid rgba(255, 211, 77, 0.3);
+            color: var(--accent);
+            padding: 0.8rem 2rem;
             border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3);
+            font-weight: 700;
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
         }
 
         .ticket-card:hover .ticket-buy-btn {
-            background: linear-gradient(45deg, #00ffff, #7c5cff);
-            box-shadow: 0 6px 20px rgba(0, 255, 255, 0.4);
-            transform: scale(1.05);
+            background: var(--accent);
+            color: var(--bg);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 211, 77, 0.3);
         }
 
-        .ticket-info {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(234, 234, 242, 0.1);
+        .ticket-info-section {
+            margin-top: 3rem;
         }
 
-        .info-item {
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
             display: flex;
             align-items: center;
-            padding: 0.8rem 0;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
+            gap: 1rem;
+            transition: all 0.3s ease;
         }
 
-        .info-icon {
-            margin-right: 0.8rem;
-            font-size: 1.2rem;
+        .info-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .info-card .info-icon {
+            font-size: 1.8rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255, 211, 77, 0.2), rgba(255, 211, 77, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .info-content h4 {
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 0 0 0.3rem 0;
+        }
+
+        .info-content p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin: 0;
         }
 
         .price-row {
@@ -1176,18 +1211,31 @@
                         <div class="ticket-buy-btn">შეძენა →</div>
                     </a>
                     
-                    <div class="ticket-info">
-                        <div class="info-item">
-                            <span class="info-icon">⏰</span>
-                            <span>საშუალო ვიზიტის ხანგრძლივობა: 1.5 საათი</span>
+                </div>
+                
+                <!-- Information Section -->
+                <div class="ticket-info-section">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="info-icon">⏰</div>
+                            <div class="info-content">
+                                <h4>ხანგრძლივობა</h4>
+                                <p>1.5 საათი საშუალოდ</p>
+                            </div>
                         </div>
-                        <div class="info-item">
-                            <span class="info-icon">📸</span>
-                            <span>ფოტოგრაფირება უფასო</span>
+                        <div class="info-card">
+                            <div class="info-icon">📸</div>
+                            <div class="info-content">
+                                <h4>ფოტოგრაფირება</h4>
+                                <p>უფასო ყველასთვის</p>
+                            </div>
                         </div>
-                        <div class="info-item">
-                            <span class="info-icon">♿</span>
-                            <span>ხელმისაწვდომია ყველა ასაკისთვის</span>
+                        <div class="info-card">
+                            <div class="info-icon">♿</div>
+                            <div class="info-content">
+                                <h4>ხელმისაწვდომობა</h4>
+                                <p>ყველა ასაკისთვის</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1501,23 +1549,30 @@
 
         // Close mobile menu when clicking nav links
         mobileNavLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                closeMobileMenu();
-                // Small delay to allow menu to close before scrolling
-                setTimeout(() => {
-                    if (link.getAttribute('href').startsWith('#')) {
-                        const target = document.querySelector(link.getAttribute('href'));
-                        if (target) {
+            link.addEventListener('click', (e) => {
+                if (link.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    const target = document.querySelector(targetId);
+                    
+                    if (target) {
+                        closeMobileMenu();
+                        
+                        // Wait for menu to close, then scroll
+                        setTimeout(() => {
                             const headerHeight = 80;
-                            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                            const targetPosition = target.offsetTop - headerHeight;
                             
                             window.scrollTo({
                                 top: targetPosition,
                                 behavior: 'smooth'
                             });
-                        }
+                        }, 350);
                     }
-                }, 300);
+                } else {
+                    // For external links, just close the menu
+                    closeMobileMenu();
+                }
             });
         });
 
