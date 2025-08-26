@@ -1,6 +1,7 @@
 # Museum Space B10 - Georgian Museum Ticket Booking System
 
-🏛️ **Live Site**: https://betlemi10.com
+🏛️ **Live Site**: https://betlemi10.com  
+💳 **Payment System**: UniPay Integration Active
 
 ## 🚀 Quick Deploy
 
