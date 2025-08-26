@@ -21,6 +21,8 @@ export default async function handler(req, res) {
 
     const MERCHANT_ID = process.env.UNIPAY_MERCHANT_ID || "5015191030581";
     const API_KEY = process.env.UNIPAY_API_KEY;
+    console.log('Debug - API_KEY length:', API_KEY ? API_KEY.length : 'undefined');
+    console.log('Debug - API_KEY first 10 chars:', API_KEY ? API_KEY.substring(0, 10) : 'undefined');
     if (!API_KEY) return res.status(500).json({ error: 'API Key not configured' });
 
     const authResponse = await fetch('https://apiv2.unipay.com/v3/auth', {
@@ -28,8 +30,13 @@ export default async function handler(req, res) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ merchant_id: MERCHANT_ID, api_key: API_KEY })
     });
-    if (!authResponse.ok) return res.status(500).json({ error: 'Payment authentication failed' });
+    if (!authResponse.ok) {
+      const errorText = await authResponse.text();
+      console.log('Auth failed - Status:', authResponse.status, 'Response:', errorText);
+      return res.status(500).json({ error: 'Payment authentication failed', debug: errorText });
+    }
     const authData = await authResponse.json();
+    console.log('Auth success - Token length:', authData.token ? authData.token.length : 'no token');
     if (!authData?.token) return res.status(500).json({ error: 'Payment authentication failed' });
     const token = authData.token;
 
