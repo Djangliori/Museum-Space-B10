@@ -161,17 +161,22 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            firstName: data.firstName,
-                            lastName: data.lastName,
-                            phone: data.phone,
-                            amount: 10.0,
-                            ticketType: 'სამუზეუმო სივრცის ბილეთი'
+                            amount: 25,
+                            userDetails: {
+                                name: `${data.firstName} ${data.lastName}`,
+                                email: "booking@betlemi10.com",
+                                phone: data.phone
+                            },
+                            ticketInfo: {
+                                name: "მუზეუმის ბილეთი", 
+                                type: "museum-ticket"
+                            }
                         })
                     });
 
                     const result = await response.json();
 
-                    if (result.success && result.paymentUrl) {
+                    if (result.success && result.payment_url) {
                         // Show success message briefly
                         this.updateStepIndicator(2);
                         this.successMessage.textContent = '✅ შეკვეთა შექმნილია! გადამისამართება უნიფეის გვერდზე...';
@@ -180,11 +185,11 @@
 
                         // Redirect to UniPay after 2 seconds
                         setTimeout(() => {
-                            window.location.href = result.paymentUrl;
+                            window.location.href = result.payment_url;
                         }, 2000);
 
                     } else {
-                        throw new Error(result.details || 'Payment initialization failed');
+                        throw new Error(result.error || 'Payment initialization failed');
                     }
 
                 } catch (error) {
