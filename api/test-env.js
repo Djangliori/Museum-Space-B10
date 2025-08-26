@@ -24,11 +24,30 @@ export default async function handler(req, res) {
     };
 
     let apiConnectivity = 'UNKNOWN';
+    let realAuthTest = 'UNKNOWN';
     try {
       const testResponse = await fetch('https://apiv2.unipay.com/v3/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) });
       apiConnectivity = testResponse.status === 400 ? 'REACHABLE' : `HTTP_${testResponse.status}`;
-    } catch (error) { apiConnectivity = `ERROR: ${error.message}`; }
+      
+      // Test with real credentials
+      const realAuthResponse = await fetch('https://apiv2.unipay.com/v3/auth', { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({ merchant_id: merchantId, api_key: apiKey }) 
+      });
+      if (realAuthResponse.ok) {
+        const authData = await realAuthResponse.json();
+        realAuthTest = authData.token ? 'SUCCESS' : 'NO_TOKEN';
+      } else {
+        const errorText = await realAuthResponse.text();
+        realAuthTest = `FAILED_${realAuthResponse.status}: ${errorText}`;
+      }
+    } catch (error) { 
+      apiConnectivity = `ERROR: ${error.message}`;
+      realAuthTest = `ERROR: ${error.message}`;
+    }
     envStatus.api_connectivity = apiConnectivity;
+    envStatus.real_auth_test = realAuthTest;
     return res.status(200).json(envStatus);
 
   } catch (error) {
