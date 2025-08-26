@@ -1,0 +1,82 @@
+name: Museum Space Auto Deploy
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: 'Force deployment'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install -g vercel@latest
+        
+    - name: Lint and validate
+      run: |
+        echo "🔍 Validating project structure..."
+        test -f package.json || { echo "❌ package.json not found"; exit 1; }
+        test -f vercel.json || { echo "❌ vercel.json not found"; exit 1; }
+        test -f index.html || { echo "❌ index.html not found"; exit 1; }
+        echo "✅ Project structure validation passed"
+        
+    - name: Pull Vercel Environment Information
+      run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      
+    - name: Build Project
+      run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      
+    - name: Deploy to Vercel Preview
+      if: github.event_name == 'pull_request'
+      run: |
+        echo "🚀 Deploying to Vercel Preview..."
+        vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --prebuilt
+        
+    - name: Deploy to Vercel Production
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || github.event.inputs.force_deploy == 'true'
+      run: |
+        echo "🚀 Deploying to Vercel Production..."
+        vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --prebuilt
+        
+    - name: Test Deployment
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+      run: |
+        echo "🧪 Testing production deployment..."
+        sleep 10
+        curl -f https://betlemi10.com/api/test-env || { echo "❌ API test failed"; exit 1; }
+        curl -f https://betlemi10.com/ || { echo "❌ Main site test failed"; exit 1; }
+        echo "✅ Deployment tests passed"
+        
+    - name: Deployment Summary
+      if: always()
+      run: |
+        echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Project**: Museum Space B10" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Production URL**: https://betlemi10.com" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY

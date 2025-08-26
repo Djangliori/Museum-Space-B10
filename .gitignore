@@ -43,4 +43,12 @@ node_modules/
 
 # Vercel
 .vercel
-.vercel
+
+# Deployment files (generated)
+deploy-trigger.txt
+VERSION.txt
+
+# Temporary deployment files
+*.tmp
+*.temp
+.deploy-*
