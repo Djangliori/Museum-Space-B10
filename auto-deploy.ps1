@@ -36,7 +36,7 @@ function Deploy-MuseumSpace {
     Write-Header
     
     # Change to project directory
-    $projectPath = "C:\Users\user\Desktop\Museum space"
+    $projectPath = "C:\Users\user\Museum-Space-B10"
     
     if (!(Test-Path $projectPath)) {
         Write-Error "Project directory not found: $projectPath"

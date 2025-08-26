@@ -6,7 +6,7 @@ echo ===================================================
 echo.
 
 :: Change to project directory
-cd /d "C:\Users\user\Desktop\Museum space"
+cd /d "C:\Users\user\Museum-Space-B10"
 
 :: Check if there are changes
 git status --porcelain > nul
