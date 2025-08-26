@@ -645,12 +645,10 @@
                         
                         // Wait for menu to close, then scroll slowly
                         setTimeout(() => {
-                            const headerHeight = 100; // Account for mobile header
+                            const headerHeight = 100;
                             const targetPosition = target.offsetTop - headerHeight;
-                            
-                            // Use custom smooth scroll with 1.2 second duration
-                            smoothScrollTo(targetPosition, 1200);
-                        }, 400);
+                            smoothScrollTo(targetPosition, 800);
+                        }, 100);
                     }
                 } else {
                     // For external links, just close the menu
