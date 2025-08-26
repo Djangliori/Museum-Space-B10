@@ -63,7 +63,7 @@ export default async function handler(req, res) {
       SuccessRedirectUrl: successUrl,
       CancelRedirectUrl: cancelUrl,
       CallBackUrl: callbackUrl,
-      SubscriptionPlanID: "06H7AB8YY0C4EYADZCBJY37121", // Use example from docs
+      SubscriptionPlanID: "", // Empty for simple orders
       Mlogo: "",
       InApp: 1,
       Language: "GE"
