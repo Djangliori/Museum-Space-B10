@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniPay API ტესტი - Museum Space B10</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        h1 {
+            color: #FFD34D;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        .test-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .test-section h2 {
+            color: #7C5CFF;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin: 1rem 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #EAEAF2;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #FFD34D;
+            box-shadow: 0 0 0 2px rgba(255, 211, 77, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #FFD34D 0%, #FFA500 100%);
+            color: #000;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 211, 77, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background: rgba(47, 230, 166, 0.2);
+            border: 1px solid #2FE6A6;
+            color: #2FE6A6;
+        }
+
+        .status.error {
+            background: rgba(255, 92, 122, 0.2);
+            border: 1px solid #FF5C7A;
+            color: #FF5C7A;
+        }
+
+        .status.info {
+            background: rgba(124, 92, 255, 0.2);
+            border: 1px solid #7C5CFF;
+            color: #7C5CFF;
+        }
+
+        .response-box {
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #2FE6A6;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 1rem 0;
+        }
+
+        .test-data {
+            background: rgba(124, 92, 255, 0.1);
+            border: 1px solid #7C5CFF;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .step-number {
+            background: #7C5CFF;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 UniPay API ტესტი</h1>
+
+        <div class="test-section">
+            <h2>📊 ტესტის ინფორმაცია</h2>
+            <div class="test-data">
+                <p><strong>Merchant ID:</strong> 5015191030581</p>
+                <p><strong>API Environment:</strong> Production (apiv2.unipay.com)</p>
+                <p><strong>Test Status:</strong> Ready for testing</p>
+                <p><strong>Site Domain:</strong> betlemi10.com</p>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔑 Step 1: Auth Test</h2>
+            <p>ვამოწმებთ UniPay API-სთან კავშირს და ავთენტიფიკაციას</p>
+            
+            <button class="btn" onclick="testAuth()">Test Authentication</button>
+            <div id="authStatus"></div>
+            <div id="authResponse" class="response-box" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>💳 Step 2: Payment Test</h2>
+            <p>ვქმნით ტესტის ორდერს და ვამოწმებთ გადახდის URL-ს</p>
+
+            <div class="form-group">
+                <label>ბილეთის ტიპი:</label>
+                <select id="ticketType">
+                    <option value="combo-adult">კომბო ბილეთი (ზრდასრული) - 50 ლარი</option>
+                    <option value="combo-student">კომბო ბილეთი (სტუდენტი) - 30 ლარი</option>
+                    <option value="illusions-adult">ილუზიების მუზეუმი (ზრდასრული) - 25 ლარი</option>
+                    <option value="test">ტესტის გადახდა - 1 ლარი</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>სახელი:</label>
+                <input type="text" id="customerName" value="Test User" placeholder="ტესტის მომხმარებელი">
+            </div>
+
+            <div class="form-group">
+                <label>ელ. ფოსტა:</label>
+                <input type="email" id="customerEmail" value="test@example.com" placeholder="test@example.com">
+            </div>
+
+            <div class="form-group">
+                <label>ტელეფონი:</label>
+                <input type="tel" id="customerPhone" value="+995555123456" placeholder="+995555123456">
+            </div>
+
+            <button class="btn" onclick="testPayment()">Test Payment Creation</button>
+            <div id="paymentStatus"></div>
+            <div id="paymentResponse" class="response-box" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📋 ტესტის ნაბიჯები</h2>
+            <div class="step">
+                <div class="step-number">1</div>
+                <span>დააჭირეთ "Test Authentication" - თუ მწვანე სტატუსი გამოვა, API key მუშაობს</span>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <span>შეავსეთ ფორმა და დააჭირეთ "Test Payment Creation"</span>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <span>თუ მწვანე სტატუსი გამოვა და payment_url მოვა, ყველაფერი მუშაობს!</span>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <span>შემდეგ შეგიძლიათ ნამდვილ საიტზე ტესტი გააკეთოთ</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.hostname === 'localhost' ? '' : 'https://betlemi10.com';
+
+        async function testAuth() {
+            const authBtn = document.querySelector('button[onclick="testAuth()"]');
+            const authStatus = document.getElementById('authStatus');
+            const authResponse = document.getElementById('authResponse');
+
+            authBtn.disabled = true;
+            authBtn.textContent = '🔄 Testing Auth...';
+            
+            authStatus.innerHTML = '<div class="status info">🔄 ვაკეთებთ authentication test...</div>';
+            authResponse.style.display = 'none';
+
+            try {
+                // Direct API test to UniPay
+                const response = await fetch('https://apiv2.unipay.com/v3/auth', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        merchant_id: "5015191030581",
+                        api_key: "YOUR_API_KEY_HERE" // This should be replaced with real key
+                    })
+                });
+
+                const data = await response.json();
+                
+                authResponse.textContent = JSON.stringify(data, null, 2);
+                authResponse.style.display = 'block';
+
+                if (response.ok && data.token) {
+                    authStatus.innerHTML = '<div class="status success">✅ Authentication წარმატებულია! Token მიღებულია.</div>';
+                } else {
+                    authStatus.innerHTML = '<div class="status error">❌ Authentication failed: ' + (data.message || data.error || 'Unknown error') + '</div>';
+                }
+
+            } catch (error) {
+                authStatus.innerHTML = '<div class="status error">❌ Network Error: ' + error.message + '</div>';
+                authResponse.textContent = 'Error: ' + error.message;
+                authResponse.style.display = 'block';
+            }
+
+            authBtn.disabled = false;
+            authBtn.textContent = 'Test Authentication';
+        }
+
+        async function testPayment() {
+            const paymentBtn = document.querySelector('button[onclick="testPayment()"]');
+            const paymentStatus = document.getElementById('paymentStatus');
+            const paymentResponse = document.getElementById('paymentResponse');
+
+            paymentBtn.disabled = true;
+            paymentBtn.textContent = '🔄 Testing Payment...';
+            
+            paymentStatus.innerHTML = '<div class="status info">🔄 ვქმნით ტესტის ორდერს...</div>';
+            paymentResponse.style.display = 'none';
+
+            const ticketPrices = {
+                'combo-adult': 50,
+                'combo-student': 30,
+                'illusions-adult': 25,
+                'test': 1
+            };
+
+            const ticketNames = {
+                'combo-adult': 'კომბო ბილეთი (ზრდასრული)',
+                'combo-student': 'კომბო ბილეთი (სტუდენტი)',
+                'illusions-adult': 'ილუზიების მუზეუმი (ზრდასრული)',
+                'test': 'ტესტის გადახდა'
+            };
+
+            const ticketType = document.getElementById('ticketType').value;
+            const paymentData = {
+                amount: ticketPrices[ticketType],
+                userDetails: {
+                    name: document.getElementById('customerName').value,
+                    email: document.getElementById('customerEmail').value,
+                    phone: document.getElementById('customerPhone').value
+                },
+                ticketInfo: {
+                    name: ticketNames[ticketType],
+                    type: ticketType
+                }
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/unipay-create-order-production`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(paymentData)
+                });
+
+                const data = await response.json();
+                
+                paymentResponse.textContent = JSON.stringify(data, null, 2);
+                paymentResponse.style.display = 'block';
+
+                if (response.ok && data.success && data.payment_url) {
+                    paymentStatus.innerHTML = `
+                        <div class="status success">
+                            ✅ Payment creation წარმატებულია!<br>
+                            🔗 Payment URL: <a href="${data.payment_url}" target="_blank" style="color: #FFD34D;">${data.payment_url}</a><br>
+                            📝 Order ID: ${data.order_id}
+                        </div>
+                    `;
+                } else {
+                    paymentStatus.innerHTML = '<div class="status error">❌ Payment creation failed: ' + (data.error || 'Unknown error') + '</div>';
+                }
+
+            } catch (error) {
+                paymentStatus.innerHTML = '<div class="status error">❌ Network Error: ' + error.message + '</div>';
+                paymentResponse.textContent = 'Error: ' + error.message;
+                paymentResponse.style.display = 'block';
+            }
+
+            paymentBtn.disabled = false;
+            paymentBtn.textContent = 'Test Payment Creation';
+        }
+
+        // Show current environment info
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('UniPay Test Environment:', {
+                hostname: window.location.hostname,
+                apiBase: API_BASE,
+                timestamp: new Date().toISOString()
+            });
+        });
+    </script>
+</body>
+</html>

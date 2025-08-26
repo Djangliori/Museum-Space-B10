@@ -50,7 +50,10 @@ export default async function handler(req, res) {
     
     if (!API_KEY) {
       console.error('UniPay API key not configured');
-      return res.status(500).json({ error: 'Payment service configuration error' });
+      return res.status(500).json({ 
+        error: 'API Key არ არის კონფიგურირებული. Vercel Dashboard-ში დაამატეთ UNIPAY_API_KEY environment variable.',
+        debug: 'Environment variables needed: UNIPAY_API_KEY' 
+      });
     }
 
     // Step 1: Get auth token
