@@ -40,23 +40,56 @@ export default async function handler(req, res) {
 
     const crypto = await import('crypto');
     const orderId = crypto.randomBytes(16).toString('hex');
+    
+    // BASE64 encode URLs as required by UniPay API
+    const successUrl = Buffer.from("https://betlemi10.com/payment-success.html").toString('base64');
+    const cancelUrl = Buffer.from("https://betlemi10.com/payment-cancel.html").toString('base64');
+    const callbackUrl = Buffer.from("https://betlemi10.com/api/unipay-callback-production").toString('base64');
+    
+    // UniPay API v3 correct format
     const orderData = {
-      merchant_id: MERCHANT_ID, amount: sanitizedAmount, currency: "GEL", order_id: orderId,
-      description: `მუზეუმის ბილეთი - ${ticketInfo.name}`,
-      callback_url: "https://betlemi10.com/api/unipay-callback-production",
-      success_url: "https://betlemi10.com/payment-success.html", cancel_url: "https://betlemi10.com/payment-cancel.html",
-      customer: { name: sanitizedName, email: sanitizedEmail, phone: sanitizedPhone }
+      MerchantUser: sanitizedEmail,
+      MerchantOrderID: orderId,
+      OrderPrice: sanitizedAmount,
+      OrderCurrency: "GEL",
+      OrderName: `მუზეუმის ბილეთი - ${sanitizedName}`,
+      OrderDescription: `მუზეუმის ბილეთი - ${ticketInfo.name}`,
+      SuccessRedirectUrl: successUrl,
+      CancelRedirectUrl: cancelUrl,
+      CallBackUrl: callbackUrl,
+      SubscriptionPlanID: "",
+      Mlogo: "",
+      InApp: 1,
+      Language: "GE"
     };
 
     const orderResponse = await fetch('https://apiv2.unipay.com/v3/api/order/create', {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      headers: { 
+        'Authorization': `Bearer ${token}`, 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json' 
+      },
       body: JSON.stringify(orderData)
     });
-    if (!orderResponse.ok) return res.status(500).json({ error: 'Order creation failed' });
+    
+    if (!orderResponse.ok) {
+      const errorText = await orderResponse.text();
+      console.log('Order creation failed - Status:', orderResponse.status, 'Response:', errorText);
+      return res.status(500).json({ error: 'Order creation failed', debug: errorText });
+    }
+    
     const result = await orderResponse.json();
-    if (result?.payment_url) return res.status(200).json({ success: true, payment_url: result.payment_url, order_id: orderId });
-    return res.status(500).json({ error: 'Order creation failed' });
+    console.log('Order creation response:', JSON.stringify(result));
+    
+    // UniPay may return different field names for payment URL
+    const paymentUrl = result?.payment_url || result?.PaymentUrl || result?.url || result?.redirectUrl;
+    
+    if (paymentUrl) {
+      return res.status(200).json({ success: true, payment_url: paymentUrl, order_id: orderId });
+    }
+    
+    return res.status(500).json({ error: 'Order created but no payment URL received', debug: result });
 
   } catch (error) {
     return res.status(500).json({ error: 'Payment processing error' });
