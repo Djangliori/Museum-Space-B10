@@ -1,6 +1,8 @@
 {
   "version": 2,
   "public": true,
+  "buildCommand": null,
+  "outputDirectory": "./",
   "env": {
     "UNIPAY_MERCHANT_ID": "5015191030581",
     "UNIPAY_API_KEY": "bc6f5073-6d1c-4abe-8456-1bb814077f6e"

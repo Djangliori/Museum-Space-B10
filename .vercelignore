@@ -1,0 +1,41 @@
+# Version control
+.git
+.gitignore
+
+# Node modules (not needed for static deployment)
+node_modules
+
+# Development files
+.env
+.env.local
+.env.example
+
+# Logs
+*.log
+logs
+*.log.*
+
+# Editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation and deployment scripts (optional)
+CLAUDE.md
+CLEANUP_REPORT.md
+auto-deploy*.bat
+auto-deploy*.ps1
+
+# Temporary files
+*.tmp
+*.temp

@@ -1,9 +1,11 @@
 {
   "name": "museum-space",
   "version": "1.0.0",
-  "description": "",
-  "main": "config.js",
+  "description": "Georgian Museum Ticket Booking System",
+  "main": "index.html",
   "scripts": {
+    "build": "echo 'Static build - no compilation needed' && mkdir -p public && cp -r * public/ && echo 'Build completed'",
+    "start": "echo 'Starting local server...' && python -m http.server 3000 || python3 -m http.server 3000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
