@@ -19,8 +19,8 @@ export default async function handler(req, res) {
     const phoneRegex = /^(\+995|995)?[0-9]{9}$/;
     if (!phoneRegex.test(sanitizedPhone)) return res.status(400).json({ error: 'Invalid phone number format' });
 
-    const MERCHANT_ID = process.env.UNIPAY_MERCHANT_ID || "5015191030581";
-    const API_KEY = process.env.UNIPAY_API_KEY;
+    const MERCHANT_ID = (process.env.UNIPAY_MERCHANT_ID || "5015191030581").trim();
+    const API_KEY = process.env.UNIPAY_API_KEY ? process.env.UNIPAY_API_KEY.trim() : null;
     console.log('Debug - API_KEY length:', API_KEY ? API_KEY.length : 'undefined');
     console.log('Debug - API_KEY first 10 chars:', API_KEY ? API_KEY.substring(0, 10) : 'undefined');
     if (!API_KEY) return res.status(500).json({ error: 'API Key not configured' });

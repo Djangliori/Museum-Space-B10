@@ -9,8 +9,8 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const merchantId = process.env.UNIPAY_MERCHANT_ID;
-    const apiKey = process.env.UNIPAY_API_KEY;
+    const merchantId = process.env.UNIPAY_MERCHANT_ID ? process.env.UNIPAY_MERCHANT_ID.trim() : null;
+    const apiKey = process.env.UNIPAY_API_KEY ? process.env.UNIPAY_API_KEY.trim() : null;
     const envStatus = {
       timestamp: new Date().toISOString(),
       vercel_region: process.env.VERCEL_REGION || 'unknown',
