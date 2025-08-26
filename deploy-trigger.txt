@@ -1,0 +1,4 @@
+Manual deployment trigger
+Timestamp: 2025-01-26 
+Purpose: Force Vercel refresh after build configuration fixes
+Status: Testing API endpoints and UniPay integration
