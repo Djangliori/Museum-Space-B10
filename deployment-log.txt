@@ -1,3 +1,4 @@
 Deployment triggered at: Tue, Aug 26, 2025 17:17:12
 Runtime fix deployed at: Tue, Aug 26, 2025 17:18:59
 Simplified config deployed at: Tue, Aug 26, 2025 17:21:16
+Build script fixed at: Tue, Aug 26, 2025 17:23:10
