@@ -5,7 +5,7 @@ export default defineConfig({
   // Build configuration
   build: {
     outDir: 'dist',
-    emptyOutDir: true,
+    emptyOutDir: false, // Don't delete API directory
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
@@ -15,9 +15,11 @@ export default defineConfig({
         cancel: resolve(__dirname, 'payment-cancel.html'),
         terms: resolve(__dirname, 'terms.html'),
         test: resolve(__dirname, 'test-unipay.html')
-      }
+      },
+      // Exclude API files from bundling (let Vercel handle them)
+      external: ['api/*']
     },
-    // Ensure API directory is copied for Vercel
+    // Ensure API directory is preserved
     copyPublicDir: true
   },
   
