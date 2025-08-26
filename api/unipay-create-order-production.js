@@ -70,9 +70,8 @@ export default async function handler(req, res) {
     const token = authResponse.data.token;
 
     // Generate secure order ID
-    const array = new Uint8Array(16);
-    crypto.getRandomValues(array);
-    const orderId = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+    const crypto = require('crypto');
+    const orderId = crypto.randomBytes(16).toString('hex');
 
     // Step 2: Create order
     const orderData = {

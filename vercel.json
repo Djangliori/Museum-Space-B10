@@ -5,6 +5,17 @@
     "UNIPAY_MERCHANT_ID": "5015191030581",
     "UNIPAY_API_KEY": "bc6f5073-6d1c-4abe-8456-1bb814077f6e"
   },
+  "functions": {
+    "api/unipay-create-order-production.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/unipay-callback-production.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/test-env.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "rewrites": [
     {
       "source": "/",
@@ -21,6 +32,14 @@
     {
       "source": "/wesmdebi",
       "destination": "/terms.html"
+    },
+    {
+      "source": "/api/unipay-create-order-production",
+      "destination": "/api/unipay-create-order-production.js"
+    },
+    {
+      "source": "/api/unipay-callback-production", 
+      "destination": "/api/unipay-callback-production.js"
     }
   ],
   "headers": [

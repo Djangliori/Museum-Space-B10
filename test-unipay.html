@@ -190,7 +190,7 @@
             <h2>🔑 Step 1: Auth Test</h2>
             <p>ვამოწმებთ UniPay API-სთან კავშირს და ავთენტიფიკაციას</p>
             
-            <button class="btn" onclick="testAuth()">Test Authentication</button>
+            <button class="btn" onclick="testAuth()">Test Environment & API</button>
             <div id="authStatus"></div>
             <div id="authResponse" class="response-box" style="display: none;"></div>
         </div>
@@ -259,43 +259,46 @@
             const authResponse = document.getElementById('authResponse');
 
             authBtn.disabled = true;
-            authBtn.textContent = '🔄 Testing Auth...';
+            authBtn.textContent = '🔄 Testing Environment...';
             
-            authStatus.innerHTML = '<div class="status info">🔄 ვაკეთებთ authentication test...</div>';
+            authStatus.innerHTML = '<div class="status info">🔄 ვამოწმებთ Environment Variables...</div>';
             authResponse.style.display = 'none';
 
             try {
-                // Direct API test to UniPay
-                const response = await fetch('https://apiv2.unipay.com/v3/auth', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        merchant_id: "5015191030581",
-                        api_key: "YOUR_API_KEY_HERE" // This should be replaced with real key
-                    })
-                });
-
-                const data = await response.json();
+                // Test environment variables first
+                const envResponse = await fetch(`${API_BASE}/api/test-env`);
+                const envData = await envResponse.json();
                 
-                authResponse.textContent = JSON.stringify(data, null, 2);
+                authResponse.textContent = JSON.stringify(envData, null, 2);
                 authResponse.style.display = 'block';
 
-                if (response.ok && data.token) {
-                    authStatus.innerHTML = '<div class="status success">✅ Authentication წარმატებულია! Token მიღებულია.</div>';
+                if (envResponse.ok && envData.status === 'READY') {
+                    authStatus.innerHTML = '<div class="status success">✅ Environment Variables მზადაა! API Key კონფიგურირებულია.</div>';
                 } else {
-                    authStatus.innerHTML = '<div class="status error">❌ Authentication failed: ' + (data.message || data.error || 'Unknown error') + '</div>';
+                    let errorMsg = 'Environment Variables არ არის კონფიგურირებული';
+                    if (envData.environment_variables) {
+                        const issues = [];
+                        if (!envData.environment_variables.UNIPAY_MERCHANT_ID.configured) {
+                            issues.push('UNIPAY_MERCHANT_ID');
+                        }
+                        if (!envData.environment_variables.UNIPAY_API_KEY.configured) {
+                            issues.push('UNIPAY_API_KEY');
+                        }
+                        if (issues.length > 0) {
+                            errorMsg += ': ' + issues.join(', ');
+                        }
+                    }
+                    authStatus.innerHTML = '<div class="status error">❌ ' + errorMsg + '</div>';
                 }
 
             } catch (error) {
-                authStatus.innerHTML = '<div class="status error">❌ Network Error: ' + error.message + '</div>';
+                authStatus.innerHTML = '<div class="status error">❌ Environment Test Error: ' + error.message + '</div>';
                 authResponse.textContent = 'Error: ' + error.message;
                 authResponse.style.display = 'block';
             }
 
             authBtn.disabled = false;
-            authBtn.textContent = 'Test Authentication';
+            authBtn.textContent = 'Test Environment';
         }
 
         async function testPayment() {
