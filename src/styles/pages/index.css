@@ -800,3 +800,53 @@
     gap: var(--space-md);
   }
 }
+
+/* Mobile Navigation Overlay */
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: var(--z-modal-backdrop);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-normal);
+}
+
+.mobile-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-nav-secondary {
+  display: block;
+  padding: var(--space-sm);
+  color: var(--color-muted);
+  text-decoration: none;
+  text-align: center;
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
+}
+
+.mobile-nav-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-accent);
+}
+
+.mobile-close-btn {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font-size: var(--font-size-2xl);
+  cursor: pointer;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
+}
+
+.mobile-close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
