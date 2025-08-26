@@ -9,13 +9,13 @@
   },
   "functions": {
     "api/unipay-create-order-production.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "@vercel/node@18"
     },
     "api/unipay-callback-production.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "@vercel/node@18"
     },
     "api/test-env.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "@vercel/node@18"
     }
   },
   "rewrites": [
