@@ -1,6 +1,10 @@
 {
   "version": 2,
   "public": true,
+  "env": {
+    "UNIPAY_MERCHANT_ID": "5015191030581",
+    "UNIPAY_API_KEY": "@unipay_api_key"
+  },
   "rewrites": [
     {
       "source": "/",
@@ -17,10 +21,6 @@
     {
       "source": "/wesmdebi",
       "destination": "/terms.html"
-    },
-    {
-      "source": "/api/unipay-create-order",
-      "destination": "/api/unipay-create-order.js"
     }
   ],
   "headers": [
