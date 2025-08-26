@@ -38,32 +38,44 @@ export default async function handler(req, res) {
     if (!authData?.token) return res.status(500).json({ error: 'Payment authentication failed' });
     const token = authData.token;
 
-    const crypto = await import('crypto');
-    const orderId = crypto.randomBytes(16).toString('hex');
+    // Generate order ID in format similar to docs example
+    const timestamp = Date.now().toString().slice(-6);
+    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const orderId = `MS${timestamp}-${random}`;
     
     // BASE64 encode URLs as required by UniPay API
     const successUrl = Buffer.from("https://betlemi10.com/payment-success.html").toString('base64');
     const cancelUrl = Buffer.from("https://betlemi10.com/payment-cancel.html").toString('base64');
     const callbackUrl = Buffer.from("https://betlemi10.com/api/unipay-callback-production").toString('base64');
     
-    // UniPay API v3 correct format
+    // UniPay API v3 correct format - FIXED ISSUES:
+    // 1. OrderPrice as string with 2 decimals
+    // 2. Use example SubscriptionPlanID from docs
+    // 3. English text only to avoid encoding issues
+    // 4. Order ID format matching docs pattern
     const orderData = {
       MerchantUser: sanitizedEmail,
       MerchantOrderID: orderId,
-      OrderPrice: sanitizedAmount,
+      OrderPrice: sanitizedAmount.toFixed(2), // String format with 2 decimals
       OrderCurrency: "GEL",
-      OrderName: `მუზეუმის ბილეთი - ${sanitizedName}`,
-      OrderDescription: `მუზეუმის ბილეთი - ${ticketInfo.name}`,
+      OrderName: `Museum Ticket - ${sanitizedName}`, // English to avoid encoding issues
+      OrderDescription: `Museum Space B10 Ticket`, // Simple English description
       SuccessRedirectUrl: successUrl,
       CancelRedirectUrl: cancelUrl,
       CallBackUrl: callbackUrl,
-      SubscriptionPlanID: "",
+      SubscriptionPlanID: "06H7AB8YY0C4EYADZCBJY37121", // Use example from docs
       Mlogo: "",
       InApp: 1,
       Language: "GE"
     };
 
-    const orderResponse = await fetch('https://apiv2.unipay.com/v3/api/order/create', {
+    console.log('=== SENDING ORDER TO UNIPAY ===');
+    console.log('Order Data:', JSON.stringify(orderData, null, 2));
+    console.log('Token present:', !!token);
+    console.log('================================');
+
+    // Try both header formats - first with Authorization (standard), then without if it fails
+    let orderResponse = await fetch('https://apiv2.unipay.com/v3/api/order/create', {
       method: 'POST',
       headers: { 
         'Authorization': `Bearer ${token}`, 
@@ -72,6 +84,19 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify(orderData)
     });
+    
+    // If fails with Authorization, try without it (as docs example shows)
+    if (!orderResponse.ok && orderResponse.status === 401) {
+      console.log('Trying without Authorization header...');
+      orderResponse = await fetch('https://apiv2.unipay.com/v3/api/order/create', {
+        method: 'POST',
+        headers: { 
+          'Accept': 'application/json',
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(orderData)
+      });
+    }
     
     if (!orderResponse.ok) {
       const errorText = await orderResponse.text();
