@@ -6,7 +6,13 @@ export class ApiClient {
 
   constructor() {
     // Determine base URL based on environment
-    this.baseUrl = window.location.hostname === 'localhost' ? '' : 'https://betlemi10.com';
+    if (window.location.hostname === 'localhost') {
+      this.baseUrl = '';
+    } else if (window.location.hostname === 'www.betlemi10.com') {
+      this.baseUrl = 'https://www.betlemi10.com';
+    } else {
+      this.baseUrl = 'https://betlemi10.com';
+    }
   }
 
   // Test environment variables and API configuration

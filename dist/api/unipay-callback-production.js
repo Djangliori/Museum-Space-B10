@@ -2,10 +2,22 @@
 // Production version for betlemi10.com
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', 'https://betlemi10.com');
+  // Set CORS headers for both betlemi10.com and www.betlemi10.com
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    'https://betlemi10.com',
+    'https://www.betlemi10.com',
+    'http://localhost:3000',
+    'http://localhost:5173'
+  ];
+  
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   // Handle preflight request
   if (req.method === 'OPTIONS') {

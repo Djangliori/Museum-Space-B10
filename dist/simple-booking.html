@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ბილეთების შეკვეთა - სამუზეუმო სივრცე</title>
+    <!-- Modular CSS Architecture -->
+  <link rel="stylesheet" crossorigin href="/assets/components-COcl-byQ.css">
+  <link rel="stylesheet" crossorigin href="/assets/booking-BZWNOv3q.css">
+</head>
+<body>
+    <div class="booking-background-overlay"></div>
+    
+    <div class="booking-header">
+        <a href="index.html" class="booking-nav-brand">მუზეუმი</a>
+        <a href="/biletebi" class="booking-back-button">← ბილეთების მაღაზია</a>
+    </div>
+
+    <div class="booking-container">
+        <div class="booking-card">
+            <h1 class="booking-title">ბილეთების შეკვეთა</h1>
+            <p class="booking-subtitle">შეავსეთ ინფორმაცია და აირჩიეთ გადახდის მეთოდი</p>
+
+        <div class="step-indicator">
+            <div class="steps">
+                <div class="step active">1</div>
+                <div class="step-line"></div>
+                <div class="step inactive">2</div>
+                <div class="step-line"></div>
+                <div class="step inactive">3</div>
+            </div>
+        </div>
+
+        <form id="bookingForm">
+            <div class="booking-form-group">
+                <label for="firstName" class="booking-form-label">სახელი *</label>
+                <input type="text" id="firstName" name="firstName" required class="booking-form-input">
+                <div class="booking-error-message" id="firstNameError">გთხოვთ შეავსოთ სახელი</div>
+            </div>
+
+            <div class="booking-form-group">
+                <label for="lastName" class="booking-form-label">გვარი *</label>
+                <input type="text" id="lastName" name="lastName" required class="booking-form-input">
+                <div class="booking-error-message" id="lastNameError">გთხოვთ შეავსოთ გვარი</div>
+            </div>
+
+            <div class="booking-form-group">
+                <label for="phone" class="booking-form-label">ტელეფონის ნომერი *</label>
+                <input type="tel" id="phone" name="phone" required placeholder="+995 5XX XXX XXX" class="booking-form-input">
+                <div class="booking-error-message" id="phoneError">გთხოვთ შეავსოთ ვალიდური ტელეფონის ნომერი</div>
+            </div>
+
+            <div class="payment-methods">
+                <h3>აირჩიეთ გადახდის მეთოდი</h3>
+                <div class="payment-buttons">
+                    <button type="button" class="payment-btn card-payment" id="cardPayment" disabled>
+                        💳 ბარათით გადახდა
+                    </button>
+                    <button type="button" class="payment-btn bank-transfer" id="bankTransfer" disabled>
+                        🏦 ბანკში გადარიცხვა
+                    </button>
+                </div>
+            </div>
+        </form>
+
+            <div class="booking-success-message" id="successMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        class SimpleBookingSystem {
+            constructor() {
+                this.form = document.getElementById('bookingForm');
+                this.cardPaymentBtn = document.getElementById('cardPayment');
+                this.bankTransferBtn = document.getElementById('bankTransfer');
+                this.successMessage = document.getElementById('successMessage');
+                
+                this.initEventListeners();
+                this.updatePaymentButtons();
+            }
+
+            initEventListeners() {
+                // Real-time validation
+                const inputs = this.form.querySelectorAll('input[required]');
+                inputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        this.validateField(input);
+                        this.updatePaymentButtons();
+                    });
+                });
+
+                // Payment method handlers
+                this.cardPaymentBtn.addEventListener('click', () => this.handleCardPayment());
+                this.bankTransferBtn.addEventListener('click', () => this.handleBankTransfer());
+            }
+
+            validateField(field) {
+                const errorElement = document.getElementById(field.id + 'Error');
+                let isValid = true;
+
+                if (field.id === 'firstName' || field.id === 'lastName') {
+                    isValid = field.value.trim().length >= 2;
+                } else if (field.id === 'phone') {
+                    const phoneRegex = /^(\+995|995)?[0-9]{9}$/;
+                    isValid = phoneRegex.test(field.value.replace(/\s/g, ''));
+                }
+
+                if (isValid) {
+                    field.style.borderColor = '#28a745';
+                    errorElement.style.display = 'none';
+                } else {
+                    field.style.borderColor = '#e74c3c';
+                    errorElement.style.display = 'block';
+                }
+
+                return isValid;
+            }
+
+            isFormValid() {
+                const inputs = this.form.querySelectorAll('input[required]');
+                return Array.from(inputs).every(input => this.validateField(input));
+            }
+
+            updatePaymentButtons() {
+                const isValid = this.isFormValid();
+                this.cardPaymentBtn.disabled = !isValid;
+                this.bankTransferBtn.disabled = !isValid;
+            }
+
+            generateOrderId() {
+                const timestamp = Date.now();
+                const random = Math.random().toString(36).substr(2, 5).toUpperCase();
+                return `MS-${timestamp}-${random}`;
+            }
+
+            getFormData() {
+                return {
+                    firstName: document.getElementById('firstName').value.trim(),
+                    lastName: document.getElementById('lastName').value.trim(),
+                    phone: document.getElementById('phone').value.trim(),
+                    orderId: this.generateOrderId(),
+                    timestamp: new Date().toLocaleString('ka-GE')
+                };
+            }
+
+            async handleCardPayment() {
+                if (!this.isFormValid()) return;
+
+                const data = this.getFormData();
+                
+                // Show loading state
+                this.cardPaymentBtn.disabled = true;
+                this.cardPaymentBtn.textContent = '⏳ გადახდა მუშავდება...';
+
+                try {
+                    // Call UniPay API
+                    const response = await fetch('/api/unipay-create-order-production', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                            phone: data.phone,
+                            amount: 10.0,
+                            ticketType: 'სამუზეუმო სივრცის ბილეთი'
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success && result.paymentUrl) {
+                        // Show success message briefly
+                        this.updateStepIndicator(2);
+                        this.successMessage.textContent = '✅ შეკვეთა შექმნილია! გადამისამართება უნიფეის გვერდზე...';
+                        this.successMessage.style.display = 'block';
+                        this.form.style.display = 'none';
+
+                        // Redirect to UniPay after 2 seconds
+                        setTimeout(() => {
+                            window.location.href = result.paymentUrl;
+                        }, 2000);
+
+                    } else {
+                        throw new Error(result.details || 'Payment initialization failed');
+                    }
+
+                } catch (error) {
+                    console.error('Payment error:', error);
+                    
+                    // Show error message
+                    this.successMessage.textContent = `❌ შეცდომა! ${error.message}. გთხოვთ კვლავ სცადოთ ან დაუკავშირდით მხარდაჭერას`;
+                    this.successMessage.style.display = 'block';
+                    
+                    // Reset button
+                    this.cardPaymentBtn.disabled = false;
+                    this.cardPaymentBtn.textContent = '💳 ბარათით გადახდა';
+                }
+            }
+
+            handleBankTransfer() {
+                if (!this.isFormValid()) return;
+
+                const data = this.getFormData();
+                this.proceedToNextStep('bank', data);
+            }
+
+            proceedToNextStep(paymentMethod, data) {
+                // Update step indicator
+                this.updateStepIndicator(2);
+
+                // Show success message with next step info
+                let message = '';
+                if (paymentMethod === 'card') {
+                    message = `
+                        <strong>✅ შეკვეთა რეგისტრირებულია!</strong><br>
+                        🆔 შეკვეთის კოდი: <strong>${data.orderId}</strong><br>
+                        👤 ${data.firstName} ${data.lastName}<br>
+                        📞 ${data.phone}<br><br>
+                        <strong>შემდეგი ნაბიჯი:</strong> ბარათით გადახდა<br>
+                        <em>გთხოვთ დაელოდოთ, მალე გადაგიყვანთ გადახდის გვერდზე...</em>
+                    `;
+                } else {
+                    message = `
+                        <strong>✅ შეკვეთა რეგისტრირებულია!</strong><br>
+                        🆔 შეკვეთის კოდი: <strong>${data.orderId}</strong><br>
+                        👤 ${data.firstName} ${data.lastName}<br>
+                        📞 ${data.phone}<br><br>
+                        <strong>შემდეგი ნაბიჯი:</strong> ბანკში გადარიცხვა<br>
+                        <em>მალე მიიღებთ ინსტრუქციებს...</em>
+                    `;
+                }
+
+                this.successMessage.textContent = message.replace(/<[^>]*>/g, '');
+                this.successMessage.style.display = 'block';
+
+                // Hide form
+                this.form.style.display = 'none';
+
+                // Simulate next step after 3 seconds
+                setTimeout(() => {
+                    this.simulateNextStep(paymentMethod, data);
+                }, 3000);
+            }
+
+            updateStepIndicator(activeStep) {
+                const steps = document.querySelectorAll('.step');
+                steps.forEach((step, index) => {
+                    if (index + 1 <= activeStep) {
+                        step.classList.remove('inactive');
+                        step.classList.add('active');
+                    }
+                });
+            }
+
+            simulateNextStep(paymentMethod, data) {
+                this.updateStepIndicator(3);
+                
+                if (paymentMethod === 'card') {
+                    this.successMessage.innerHTML = `
+                        <strong>💳 ბარათით გადახდა</strong><br>
+                        🆔 შეკვეთის კოდი: <strong>${data.orderId}</strong><br><br>
+                        <em>რეალურ სისტემაში აქ იქნებოდა ბარათის გადახდის ინტერფეისი</em><br><br>
+                        <strong>საკონტაქტო ინფორმაცია:</strong><br>
+                        📧 betlemi.museum@gmail.com<br>
+                        📞 +995 32 2 123 456
+                    `;
+                } else {
+                    this.successMessage.innerHTML = `
+                        <strong>🏦 ბანკში გადარიცხვის ინსტრუქცია</strong><br>
+                        🆔 შეკვეთის კოდი: <strong>${data.orderId}</strong><br><br>
+                        <strong>ბანკის რეკვიზიტები:</strong><br>
+                        მიმღები: შპს სამუზეუმო სივრცე<br>
+                        ანგარიშის ნომერი: GE00TB0000000000000000<br>
+                        ბანკი: თიბისი ბანკი<br>
+                        დანიშნულება: ${data.orderId}<br><br>
+                        <strong>საკონტაქტო ინფორმაცია:</strong><br>
+                        📧 betlemi.museum@gmail.com<br>
+                        📞 +995 32 2 123 456
+                    `;
+                }
+            }
+        }
+
+        // Initialize the booking system when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load selected ticket from shop page
+            const selectedTicket = sessionStorage.getItem('selectedTicket');
+            if (selectedTicket) {
+                try {
+                    const ticket = JSON.parse(selectedTicket);
+                    // Update page title and ticket info
+                    const titleElement = document.querySelector('.subtitle');
+                    if (titleElement) {
+                        titleElement.textContent = `შერჩეული: ${ticket.name} - ${ticket.price}₾`;
+                    }
+                    
+                    // Auto-fill ticket type field if it exists
+                    const ticketTypeField = document.getElementById('ticketType');
+                    if (ticketTypeField) {
+                        ticketTypeField.value = ticket.name;
+                    }
+                    
+                } catch (error) {
+                    console.error('Error loading selected ticket:', error);
+                }
+            }
+            
+            new SimpleBookingSystem();
+        });
+
+    </script>
+
+</body>
+</html>

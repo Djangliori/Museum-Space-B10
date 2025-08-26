@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>გადახდა გაუქმებულია - სამუზეუმო სივრცე</title>
+    <!-- Modular CSS Architecture -->
+  <link rel="stylesheet" crossorigin href="/assets/components-COcl-byQ.css">
+  <link rel="stylesheet" crossorigin href="/assets/booking-BZWNOv3q.css">
+</head>
+<body class="cancel-page">
+    <div class="result-container">
+        <div class="cancel-icon"></div>
+        <h1>გადახდა გაუქმებულია</h1>
+        
+        <p class="cancel-message">
+            თქვენი გადახდა არ დასრულებულა. არ გადახვეწოთ, შეგიძლიათ ნებისმიერ დროს კვლავ სცადოთ.
+        </p>
+
+        <div class="order-info" id="orderInfo">
+            <h3>📋 შეკვეთის ინფორმაცია</h3>
+            <div class="detail-row">
+                <span class="detail-label">შეკვეთის ID:</span>
+                <span class="detail-value" id="orderIdDisplay">MS-xxxxxxx</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">სტატუსი:</span>
+                <span class="detail-value">გაუქმებული</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">თარიღი:</span>
+                <span class="detail-value" id="cancelDate"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">ღირებულება:</span>
+                <span class="detail-value">10.00 ₾</span>
+            </div>
+        </div>
+
+        <div class="retry-notice">
+            <h4>💡 რჩევა</h4>
+            <p>შეგიძლიათ კვლავ სცადოთ გადახდა. თქვენი ბანკიდან თანხა არ ჩამოგებული.</p>
+        </div>
+
+        <div class="reasons">
+            <h3>🤔 შესაძლო მიზეზები</h3>
+            <ul>
+                <li>მომხმარებლის მიერ გადახდის პროცესის გაუქმება</li>
+                <li>ბანკის ბარათის არასაკმარისი ბალანსი</li>
+                <li>ტექნიკური შეცდომა</li>
+                <li>ბარათის ვადის გასვლა</li>
+                <li>3D Secure-ის ვერიფიკაცია ვერ გაიარა</li>
+                <li>ინტერნეტ კავშირის პრობლემა</li>
+            </ul>
+        </div>
+
+        <div class="contact-info">
+            <h4>📞 დახმარება საჭიროა?</h4>
+            <p>📧 Email: betlemi.museum@gmail.com</p>
+            <p>📞 ტელეფონი: +995 32 2 123 456</p>
+            <p>🏛️ მისამართი: ბეთლემის ქუჩა 10N, სოლოლაკი, თბილისი</p>
+            <p style="margin-top: 10px; font-style: italic;">
+                ჩვენი გუნდი ყოველთვის მზადაა დაგეხმაროთ!
+            </p>
+        </div>
+
+        <div class="buttons">
+            <a href="/simple-booking.html" class="btn btn-primary">🔄 კვლავ ცდა</a>
+            <a href="/" class="btn btn-secondary">🏠 მთავარ გვერდზე</a>
+            <a href="mailto:betlemi.museum@gmail.com" class="btn btn-outline">✉️ დახმარება</a>
+        </div>
+    </div>
+
+    <script>
+        // Get order ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('order');
+        
+        if (orderId) {
+            document.getElementById('orderIdDisplay').textContent = orderId;
+        }
+
+        // Set current date
+        const now = new Date();
+        const georgianDate = now.toLocaleDateString('ka-GE', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        document.getElementById('cancelDate').textContent = georgianDate;
+
+        // Log cancelled payment for analytics
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'purchase_cancelled', {
+                transaction_id: orderId,
+                value: 10.00,
+                currency: 'GEL'
+            });
+        }
+
+        console.log('Payment cancelled for order:', orderId);
+    </script>
+</body>
+</html>
