@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UniPay Debug Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #fff; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #333; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .loading { color: #ffa500; }
+        .error { color: #ff4444; }
+        .success { color: #44ff44; }
+    </style>
+</head>
+<body>
+    <h1>UniPay Debug Test</h1>
+    <button onclick="testDebugEndpoint()">Test UniPay Debug Endpoint</button>
+    <div id="result"></div>
+
+    <script>
+        async function testDebugEndpoint() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p class="loading">Testing UniPay debug endpoint...</p>';
+            
+            try {
+                const response = await fetch('/api/unipay-debug-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3 class="success">✅ Debug Test Results:</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <h3 class="error">❌ Error ${response.status}:</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3 class="error">❌ Network Error:</h3>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
