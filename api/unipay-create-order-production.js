@@ -1,8 +1,6 @@
 // UniPay Order Creation API Endpoint
 // Production version for betlemi10.com
 
-const axios = require('axios');
-
 export default async function handler(req, res) {
   // Set CORS headers for both betlemi10.com and www.betlemi10.com
   const origin = req.headers.origin;
@@ -69,20 +67,32 @@ export default async function handler(req, res) {
     }
 
     // Step 1: Get auth token
-    const authResponse = await axios.post('https://apiv2.unipay.com/v3/auth', {
-      merchant_id: MERCHANT_ID,
-      api_key: API_KEY
+    const authResponse = await fetch('https://apiv2.unipay.com/v3/auth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        merchant_id: MERCHANT_ID,
+        api_key: API_KEY
+      })
     });
 
-    if (!authResponse.data || !authResponse.data.token) {
-      console.error('UniPay auth failed:', authResponse.data);
+    if (!authResponse.ok) {
+      console.error('UniPay auth failed:', authResponse.status, authResponse.statusText);
       return res.status(500).json({ error: 'Payment authentication failed' });
     }
 
-    const token = authResponse.data.token;
+    const authData = await authResponse.json();
+    if (!authData || !authData.token) {
+      console.error('UniPay auth failed:', authData);
+      return res.status(500).json({ error: 'Payment authentication failed' });
+    }
+
+    const token = authData.token;
 
     // Generate secure order ID
-    const crypto = require('crypto');
+    const crypto = await import('crypto');
     const orderId = crypto.randomBytes(16).toString('hex');
 
     // Step 2: Create order
@@ -102,33 +112,40 @@ export default async function handler(req, res) {
       }
     };
 
-    const orderResponse = await axios.post(
-      'https://apiv2.unipay.com/v3/api/order/create',
-      orderData,
-      {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
+    const orderResponse = await fetch('https://apiv2.unipay.com/v3/api/order/create', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(orderData)
+    });
 
-    if (orderResponse.data && orderResponse.data.payment_url) {
+    if (!orderResponse.ok) {
+      console.error('Order creation failed:', orderResponse.status, orderResponse.statusText);
+      const errorText = await orderResponse.text();
+      console.error('Error response:', errorText);
+      return res.status(500).json({ error: 'Order creation failed' });
+    }
+
+    const orderData_result = await orderResponse.json();
+    if (orderData_result && orderData_result.payment_url) {
       // Success - return payment URL
       return res.status(200).json({
         success: true,
-        payment_url: orderResponse.data.payment_url,
+        payment_url: orderData_result.payment_url,
         order_id: orderId
       });
     } else {
-      console.error('Order creation failed:', orderResponse.data);
+      console.error('Order creation failed:', orderData_result);
       return res.status(500).json({ error: 'Order creation failed' });
     }
 
   } catch (error) {
-    console.error('UniPay API error:', error.response?.data || error.message);
+    console.error('UniPay API error:', error.message);
+    console.error('Full error:', error);
     
-    if (error.response?.status === 403) {
+    if (error.message.includes('403')) {
       return res.status(500).json({ 
         error: 'Payment service permissions issue - contact support' 
       });
