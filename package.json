@@ -1,25 +1,40 @@
 {
-  "name": "museum-space",
+  "name": "museum-space-b10",
   "version": "1.0.0",
-  "description": "Georgian Museum Ticket Booking System",
-  "main": "index.html",
+  "description": "Museum Space B10 - Interactive museum website with illusions and hologram exhibits",
+  "type": "module",
   "scripts": {
-    "build": "echo 'Static site - no build process required'",
-    "start": "echo 'Starting local server...' && python -m http.server 3000 || python3 -m http.server 3000",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --write src/**/*.ts"
   },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.9.2",
+    "vite": "^5.0.0"
+  },
+  "keywords": [
+    "museum",
+    "illusions",
+    "hologram",
+    "interactive",
+    "typescript",
+    "georgian"
+  ],
+  "author": "Museum Space Team",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Djangliori/Museum-Space-B10.git"
+    "url": "https://github.com/your-username/museum-space-b10.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Djangliori/Museum-Space-B10/issues"
-  },
-  "homepage": "https://github.com/Djangliori/Museum-Space-B10#readme",
-  "dependencies": {
-    "axios": "^1.11.0"
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

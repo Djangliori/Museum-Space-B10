@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integration Example - Museum Space B10</title>
+    
+    <!-- Existing CSS -->
+    <link rel="stylesheet" href="src/styles/style.css">
+    <link rel="stylesheet" href="src/styles/components.css">
+    <link rel="stylesheet" href="src/styles/pages/index.css">
+
+    <!-- Google Analytics 4 (external script still needed) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+</head>
+<body>
+    <!-- Your existing HTML content -->
+    <header class="header" role="banner">
+        <nav class="nav-container" role="navigation" aria-label="Main navigation">
+            <div class="logo">Museum Space</div>
+            
+            <!-- Mobile Hamburger Menu -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="მენიუს გახსნა">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Mobile Navigation -->
+            <div class="mobile-nav" id="mobileNav">
+                <div class="mobile-nav-header">
+                    <h2>მენიუ</h2>
+                    <button class="mobile-close-btn" id="mobileCloseBtn" aria-label="მენიუს დახურვა">
+                        ✕
+                    </button>
+                </div>
+                <ul class="mobile-nav-links">
+                    <li><a href="#home" class="mobile-nav-link">🏠 სახლი</a></li>
+                    <li><a href="#tickets" class="mobile-nav-link">🎫 ბილეთები</a></li>
+                </ul>
+            </div>
+            
+            <!-- Mobile Overlay -->
+            <div class="mobile-overlay" id="mobileOverlay"></div>
+        </nav>
+    </header>
+
+    <main role="main">
+        <section id="home" class="hero" role="banner">
+            <h1>შეხე რეალობას ახალ თვალით!</h1>
+            <p>ორი სამყაროს გამოცდილება ერთ სივრცეში</p>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq">
+            <div class="faq-container">
+                <h2>ხშირად დასმული კითხვები</h2>
+                
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        სამუშაო საათები
+                    </button>
+                    <div class="faq-answer">
+                        <p>09:00-21:00 (ორშაბათი დღის გარდა)</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        ბილეთის ვალიდურობა
+                    </button>
+                    <div class="faq-answer">
+                        <p>ბილეთი ვალიდურია ყიდვიდან 6 თვის განმავლობაში.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Back to Top Button -->
+    <a href="#home" class="back-to-top" id="backToTop" aria-label="Back to top">
+        ↑
+    </a>
+
+    <!-- 
+    REPLACE the old inline <script> tags with this single line:
+    The TypeScript modules will handle all functionality automatically
+    -->
+    <script type="module" src="/dist/ts/main.js"></script>
+
+    <!-- 
+    REMOVED: All inline JavaScript has been extracted into TypeScript modules
+    
+    The following functionality is now handled by the TypeScript modules:
+    - Mobile navigation (NavigationManager)
+    - Smooth scrolling (SmoothScroll) 
+    - FAQ accordions (UIHelpers.initFAQAccordion)
+    - Back to top button (UIHelpers.initBackToTop)
+    - Google Analytics tracking (AnalyticsManager)
+    - Form validation (BookingPage - for booking pages)
+    - Payment processing (PaymentManager - for payment pages)
+    - API testing (TestUniPayPage - for test pages)
+    -->
+
+</body>
+</html>
