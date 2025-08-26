@@ -54,7 +54,7 @@
   color: var(--color-muted);
 }
 
-.hero-cta-group {
+.cta-group {
   display: flex;
   gap: var(--space-md);
   justify-content: center;
@@ -62,7 +62,7 @@
   margin-bottom: var(--space-3xl);
 }
 
-.hero-trust-badges {
+.trust-badges {
   display: flex;
   justify-content: center;
   gap: var(--space-xl);

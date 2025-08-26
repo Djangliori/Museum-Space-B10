@@ -65,6 +65,82 @@
   color: var(--color-bg);
 }
 
+/* CTA Button Aliases (matching HTML class names) */
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  border: none;
+  border-radius: var(--radius-2xl);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-all);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--gradient-primary);
+  color: var(--color-bg);
+}
+
+.cta-primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-accent);
+}
+
+.cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  border: 2px solid var(--color-accent-2);
+  border-radius: var(--radius-2xl);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-all);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  background: transparent;
+  color: var(--color-text);
+}
+
+.cta-secondary:hover:not(:disabled) {
+  background: var(--color-accent-2);
+  color: var(--color-bg);
+}
+
+.cta-header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: var(--radius-xl);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-all);
+  background: var(--gradient-primary);
+  color: var(--color-bg);
+}
+
+.cta-header:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
 .btn-outline {
   background: transparent;
   color: var(--color-accent);
