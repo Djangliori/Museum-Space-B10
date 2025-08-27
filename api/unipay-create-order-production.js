@@ -48,22 +48,18 @@ export default async function handler(req, res) {
     const cancelUrl = Buffer.from("https://betlemi10.com/payment-cancel.html").toString('base64');
     const callbackUrl = Buffer.from("https://betlemi10.com/api/unipay-callback-production").toString('base64');
     
-    // UniPay API v3 correct format - FIXED ISSUES:
-    // 1. OrderPrice as string with 2 decimals
-    // 2. Use example SubscriptionPlanID from docs
-    // 3. English text only to avoid encoding issues
-    // 4. Order ID format matching docs pattern
+    // UniPay API v3 EXACT format matching docs
     const orderData = {
       MerchantUser: sanitizedEmail,
       MerchantOrderID: orderId,
-      OrderPrice: sanitizedAmount.toFixed(2), // String format with 2 decimals
+      OrderPrice: sanitizedAmount, // Number format as in docs (0.5)
       OrderCurrency: "GEL",
-      OrderName: `Museum Ticket - ${sanitizedName}`, // English to avoid encoding issues
-      OrderDescription: `Museum Space B10 Ticket`, // Simple English description
+      OrderName: `Museum Ticket - ${sanitizedName}`,
+      OrderDescription: `Museum Space B10 Ticket`,
       SuccessRedirectUrl: successUrl,
       CancelRedirectUrl: cancelUrl,
       CallBackUrl: callbackUrl,
-      SubscriptionPlanID: "", // Empty for simple orders
+      SubscriptionPlanID: "06H7AB8YY0C4EYADZCBJY37121", // Exact from docs
       Mlogo: "",
       InApp: 1,
       Language: "GE"
@@ -74,29 +70,14 @@ export default async function handler(req, res) {
     console.log('Token present:', !!token);
     console.log('================================');
 
-    // Try both header formats - first with Authorization (standard), then without if it fails
-    let orderResponse = await fetch('https://apiv2.unipay.com/v3/api/order/create', {
+    // Use EXACT headers format from docs - NO Authorization header!
+    const orderResponse = await fetch('https://apiv2.unipay.com/v3/api/order/create', {
       method: 'POST',
       headers: { 
-        'Authorization': `Bearer ${token}`, 
-        'Accept': 'application/json',
-        'Content-Type': 'application/json' 
+        'Accept': 'application/json'  // Only this header as in docs example
       },
       body: JSON.stringify(orderData)
     });
-    
-    // If fails with Authorization, try without it (as docs example shows)
-    if (!orderResponse.ok && orderResponse.status === 401) {
-      console.log('Trying without Authorization header...');
-      orderResponse = await fetch('https://apiv2.unipay.com/v3/api/order/create', {
-        method: 'POST',
-        headers: { 
-          'Accept': 'application/json',
-          'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify(orderData)
-      });
-    }
     
     if (!orderResponse.ok) {
       const errorText = await orderResponse.text();
