@@ -18,8 +18,15 @@ export default async function handler(req, res) {
   console.log(`[Security] Payment request from IP: ${clientIP}`);
 
   try {
+    // Early debug check
+    console.log('[DEBUG] Request received');
+    console.log('[DEBUG] Request body:', JSON.stringify(req.body, null, 2));
+    
     const { amount, userDetails, ticketInfo } = req.body;
-    if (!amount || !userDetails || !ticketInfo) return res.status(400).json({ error: 'Missing required fields' });
+    if (!amount || !userDetails || !ticketInfo) {
+      console.log('[DEBUG] Missing required fields');
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
     const sanitizedAmount = parseFloat(amount);
     if (isNaN(sanitizedAmount) || sanitizedAmount <= 0 || sanitizedAmount > 1000) return res.status(400).json({ error: 'Invalid amount' });
     // Enhanced input validation and sanitization
@@ -44,7 +51,24 @@ export default async function handler(req, res) {
 
     const MERCHANT_ID = (process.env.UNIPAY_MERCHANT_ID || "5015191030581").trim();
     const API_KEY = process.env.UNIPAY_API_KEY ? process.env.UNIPAY_API_KEY.trim() : null;
-    if (!API_KEY) return res.status(500).json({ error: 'API Key not configured' });
+    
+    console.log('[DEBUG] Environment check:', {
+      has_merchant_id: !!MERCHANT_ID,
+      has_api_key: !!API_KEY,
+      api_key_length: API_KEY ? API_KEY.length : 0
+    });
+    
+    if (!API_KEY) {
+      console.log('[DEBUG] API Key missing!');
+      return res.status(500).json({ 
+        error: 'API Key not configured',
+        debug_info: {
+          has_merchant_id: !!MERCHANT_ID,
+          has_api_key: false,
+          env_vars: Object.keys(process.env).filter(key => key.includes('UNIPAY'))
+        }
+      });
+    }
 
     const authResponse = await fetch('https://apiv2.unipay.com/v3/auth', {
       method: 'POST',
