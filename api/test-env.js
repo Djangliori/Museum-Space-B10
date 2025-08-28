@@ -37,7 +37,7 @@ export default async function handler(req, res) {
       });
       if (realAuthResponse.ok) {
         const authData = await realAuthResponse.json();
-        realAuthTest = authData.token ? 'SUCCESS' : 'NO_TOKEN';
+        realAuthTest = authData.auth_token ? 'SUCCESS' : 'NO_TOKEN';
       } else {
         const errorText = await realAuthResponse.text();
         realAuthTest = `FAILED_${realAuthResponse.status}: ${errorText}`;
