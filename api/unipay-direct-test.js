@@ -23,12 +23,66 @@ export default async function handler(req, res) {
     
     console.log('🔄 UniPay Direct Test - Order Data:', JSON.stringify(orderData, null, 2));
 
-    // Make request to UniPay API from server-side (no CORS issues)
+    // Step 1: Get authentication token first
+    const MERCHANT_ID = (process.env.UNIPAY_MERCHANT_ID || "5015191030581").trim();
+    const API_KEY = process.env.UNIPAY_API_KEY ? process.env.UNIPAY_API_KEY.trim() : null;
+    
+    if (!API_KEY) {
+      return res.status(500).json({
+        success: false,
+        error: 'API Key not configured in environment variables'
+      });
+    }
+
+    console.log('🔐 Getting authentication token...');
+    
+    const authResponse = await fetch('https://apiv2.unipay.com/v3/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ merchant_id: MERCHANT_ID, api_key: API_KEY })
+    });
+
+    const authResponseText = await authResponse.text();
+    console.log('🔐 Auth Response Status:', authResponse.status);
+    console.log('🔐 Auth Response Body:', authResponseText);
+
+    if (!authResponse.ok) {
+      return res.status(500).json({
+        success: false,
+        error: `Authentication failed: HTTP ${authResponse.status}`,
+        auth_response: authResponseText
+      });
+    }
+
+    let authData;
+    try {
+      authData = JSON.parse(authResponseText);
+    } catch (e) {
+      return res.status(500).json({
+        success: false,
+        error: 'Invalid JSON in auth response',
+        auth_response: authResponseText
+      });
+    }
+
+    if (!authData?.token) {
+      return res.status(500).json({
+        success: false,
+        error: 'No token in auth response (known permission issue)',
+        auth_data: authData
+      });
+    }
+
+    const token = authData.token;
+    console.log('✅ Token received, length:', token.length);
+
+    // Step 2: Make order request with authentication token
     const response = await fetch('https://apiv2.unipay.com/v3/api/order/create', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(orderData)
     });
@@ -51,7 +105,12 @@ export default async function handler(req, res) {
       status: response.status,
       statusText: response.statusText,
       data: responseData,
-      headers: Object.fromEntries(response.headers.entries())
+      headers: Object.fromEntries(response.headers.entries()),
+      auth_info: {
+        token_received: !!token,
+        token_length: token ? token.length : 0,
+        auth_status: authResponse.status
+      }
     });
 
   } catch (error) {
