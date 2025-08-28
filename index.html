@@ -18,7 +18,6 @@
     <meta name="twitter:card" content="summary_large_image">
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="config.js" as="script">
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="preconnect" href="https://www.google-analytics.com">
     
@@ -516,8 +515,8 @@
                     const headerHeight = 100;
                     const targetPosition = target.offsetTop - headerHeight;
                     
-                    // Use fast smooth scroll for desktop
-                    smoothScrollTo(targetPosition, 300);
+                    // Instant smooth scroll for desktop
+                    smoothScrollTo(targetPosition, 200);
                 }
             });
         });
@@ -643,12 +642,10 @@
                     if (target) {
                         closeMobileMenu();
                         
-                        // Fast scroll with minimal delay
-                        setTimeout(() => {
-                            const headerHeight = 100;
-                            const targetPosition = target.offsetTop - headerHeight;
-                            smoothScrollTo(targetPosition, 300);
-                        }, 50);
+                        // Instant scroll - no delay
+                        const headerHeight = 100;
+                        const targetPosition = target.offsetTop - headerHeight;
+                        smoothScrollTo(targetPosition, 200);
                     }
                 } else {
                     // For external links, just close the menu
