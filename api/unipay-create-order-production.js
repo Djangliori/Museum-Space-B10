@@ -144,10 +144,15 @@ export default async function handler(req, res) {
     // Temporary debugging: return more specific error info
     return res.status(500).json({ 
       error: 'Payment service error. Please try again or contact support.',
-      debug_info: process.env.NODE_ENV === 'development' ? {
+      debug_info: {
         message: error.message,
-        stack: error.stack?.split('\n')[0]
-      } : undefined
+        stack: error.stack?.split('\n')[0],
+        env_check: {
+          has_api_key: !!process.env.UNIPAY_API_KEY,
+          has_merchant_id: !!process.env.UNIPAY_MERCHANT_ID,
+          api_key_length: process.env.UNIPAY_API_KEY ? process.env.UNIPAY_API_KEY.length : 0
+        }
+      }
     });
   }
 }
