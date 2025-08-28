@@ -183,9 +183,9 @@
         </div>
 
         <div class="test-info">
-            <h3>📋 ტესტის ინფორმაცია</h3>
-            <p>ეს გვერდი ტესტავს UniPay API-ის სრულ authentication flow-ს: მუშავდება token-ის მიღება და შემდეგ order creation. ტესტი გავლის ჩვენი backend-ით UniPay-ამდე.</p>
-            <p><strong>🔐 Authentication Steps:</strong> 1) API Key → Token, 2) Token → Order Creation</p>
+            <h3>🧪 ნამდვილი გადახდის ტესტი</h3>
+            <p>ეს არის LIVE UniPay გადახდის ტესტი 1 ლარის ღირებულებით. ტესტი იქმნება ნამდვილ order-ს და გადაგიყვანთ UniPay-ის checkout გვერდზე.</p>
+            <p><strong>⚠️ გაფრთხილება:</strong> ეს არის ნამდვილი გადახდა! შეიძლება დაგიჭრათ 1 ლარი.</p>
         </div>
 
         <form id="testForm">
@@ -228,7 +228,7 @@
                     type="number" 
                     id="orderPrice" 
                     class="form-input"
-                    value="25"
+                    value="1"
                     min="0.1"
                     step="0.1"
                     required
@@ -236,7 +236,7 @@
             </div>
 
             <button type="submit" id="paymentBtn" class="payment-btn">
-                💳 ბარათით გადახდა - UniPay Direct
+                💳 ნამდვილი გადახდის ტესტი - 1 ლარი
             </button>
         </form>
 
@@ -268,7 +268,26 @@
             generateOrderId() {
                 const timestamp = Date.now().toString().slice(-8);
                 const random = Math.random().toString(36).substring(2, 10).toUpperCase();
-                return `BTLM${timestamp}-${random}`;
+                return `TEST${timestamp}-${random}`;
+            }
+
+            showPaymentRedirect(paymentUrl) {
+                // Update result section to show payment link
+                const currentContent = this.resultContent.textContent;
+                const paymentInfo = `\n\n🔗 PAYMENT URL GENERATED:\n${paymentUrl}\n\n⏳ Redirecting to payment page in 3 seconds...`;
+                this.resultContent.textContent = currentContent + paymentInfo;
+                
+                // Auto redirect after 3 seconds
+                setTimeout(() => {
+                    console.log('🚀 Redirecting to UniPay checkout:', paymentUrl);
+                    window.open(paymentUrl, '_blank', 'width=800,height=600');
+                }, 3000);
+                
+                // Also add manual link
+                setTimeout(() => {
+                    const linkHTML = `\n\n<a href="${paymentUrl}" target="_blank" style="color: #FFD34D; text-decoration: underline;">🔗 ან ხელით დააწვდი აქ</a>`;
+                    this.resultContent.innerHTML = this.resultContent.textContent + linkHTML;
+                }, 1000);
             }
 
             showResult(title, content, type = 'info') {
@@ -366,11 +385,8 @@
                     // Handle payment URL if present
                     
                     if (paymentUrl) {
-                        setTimeout(() => {
-                            if (confirm('🔗 გსურს გადაყვანა UniPay-ის გადახდის გვერდზე?')) {
-                                window.open(paymentUrl, '_blank');
-                            }
-                        }, 2000);
+                        // Auto redirect to payment page
+                        this.showPaymentRedirect(paymentUrl);
                     }
 
                 } catch (error) {
