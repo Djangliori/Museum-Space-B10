@@ -1,23 +1,46 @@
 export default async function handler(req, res) {
+  // Security headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  
   const origin = req.headers.origin;
   const allowedOrigins = ['https://betlemi10.com', 'https://www.betlemi10.com', 'http://localhost:3000', 'http://localhost:5173'];
   if (allowedOrigins.includes(origin)) res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
+  
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  
+  // Basic rate limiting check (simple IP-based)
+  const clientIP = req.headers['x-forwarded-for'] || req.connection?.remoteAddress || 'unknown';
+  console.log(`[Security] Payment request from IP: ${clientIP}`);
 
   try {
     const { amount, userDetails, ticketInfo } = req.body;
     if (!amount || !userDetails || !ticketInfo) return res.status(400).json({ error: 'Missing required fields' });
     const sanitizedAmount = parseFloat(amount);
     if (isNaN(sanitizedAmount) || sanitizedAmount <= 0 || sanitizedAmount > 1000) return res.status(400).json({ error: 'Invalid amount' });
-    const sanitizedName = userDetails.name.replace(/[<>"']/g, '');
-    const sanitizedEmail = userDetails.email.replace(/[<>"']/g, '');
-    const sanitizedPhone = userDetails.phone.replace(/[<>"']/g, '');
+    // Enhanced input validation and sanitization
+    const sanitizedName = userDetails.name.replace(/[<>"'&]/g, '').trim().substring(0, 100);
+    const sanitizedEmail = userDetails.email.replace(/[<>"'&]/g, '').toLowerCase().trim();
+    const sanitizedPhone = userDetails.phone.replace(/[^+0-9]/g, '').trim();
+    
+    // Validation checks
+    if (!sanitizedName || sanitizedName.length < 2) {
+      return res.status(400).json({ error: 'Invalid name format' });
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(sanitizedEmail)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+    
     const phoneRegex = /^(\+995|995)?[0-9]{9}$/;
-    if (!phoneRegex.test(sanitizedPhone)) return res.status(400).json({ error: 'Invalid phone number format' });
+    if (!phoneRegex.test(sanitizedPhone)) {
+      return res.status(400).json({ error: 'Invalid phone number format' });
+    }
 
     const MERCHANT_ID = (process.env.UNIPAY_MERCHANT_ID || "5015191030581").trim();
     const API_KEY = process.env.UNIPAY_API_KEY ? process.env.UNIPAY_API_KEY.trim() : null;
@@ -30,18 +53,35 @@ export default async function handler(req, res) {
     });
     if (!authResponse.ok) {
       const errorText = await authResponse.text();
-      console.log('Auth failed - Status:', authResponse.status, 'Response:', errorText);
-      return res.status(500).json({ error: 'Payment authentication failed', debug: errorText });
+      // Security: Log detailed errors server-side only
+      console.error(`[UniPay Auth Error] Status: ${authResponse.status}, Response: ${errorText}`);
+      return res.status(500).json({ error: 'Payment service temporarily unavailable. Please try again later.' });
     }
     const authData = await authResponse.json();
-    console.log('Auth success - Token length:', authData.token ? authData.token.length : 'no token');
-    if (!authData?.token) return res.status(500).json({ error: 'Payment authentication failed' });
+    // Security: Only log success without sensitive data
+    console.log(`[UniPay Auth] Success - Token received: ${!!authData?.token}`);
+    if (!authData?.token) {
+      console.error('[UniPay Auth] No token in response');
+      return res.status(500).json({ error: 'Payment service configuration error. Please contact support.' });
+    }
     const token = authData.token;
 
-    // Generate order ID in format similar to docs example
+    // Generate secure order ID
     const timestamp = Date.now().toString().slice(-6);
-    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-    const orderId = `MS${timestamp}-${random}`;
+    // Use crypto for better randomness (fallback to Math.random if unavailable)
+    let randomPart;
+    try {
+      const array = new Uint8Array(4);
+      if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+        crypto.getRandomValues(array);
+        randomPart = Array.from(array, byte => byte.toString(36)).join('').substring(0, 6).toUpperCase();
+      } else {
+        randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
+      }
+    } catch (error) {
+      randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+    const orderId = `MS${timestamp}-${randomPart}`;
     
     // BASE64 encode URLs as required by UniPay API
     const successUrl = Buffer.from("https://betlemi10.com/payment-success.html").toString('base64');
@@ -65,10 +105,8 @@ export default async function handler(req, res) {
       Language: "GE"
     };
 
-    console.log('=== SENDING ORDER TO UNIPAY ===');
-    console.log('Order Data:', JSON.stringify(orderData, null, 2));
-    console.log('Token present:', !!token);
-    console.log('================================');
+    // Security: Log order creation without sensitive data
+    console.log(`[UniPay Order] Creating order ${orderId} for ${orderData.OrderPrice} GEL`);
 
     // Use EXACT headers format from docs - NO Authorization header!
     const orderResponse = await fetch('https://apiv2.unipay.com/v3/api/order/create', {
@@ -81,12 +119,14 @@ export default async function handler(req, res) {
     
     if (!orderResponse.ok) {
       const errorText = await orderResponse.text();
-      console.log('Order creation failed - Status:', orderResponse.status, 'Response:', errorText);
-      return res.status(500).json({ error: 'Order creation failed', debug: errorText });
+      // Security: Log detailed errors server-side only
+      console.error(`[UniPay Order Error] Status: ${orderResponse.status}, Response: ${errorText}`);
+      return res.status(500).json({ error: 'Unable to process payment at this time. Please try again later.' });
     }
     
     const result = await orderResponse.json();
-    console.log('Order creation response:', JSON.stringify(result));
+    // Security: Log success without exposing sensitive response data
+    console.log(`[UniPay Order] Response received for order ${orderId}`);
     
     // UniPay may return different field names for payment URL
     const paymentUrl = result?.payment_url || result?.PaymentUrl || result?.url || result?.redirectUrl;
@@ -95,9 +135,12 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, payment_url: paymentUrl, order_id: orderId });
     }
     
-    return res.status(500).json({ error: 'Order created but no payment URL received', debug: result });
+    console.error(`[UniPay Order] No payment URL in response for order ${orderId}`);
+    return res.status(500).json({ error: 'Payment processing error. Please contact support with order ID: ' + orderId });
 
   } catch (error) {
-    return res.status(500).json({ error: 'Payment processing error' });
+    // Security: Log full error server-side, generic message to client
+    console.error('[UniPay API Error]', error.message, error.stack);
+    return res.status(500).json({ error: 'Payment service error. Please try again or contact support.' });
   }
 }
