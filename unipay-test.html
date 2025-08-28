@@ -184,7 +184,7 @@
 
         <div class="test-info">
             <h3>📋 ტესტის ინფორმაცია</h3>
-            <p>ეს გვერდი ტესტავს UniPay API-ის პირდაპირ გამოძახებას axios-ით. შევსებული ველები შესაბამისობაში არის UniPay-ის documentation-თან.</p>
+            <p>ეს გვერდი ტესტავს UniPay API-ის გამოძახებას server-side proxy-ს მეშვეობით (CORS შეზღუდვის გვერდის ავლით). ტესტი გავლის ჩვენი backend-ით UniPay-ამდე.</p>
         </div>
 
         <form id="testForm">
@@ -318,15 +318,13 @@
                         "Language": "GE"
                     };
 
-                    console.log('🔄 Sending order to UniPay:', orderData);
+                    console.log('🔄 Sending order to UniPay via proxy:', orderData);
 
-                    // Make axios request exactly as in your example
+                    // Use our server-side proxy to bypass CORS
                     const config = {
                         method: 'post',
-                        maxBodyLength: Infinity,
-                        url: 'https://apiv2.unipay.com/v3/api/order/create',
+                        url: '/api/unipay-direct-test',
                         headers: { 
-                            'Accept': 'application/json',
                             'Content-Type': 'application/json'
                         },
                         data: orderData
@@ -334,17 +332,32 @@
 
                     const response = await axios(config);
                     
-                    console.log('✅ UniPay Response:', response.data);
+                    console.log('✅ Proxy Response:', response.data);
                     
-                    // Show success result
-                    this.showResult(
-                        '✅ წარმატებული პასუხი',
-                        JSON.stringify(response.data, null, 2),
-                        'success'
-                    );
+                    // Extract actual UniPay data from proxy response
+                    const uniPayData = response.data.data;
+                    const success = response.data.success;
+                    let paymentUrl = null;
+                    
+                    // Show result based on success
+                    if (success) {
+                        this.showResult(
+                            '✅ წარმატებული პასუხი',
+                            JSON.stringify(uniPayData, null, 2),
+                            'success'
+                        );
+                        
+                        // Check if we got payment URL
+                        paymentUrl = uniPayData?.payment_url || uniPayData?.PaymentUrl || uniPayData?.url;
+                    } else {
+                        this.showResult(
+                            `❌ UniPay Error (HTTP ${response.data.status})`,
+                            JSON.stringify(response.data, null, 2),
+                            'error'
+                        );
+                    }
 
-                    // Check if we got payment URL
-                    const paymentUrl = response.data?.payment_url || response.data?.PaymentUrl || response.data?.url;
+                    // Handle payment URL if present
                     
                     if (paymentUrl) {
                         setTimeout(() => {
