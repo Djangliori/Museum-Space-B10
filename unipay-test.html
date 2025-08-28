@@ -368,8 +368,8 @@
                             'success'
                         );
                         
-                        // Check if we got payment URL
-                        paymentUrl = uniPayData?.payment_url || uniPayData?.PaymentUrl || uniPayData?.url;
+                        // Check if we got payment URL (UniPay returns it as 'Checkout')
+                        paymentUrl = uniPayData?.Checkout || uniPayData?.payment_url || uniPayData?.PaymentUrl || uniPayData?.url;
                     } else {
                         // Check if auth failed
                         const authInfo = response.data.auth_info || {};
