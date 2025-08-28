@@ -141,6 +141,13 @@ export default async function handler(req, res) {
   } catch (error) {
     // Security: Log full error server-side, generic message to client
     console.error('[UniPay API Error]', error.message, error.stack);
-    return res.status(500).json({ error: 'Payment service error. Please try again or contact support.' });
+    // Temporary debugging: return more specific error info
+    return res.status(500).json({ 
+      error: 'Payment service error. Please try again or contact support.',
+      debug_info: process.env.NODE_ENV === 'development' ? {
+        message: error.message,
+        stack: error.stack?.split('\n')[0]
+      } : undefined
+    });
   }
 }
