@@ -65,15 +65,15 @@ export default async function handler(req, res) {
       });
     }
 
-    if (!authData?.token) {
+    if (!authData?.auth_token) {
       return res.status(500).json({
         success: false,
-        error: 'No token in auth response (known permission issue)',
+        error: 'No auth_token in response',
         auth_data: authData
       });
     }
 
-    const token = authData.token;
+    const token = authData.auth_token;
     console.log('✅ Token received, length:', token.length);
 
     // Step 2: Make order request with authentication token

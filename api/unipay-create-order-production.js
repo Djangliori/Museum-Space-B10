@@ -59,12 +59,12 @@ export default async function handler(req, res) {
     }
     const authData = await authResponse.json();
     // Security: Only log success without sensitive data
-    console.log(`[UniPay Auth] Success - Token received: ${!!authData?.token}`);
-    if (!authData?.token) {
-      console.error('[UniPay Auth] No token in response');
+    console.log(`[UniPay Auth] Success - Token received: ${!!authData?.auth_token}`);
+    if (!authData?.auth_token) {
+      console.error('[UniPay Auth] No auth_token in response');
       return res.status(500).json({ error: 'Payment service configuration error. Please contact support.' });
     }
-    const token = authData.token;
+    const token = authData.auth_token;
 
     // Generate secure order ID
     const timestamp = Date.now().toString().slice(-6);
