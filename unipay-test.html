@@ -385,8 +385,29 @@
                     // Handle payment URL if present
                     
                     if (paymentUrl) {
-                        // Auto redirect to payment page
-                        this.showPaymentRedirect(paymentUrl);
+                        // Show success message with payment link
+                        console.log('🔗 Payment URL found:', paymentUrl);
+                        
+                        // Add redirect button to result
+                        setTimeout(() => {
+                            this.resultContent.innerHTML = this.resultContent.textContent + 
+                            `\n\n🎯 Payment URL მზადაა!\n\n` +
+                            `<div style="margin: 20px 0; text-align: center;">
+                                <a href="${paymentUrl}" target="_blank" 
+                                   style="display: inline-block; background: linear-gradient(135deg, #FFD34D, #FFA500); 
+                                          color: #0a0a0a; padding: 15px 30px; border-radius: 10px; 
+                                          text-decoration: none; font-weight: bold; font-size: 16px;">
+                                    🚀 გადახდის გვერდზე გადასვლა
+                                </a>
+                            </div>`;
+                        }, 1000);
+                        
+                        // Auto redirect after 5 seconds
+                        setTimeout(() => {
+                            if (confirm('🔗 გსურს ავტომატური გადაყვანა UniPay-ის გადახდის გვერდზე?')) {
+                                window.location.href = paymentUrl;
+                            }
+                        }, 5000);
                     }
 
                 } catch (error) {
