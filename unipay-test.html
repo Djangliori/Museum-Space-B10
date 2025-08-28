@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniPay Direct Test - მუზეუმის ბილეთი</title>
+    
+    <!-- Axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #121222 100%);
+            color: #EAEAF2;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .test-container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .test-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #FFD34D;
+            margin-bottom: 10px;
+        }
+
+        .test-subtitle {
+            color: #A6A7BC;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #EAEAF2;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 16px;
+            color: #EAEAF2;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #FFD34D;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(255, 211, 77, 0.1);
+        }
+
+        .payment-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #FFD34D 0%, #FFA500 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .payment-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 211, 77, 0.4);
+        }
+
+        .payment-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border-left: 4px solid #7C5CFF;
+            display: none;
+        }
+
+        .result-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #7C5CFF;
+        }
+
+        .result-content {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .success {
+            border-left-color: #2FE6A6;
+        }
+
+        .success .result-title {
+            color: #2FE6A6;
+        }
+
+        .error {
+            border-left-color: #FF5C7A;
+        }
+
+        .error .result-title {
+            color: #FF5C7A;
+        }
+
+        .test-info {
+            background: rgba(124, 92, 255, 0.1);
+            border: 1px solid rgba(124, 92, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .test-info h3 {
+            color: #7C5CFF;
+            margin-bottom: 10px;
+        }
+
+        .test-info p {
+            color: #A6A7BC;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1 class="test-title">🧪 UniPay Direct Test</h1>
+            <p class="test-subtitle">პირდაპირ API წვდომის ტესტირება</p>
+        </div>
+
+        <div class="test-info">
+            <h3>📋 ტესტის ინფორმაცია</h3>
+            <p>ეს გვერდი ტესტავს UniPay API-ის პირდაპირ გამოძახებას axios-ით. შევსებული ველები შესაბამისობაში არის UniPay-ის documentation-თან.</p>
+        </div>
+
+        <form id="testForm">
+            <div class="form-group">
+                <label class="form-label" for="merchantUser">📧 ელ-ფოსტა</label>
+                <input 
+                    type="email" 
+                    id="merchantUser" 
+                    class="form-input"
+                    value="test.user@betlemi10.com"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="customerName">👤 სრული სახელი</label>
+                <input 
+                    type="text" 
+                    id="customerName" 
+                    class="form-input"
+                    value="თეიმურაზ გელაშვილი"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="customerPhone">📞 ტელეფონის ნომერი</label>
+                <input 
+                    type="tel" 
+                    id="customerPhone" 
+                    class="form-input"
+                    value="+995591123456"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="orderPrice">💰 ღირებულება (ლარი)</label>
+                <input 
+                    type="number" 
+                    id="orderPrice" 
+                    class="form-input"
+                    value="25"
+                    min="0.1"
+                    step="0.1"
+                    required
+                >
+            </div>
+
+            <button type="submit" id="paymentBtn" class="payment-btn">
+                💳 ბარათით გადახდა - UniPay Direct
+            </button>
+        </form>
+
+        <div id="resultSection" class="result-section">
+            <div class="result-title" id="resultTitle">📤 API Response:</div>
+            <div class="result-content" id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        class UniPayDirectTest {
+            constructor() {
+                this.form = document.getElementById('testForm');
+                this.paymentBtn = document.getElementById('paymentBtn');
+                this.resultSection = document.getElementById('resultSection');
+                this.resultTitle = document.getElementById('resultTitle');
+                this.resultContent = document.getElementById('resultContent');
+                
+                this.init();
+            }
+
+            init() {
+                this.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handlePayment();
+                });
+            }
+
+            generateOrderId() {
+                const timestamp = Date.now().toString().slice(-8);
+                const random = Math.random().toString(36).substring(2, 10).toUpperCase();
+                return `BTLM${timestamp}-${random}`;
+            }
+
+            showResult(title, content, type = 'info') {
+                this.resultTitle.textContent = title;
+                this.resultContent.textContent = content;
+                this.resultSection.className = `result-section ${type}`;
+                this.resultSection.style.display = 'block';
+                
+                // Scroll to result
+                this.resultSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            async handlePayment() {
+                // Show loading state
+                this.paymentBtn.disabled = true;
+                this.paymentBtn.innerHTML = '⏳ მუშავდება...';
+                
+                // Hide previous results
+                this.resultSection.style.display = 'none';
+
+                try {
+                    // Get form data
+                    const merchantUser = document.getElementById('merchantUser').value;
+                    const customerName = document.getElementById('customerName').value;
+                    const customerPhone = document.getElementById('customerPhone').value;
+                    const orderPrice = parseFloat(document.getElementById('orderPrice').value);
+
+                    // Generate order ID
+                    const orderId = this.generateOrderId();
+
+                    // Prepare BASE64 URLs (as per UniPay requirement)
+                    const successUrl = btoa("https://betlemi10.com/payment-success.html");
+                    const cancelUrl = btoa("https://betlemi10.com/payment-cancel.html");
+                    const callbackUrl = btoa("https://betlemi10.com/api/unipay-callback-production");
+
+                    // Prepare order data exactly as in your example
+                    const orderData = {
+                        "MerchantUser": merchantUser,
+                        "MerchantOrderID": orderId,
+                        "OrderPrice": orderPrice,
+                        "OrderCurrency": "GEL",
+                        "OrderName": `Museum Ticket - ${customerName}`,
+                        "OrderDescription": `Betlemi 10 Museum Booking - ${customerPhone}`,
+                        "SuccessRedirectUrl": successUrl,
+                        "CancelRedirectUrl": cancelUrl,
+                        "CallBackUrl": callbackUrl,
+                        "Mlogo": "",
+                        "Language": "GE"
+                    };
+
+                    console.log('🔄 Sending order to UniPay:', orderData);
+
+                    // Make axios request exactly as in your example
+                    const config = {
+                        method: 'post',
+                        maxBodyLength: Infinity,
+                        url: 'https://apiv2.unipay.com/v3/api/order/create',
+                        headers: { 
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        data: orderData
+                    };
+
+                    const response = await axios(config);
+                    
+                    console.log('✅ UniPay Response:', response.data);
+                    
+                    // Show success result
+                    this.showResult(
+                        '✅ წარმატებული პასუხი',
+                        JSON.stringify(response.data, null, 2),
+                        'success'
+                    );
+
+                    // Check if we got payment URL
+                    const paymentUrl = response.data?.payment_url || response.data?.PaymentUrl || response.data?.url;
+                    
+                    if (paymentUrl) {
+                        setTimeout(() => {
+                            if (confirm('🔗 გსურს გადაყვანა UniPay-ის გადახდის გვერდზე?')) {
+                                window.open(paymentUrl, '_blank');
+                            }
+                        }, 2000);
+                    }
+
+                } catch (error) {
+                    console.error('❌ UniPay Error:', error);
+                    
+                    let errorMessage = 'Unknown error';
+                    let errorDetails = '';
+
+                    if (error.response) {
+                        // Server responded with error
+                        errorMessage = `HTTP ${error.response.status} - ${error.response.statusText}`;
+                        errorDetails = JSON.stringify(error.response.data, null, 2);
+                    } else if (error.request) {
+                        // Request was made but no response
+                        errorMessage = 'ქსელის შეცდომა - პასუხი არ მოვიდა';
+                        errorDetails = 'Network error or CORS issue';
+                    } else {
+                        // Something else happened
+                        errorMessage = error.message;
+                        errorDetails = error.stack || '';
+                    }
+
+                    this.showResult(
+                        `❌ შეცდომა: ${errorMessage}`,
+                        errorDetails,
+                        'error'
+                    );
+                }
+
+                // Reset button
+                this.paymentBtn.disabled = false;
+                this.paymentBtn.innerHTML = '💳 ბარათით გადახდა - UniPay Direct';
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new UniPayDirectTest();
+            console.log('🧪 UniPay Direct Test initialized');
+        });
+    </script>
+</body>
+</html>
