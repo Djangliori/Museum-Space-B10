@@ -1,8 +1,6 @@
 {
   "version": 2,
   "public": true,
-  "buildCommand": "npm run build && cp -r api dist/ || xcopy api dist\\api /E /I",
-  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/",
