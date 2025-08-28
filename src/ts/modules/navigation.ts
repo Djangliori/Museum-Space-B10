@@ -104,11 +104,11 @@ export class NavigationManager {
       if (target) {
         this.closeMobileMenu();
         
-        // Wait for menu to close, then scroll slowly
+        // Fast scroll with minimal delay
         this.smoothScroll.scrollToElementWithDelay(
           target as HTMLElement,
-          400, // delay
-          1200 // duration - slower for mobile
+          50, // minimal delay
+          300 // fast duration
         );
       }
     } else {

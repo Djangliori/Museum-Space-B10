@@ -2,7 +2,7 @@
 import { SmoothScrollOptions } from '../types.js';
 
 export class SmoothScroll {
-  private defaultDuration: number = 1000;
+  private defaultDuration: number = 300;
   private defaultHeaderOffset: number = 100;
 
   constructor() {
@@ -51,11 +51,11 @@ export class SmoothScroll {
     this.smoothScrollTo(targetPosition, duration);
   }
 
-  public scrollToTop(duration: number = 1000): void {
+  public scrollToTop(duration: number = 300): void {
     this.smoothScrollTo(0, duration);
   }
 
-  private smoothScrollTo(targetPosition: number, duration: number = 1000): void {
+  private smoothScrollTo(targetPosition: number, duration: number = 300): void {
     const startPosition = window.pageYOffset;
     const distance = targetPosition - startPosition;
     let startTime: number | null = null;
@@ -81,8 +81,8 @@ export class SmoothScroll {
     return -c / 2 * (t * (t - 2) - 1) + b;
   }
 
-  // Handle mobile navigation with custom timing
-  public scrollToElementWithDelay(element: HTMLElement, delay: number = 400, duration: number = 1200): void {
+  // Handle mobile navigation with fast timing
+  public scrollToElementWithDelay(element: HTMLElement, delay: number = 50, duration: number = 300): void {
     setTimeout(() => {
       this.scrollToElement(element, { duration });
     }, delay);

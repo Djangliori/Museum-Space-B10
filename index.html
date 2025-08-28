@@ -516,8 +516,8 @@
                     const headerHeight = 100;
                     const targetPosition = target.offsetTop - headerHeight;
                     
-                    // Use custom smooth scroll with 1 second duration for desktop
-                    smoothScrollTo(targetPosition, 1000);
+                    // Use fast smooth scroll for desktop
+                    smoothScrollTo(targetPosition, 300);
                 }
             });
         });
@@ -643,12 +643,12 @@
                     if (target) {
                         closeMobileMenu();
                         
-                        // Wait for menu to close, then scroll slowly
+                        // Fast scroll with minimal delay
                         setTimeout(() => {
                             const headerHeight = 100;
                             const targetPosition = target.offsetTop - headerHeight;
-                            smoothScrollTo(targetPosition, 800);
-                        }, 100);
+                            smoothScrollTo(targetPosition, 300);
+                        }, 50);
                     }
                 } else {
                     // For external links, just close the menu
