@@ -37,10 +37,7 @@
 .terms-logo {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
-  background: linear-gradient(45deg, var(--color-accent-2), var(--color-text-accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--color-accent-2);
 }
 
 .terms-back-btn {
@@ -81,12 +78,11 @@
 
 .terms-page-header h1 {
   font-size: var(--font-size-5xl);
-  background: linear-gradient(45deg, var(--color-accent-2), var(--color-text-accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--color-accent-2);
   margin-bottom: var(--space-md);
   text-shadow: 0 0 30px rgba(124, 92, 255, 0.5);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
 }
 
 .terms-page-header p {

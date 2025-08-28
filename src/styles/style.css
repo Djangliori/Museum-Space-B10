@@ -147,9 +147,18 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: var(--line-height-normal);
-  overflow-x: hidden;
+  font-feature-settings: "kern" 1;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Georgian text optimization */
+h1, h2, h3, h4, h5, h6 {
+  font-feature-settings: "kern" 1;
+  text-rendering: optimizeLegibility;
+  word-spacing: 0.1em;
 }
 
 /* Focus management for better accessibility */
