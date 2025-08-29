@@ -25,6 +25,14 @@
     {
       "source": "/payment-cancel",
       "destination": "/payment-cancel.html"
+    },
+    {
+      "source": "/rame",
+      "destination": "/rame/"
+    },
+    {
+      "source": "/rame/(.*)",
+      "destination": "/rame/$1"
     }
   ],
   "headers": [

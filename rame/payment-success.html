@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>გადახდა წარმატებულია - სამუზეუმო სივრცე</title>
+    <!-- Modular CSS Architecture -->
+    <link rel="stylesheet" href="src/styles/style.css">
+    <link rel="stylesheet" href="src/styles/components.css">
+    <link rel="stylesheet" href="src/styles/pages/booking.css">
+</head>
+<body class="success-page">
+    <div class="result-container">
+        <div class="success-icon"></div>
+        <h1>გადახდა წარმატებით დასრულდა!</h1>
+        
+        <p class="success-message">
+            გმადლობთ სამუზეუმო სივრცე B10-ის არჩევისთვის! თქვენი ბილეთი წარმატებით შეძენილია.
+        </p>
+
+        <div class="order-details" id="orderDetails">
+            <h3>📋 შეკვეთის დეტალები</h3>
+            <div class="detail-row">
+                <span class="detail-label">შეკვეთის ID:</span>
+                <span class="detail-value" id="orderIdDisplay">MS-xxxxxxx</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">ბილეთის ტიპი:</span>
+                <span class="detail-value">სამუზეუმო სივრცის ბილეთი</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">თარიღი:</span>
+                <span class="detail-value" id="paymentDate"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">ღირებულება:</span>
+                <span class="detail-value">10.00 ₾</span>
+            </div>
+        </div>
+
+        <div class="ticket-preview">
+            <h4>🎫 თქვენი ელექტრონული ბილეთი</h4>
+            <p>ბილეთი გამოგეგზავნებათ ელექტრონული ფოსტით 5-10 წუთში.</p>
+        </div>
+
+        <div class="next-steps">
+            <h3>📧 შემდეგი ნაბიჯები</h3>
+            <ul>
+                <li>მიიღებთ დადასტურების ელექტრონულ ფოსტას</li>
+                <li>ბილეთი ჩამოტვირთეთ PDF ფორმატში</li>
+                <li>მოიყვანეთ ბილეთი (დაბეჭდილი ან მობილურზე)</li>
+                <li>მუზეუმი ღიაა: ორშ-კვირა, 10:00-18:00</li>
+                <li>მისამართი: ბეთლემის ქუჩა 10N, სოლოლაკი</li>
+            </ul>
+        </div>
+
+        <div class="contact-info">
+            <h4>📞 საკონტაქტო ინფორმაცია</h4>
+            <p>📧 Email: betlemi.museum@gmail.com</p>
+            <p>📞 ტელეფონი: +995 32 2 123 456</p>
+            <p>🏛️ მისამართი: ბეთლემის ქუჩა 10N, სოლოლაკი, თბილისი</p>
+        </div>
+
+        <div class="buttons">
+            <a href="/" class="btn btn-primary">🏠 მთავარ გვერდზე დაბრუნება</a>
+            <a href="mailto:betlemi.museum@gmail.com" class="btn btn-secondary">✉️ დაგვიკავშირდით</a>
+        </div>
+    </div>
+
+    <script>
+        // Get order ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('order');
+        
+        if (orderId) {
+            document.getElementById('orderIdDisplay').textContent = orderId;
+        }
+
+        // Set current date
+        const now = new Date();
+        const georgianDate = now.toLocaleDateString('ka-GE', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        document.getElementById('paymentDate').textContent = georgianDate;
+
+        // Log successful payment for analytics
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'purchase', {
+                transaction_id: orderId,
+                value: 10.00,
+                currency: 'GEL',
+                items: [{
+                    item_id: 'museum_ticket',
+                    item_name: 'Museum Space B10 Ticket',
+                    category: 'Tickets',
+                    quantity: 1,
+                    price: 10.00
+                }]
+            });
+        }
+
+        console.log('Payment successful for order:', orderId);
+    </script>
+</body>
+</html>
