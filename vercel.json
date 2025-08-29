@@ -17,6 +17,14 @@
     {
       "source": "/wesmdebi",
       "destination": "/terms.html"
+    },
+    {
+      "source": "/payment-success",
+      "destination": "/payment-success.html"
+    },
+    {
+      "source": "/payment-cancel",
+      "destination": "/payment-cancel.html"
     }
   ],
   "headers": [
